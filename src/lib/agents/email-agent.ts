@@ -3,10 +3,12 @@ import path from 'path';
 
 export async function sendApplicationEmail(options: { 
   to: string; 
+  cc?: string;
   subject: string; 
   body: string; 
   cvPath?: string; 
-  userName: string 
+  userName: string;
+  isSystemNotification?: boolean;
 }): Promise<{ success: boolean; messageId?: string; error?: string }> {
   
   const user = process.env.EMAIL_USER;
@@ -25,12 +27,18 @@ export async function sendApplicationEmail(options: {
       }
     });
 
+    const redirect = process.env.EMAIL_REDIRECT;
+    const isRedirectActive = redirect && !options.isSystemNotification;
     const mailOptions: nodemailer.SendMailOptions = {
       from: `"${options.userName}" <${user}>`,
-      to: options.to,
+      to: isRedirectActive ? redirect : options.to,
       subject: options.subject,
       text: options.body,
     };
+
+    if (options.cc) {
+      mailOptions.cc = options.cc;
+    }
 
     if (options.cvPath) {
       mailOptions.attachments = [

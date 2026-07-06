@@ -396,8 +396,33 @@ export function createApplication(app: Omit<Application, 'id' | 'created_at'>): 
 
 export function getApplicationById(id: string): Application | null {
   const db = getDb();
-  const row = db.prepare('SELECT * FROM applications WHERE id = ?').get(id) as Record<string, unknown> | undefined;
-  return row ? deserializeApplication(row) : null;
+  const row = db.prepare(
+    `SELECT a.*, j.title as j_title, j.company as j_company, j.location as j_location,
+            j.description as j_description, j.url as j_url
+     FROM applications a
+     LEFT JOIN jobs j ON a.job_id = j.id
+     WHERE a.id = ?`
+  ).get(id) as Record<string, unknown> | undefined;
+  
+  if (!row) return null;
+  
+  const app = deserializeApplication(row);
+  if (row.j_title) {
+    app.job = {
+      id: row.job_id as string,
+      title: row.j_title as string,
+      company: row.j_company as string,
+      location: row.j_location as string,
+      description: row.j_description as string,
+      requirements: { skills: [], experience_years: 0, education: '', other: [] },
+      salary_range: '',
+      url: row.j_url as string,
+      source: '',
+      posted_date: '',
+      created_at: '',
+    };
+  }
+  return app;
 }
 
 export function getApplicationsByUser(userId: string): Application[] {
@@ -626,7 +651,7 @@ export function getDashboardStats(userId: string): DashboardStats {
 
   const jobsToday = getJobsCreatedToday();
 
-  const recent = getApplicationsByUser(userId).slice(0, 5);
+  const recent = getApplicationsByUser(userId).slice(0, 50);
 
   const topMatches = getJobMatchesByUser(userId, 50).slice(0, 5);
 
@@ -640,4 +665,35 @@ export function getDashboardStats(userId: string): DashboardStats {
     recent_applications: recent,
     top_matches: topMatches,
   };
+}
+
+export function getAcceptedJobMatches(userId: string): JobMatch[] {
+  const db = getDb();
+  const rows = db.prepare(
+    `SELECT jm.*, j.title, j.company, j.location, j.description, j.requirements,
+            j.salary_range, j.url, j.source, j.posted_date, j.created_at as job_created_at
+     FROM job_matches jm
+     JOIN jobs j ON jm.job_id = j.id
+     JOIN applications a ON a.job_id = j.id AND a.user_id = jm.user_id
+     WHERE jm.user_id = ? AND a.status = 'interview_scheduled'
+     ORDER BY jm.overall_score DESC`
+  ).all(userId) as Record<string, unknown>[];
+  
+  return rows.map((row) => {
+    const match = deserializeMatch(row);
+    match.job = {
+      id: row.job_id as string,
+      title: row.title as string,
+      company: row.company as string,
+      location: row.location as string,
+      description: row.description as string,
+      requirements: JSON.parse((row.requirements as string) || '{}'),
+      salary_range: row.salary_range as string,
+      url: row.url as string,
+      source: row.source as string,
+      posted_date: row.posted_date as string,
+      created_at: row.job_created_at as string,
+    };
+    return match;
+  });
 }

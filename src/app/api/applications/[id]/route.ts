@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
-import { getApplicationById, updateApplicationStatus } from '@/lib/db';
+import { getApplicationById, updateApplicationStatus, getUserById } from '@/lib/db';
+import { sendApplicationEmail } from '@/lib/agents/email-agent';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -36,8 +37,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     
     // Auto-notify user on interview
     if (status === 'interview_scheduled') {
-      const { getUserById } = require('@/lib/db');
-      const { sendApplicationEmail } = require('@/lib/agents/email-agent');
       const fullUser = getUserById(user.userId);
       if (fullUser) {
         await sendApplicationEmail({

@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/Card';
 import { StatCard } from '@/components/ui/StatCard';
 import { Button } from '@/components/ui/Button';
 import { MatchScore } from '@/components/ui/MatchScore';
-import { Briefcase, FileText, CheckCircle, Search, Play, RefreshCw } from 'lucide-react';
+import { Briefcase, FileText, CheckCircle, Search, Play, RefreshCw, ExternalLink } from 'lucide-react';
 import type { DashboardStats } from '@/lib/types';
 
 export default function DashboardPage() {
@@ -14,6 +14,23 @@ export default function DashboardPage() {
   const [running, setRunning] = useState(false);
   const [pipelineResult, setPipelineResult] = useState<string | null>(null);
   const [selectedApp, setSelectedApp] = useState<any | null>(null);
+  const [checkingReplies, setCheckingReplies] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  const getDynamicGreeting = (name: string) => {
+    const hr = new Date().getHours();
+    let greet = 'Hi';
+    if (hr >= 5 && hr < 12) {
+      greet = 'Good morning';
+    } else if (hr >= 12 && hr < 17) {
+      greet = 'Good afternoon';
+    } else if (hr >= 17 && hr < 22) {
+      greet = 'Good evening';
+    } else {
+      greet = 'Hi';
+    }
+    return `${greet}, ${name}!`;
+  };
 
   const fetchStats = useCallback(async () => {
     try {
@@ -27,6 +44,14 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchStats();
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setUserName(data.data.name);
+        }
+      })
+      .catch(err => console.error(err));
   }, [fetchStats]);
 
   const handleAutoPilot = async () => {
@@ -49,6 +74,35 @@ export default function DashboardPage() {
       setRunning(false);
     }
   };
+
+  const handleCheckReplies = async () => {
+    setCheckingReplies(true);
+    setPipelineResult(null);
+    try {
+      const res = await fetch('/api/applications/check-replies', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        const { processed, updates, errors } = data.data;
+        if (updates.length > 0) {
+          const updateMsgs = updates.map((u: any) => `${u.company} (${u.newStatus === 'interview_scheduled' ? 'Interview' : u.newStatus})`).join(', ');
+          setPipelineResult(`✉️ Checked replies! Processed ${processed} new emails. Updated status for: ${updateMsgs}.`);
+        } else {
+          setPipelineResult(`✉️ Checked replies! Processed ${processed} new emails. No status updates.`);
+        }
+        if (errors.length > 0) {
+          console.error('Mail check errors:', errors);
+        }
+      } else {
+        setPipelineResult(`❌ Mail check error: ${data.error}`);
+      }
+      await fetchStats();
+    } catch (e: any) {
+      setPipelineResult(`❌ Error checking replies: ${e.message}`);
+    } finally {
+      setCheckingReplies(false);
+    }
+  };
+
 
   const updateStatus = async (appId: string, status: string) => {
     await fetch(`/api/applications/${appId}`, {
@@ -77,30 +131,51 @@ export default function DashboardPage() {
       {/* Header with Auto-Pilot Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white">
+            {userName ? getDynamicGreeting(userName) : 'Dashboard'}
+          </h1>
           <p className="text-slate-400 text-sm mt-1">Your AI job search overview</p>
         </div>
-        <button
-          onClick={handleAutoPilot}
-          disabled={running}
-          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 ${
-            running
-              ? 'bg-slate-700 cursor-not-allowed opacity-70'
-              : 'bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 shadow-lg hover:shadow-cyan-500/25 hover:scale-105'
-          }`}
-        >
-          {running ? (
-            <>
-              <RefreshCw size={16} className="animate-spin" />
-              Running Pipeline...
-            </>
-          ) : (
-            <>
-              <Play size={16} />
-              Start Auto-Pilot
-            </>
-          )}
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={handleCheckReplies}
+            disabled={checkingReplies}
+            className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white border border-slate-700 shadow-md hover:scale-105 transition-all duration-200`}
+          >
+            {checkingReplies ? (
+              <>
+                <RefreshCw size={16} className="animate-spin" />
+                Checking Mail...
+              </>
+            ) : (
+              <>
+                <RefreshCw size={16} />
+                Check Replies
+              </>
+            )}
+          </button>
+          <button
+            onClick={handleAutoPilot}
+            disabled={running}
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 ${
+              running
+                ? 'bg-slate-700 cursor-not-allowed opacity-70'
+                : 'bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 shadow-lg hover:shadow-cyan-500/25 hover:scale-105'
+            }`}
+          >
+            {running ? (
+              <>
+                <RefreshCw size={16} className="animate-spin" />
+                Running Pipeline...
+              </>
+            ) : (
+              <>
+                <Play size={16} />
+                Start Auto-Pilot
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Pipeline Result Banner */}
@@ -169,7 +244,22 @@ export default function DashboardPage() {
                       onClick={() => setSelectedApp(app)}
                     >
                       <td className="py-3 font-medium text-slate-200">{app.company_name}</td>
-                      <td className="py-3 text-slate-300 truncate max-w-[140px]">{app.job_title}</td>
+                      <td className="py-3 text-slate-300 truncate max-w-[140px]">
+                        {app.job?.url ? (
+                          <a 
+                            href={app.job.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-cyan-400 hover:text-cyan-300 hover:underline inline-flex items-center gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {app.job_title}
+                            <ExternalLink size={12} className="opacity-60" />
+                          </a>
+                        ) : (
+                          app.job_title
+                        )}
+                      </td>
                       <td className="py-3 text-slate-400 text-xs">{new Date(app.date_applied).toLocaleDateString()}</td>
                       <td className="py-3" onClick={(e) => e.stopPropagation()}>
                         <select
@@ -244,6 +334,7 @@ export default function DashboardPage() {
         </Card>
       )}
 
+
       {/* Application Details Modal */}
       {selectedApp && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
@@ -263,6 +354,15 @@ export default function DashboardPage() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                   <span><strong>Auto-Applied:</strong> An email was automatically sent to {selectedApp.email_sent_to} with your CV attached!</span>
                 </p>
+              </div>
+            )}
+            
+            {selectedApp.notes && (
+              <div className="mb-4 max-h-40 overflow-y-auto pr-2">
+                <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">Communication Logs & History</h3>
+                <div className="bg-slate-900/40 rounded-lg p-3 text-xs text-slate-300 border border-slate-800/50 whitespace-pre-wrap font-mono">
+                  {selectedApp.notes}
+                </div>
               </div>
             )}
             

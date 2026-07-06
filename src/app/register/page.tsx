@@ -12,6 +12,20 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const adjectives = ['Swift', 'Clever', 'Stellar', 'Sharp', 'Mighty', 'Curious', 'Epic', 'Dynamic', 'Vibrant', 'Valiant'];
+  const nouns = ['Wizard', 'Coder', 'Analyst', 'Ninja', 'Hustler', 'Explorer', 'Leader', 'Developer', 'Maven', 'Pioneer'];
+
+  const generateNickname = () => {
+    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const noun = nouns[Math.floor(Math.random() * nouns.length)];
+    const num = Math.floor(Math.random() * 90) + 10;
+    setName(`${adj}${noun}${num}`);
+  };
+
+  React.useEffect(() => {
+    generateNickname();
+  }, []);
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -62,13 +76,22 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-medium text-slate-300">Nickname</label>
+              <button 
+                type="button" 
+                onClick={generateNickname} 
+                className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1 font-medium"
+              >
+                🎲 Randomize
+              </button>
+            </div>
             <input 
               type="text" 
               value={name}
               onChange={e => setName(e.target.value)}
               className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-              placeholder="John Doe"
+              placeholder="e.g. SwiftWizard42"
               required
             />
           </div>

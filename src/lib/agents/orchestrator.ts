@@ -36,12 +36,22 @@ export async function runMatchAndRank(userId: string): Promise<JobMatch[]> {
   // Get jobs created today or recently that don't have matches yet
   const jobs = dbSearchJobs(''); // For simplicity, grab all jobs. In prod, filter to un-matched.
   
-  for (const job of jobs.slice(0, 20)) { // Limit to 20 to avoid rate limits
-    const matchData = await matchJobToCV(profile.structured_data, job, user.preferences);
-    createJobMatch({
-      ...matchData,
-      user_id: userId
-    });
+  for (const job of jobs.slice(0, 10)) { // Limit to 10 to reduce rate limits on free keys
+    try {
+      const matchData = await matchJobToCV(profile.structured_data, job, user.preferences);
+      createJobMatch({
+        ...matchData,
+        user_id: userId
+      });
+      // Pause for 1.5 seconds between matches to stay under rate limits
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    } catch (e: any) {
+      console.error(`Failed to match job ${job.title}:`, e.message);
+      // Wait longer (5 seconds) if we hit a rate limit, then continue
+      if (e.message.includes('429') || e.message.toLowerCase().includes('rate limit')) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
+    }
   }
   
   return getJobMatchesByUser(userId);
@@ -84,6 +94,7 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
             const companyEmail = `hr@${match.job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
             await sendApplicationEmail({
               to: companyEmail,
+              cc: user.email,
               subject: emailSubject,
               body: emailBody,
               userName: user.name,

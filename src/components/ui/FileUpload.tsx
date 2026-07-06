@@ -21,6 +21,15 @@ export function FileUpload({ onUpload, accept = ".pdf,.docx", maxSize = 5 }: Fil
     }
   }, []);
 
+  const handleFile = useCallback((newFile: File) => {
+    if (newFile.size > maxSize * 1024 * 1024) {
+      alert(`File too large. Max ${maxSize}MB.`);
+      return;
+    }
+    setFile(newFile);
+    onUpload(newFile);
+  }, [maxSize, onUpload]);
+
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -28,22 +37,13 @@ export function FileUpload({ onUpload, accept = ".pdf,.docx", maxSize = 5 }: Fil
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFile(e.dataTransfer.files[0]);
     }
-  }, []);
+  }, [handleFile]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       handleFile(e.target.files[0]);
     }
-  };
-
-  const handleFile = (newFile: File) => {
-    if (newFile.size > maxSize * 1024 * 1024) {
-      alert(`File too large. Max ${maxSize}MB.`);
-      return;
-    }
-    setFile(newFile);
-    onUpload(newFile);
   };
 
   return (

@@ -25,7 +25,7 @@ export default function InterviewPage() {
     // Fetch past sessions and available jobs
     Promise.all([
       fetch('/api/interview/sessions').then(res => res.json()),
-      fetch('/api/jobs').then(res => res.json())
+      fetch('/api/jobs?acceptedOnly=true').then(res => res.json())
     ]).then(([sessionsData, jobsData]) => {
       if (sessionsData.success) setSessions(sessionsData.data);
       if (jobsData.success) {

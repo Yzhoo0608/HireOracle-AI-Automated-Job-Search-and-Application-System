@@ -31,6 +31,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (app.email_sent_to) {
       const emailResult = await sendApplicationEmail({
         to: app.email_sent_to,
+        cc: user.email,
         subject: emailSubject,
         body: emailBody,
         cvPath: cv.file_path,

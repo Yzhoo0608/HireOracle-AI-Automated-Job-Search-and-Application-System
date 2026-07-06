@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { MatchScore } from '@/components/ui/MatchScore';
@@ -16,7 +16,7 @@ export default function JobsPage() {
   const [filters, setFilters] = useState({ keywords: '', location: '', remote: false });
   const { toast } = useToast();
 
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
       const res = await fetch('/api/jobs');
       const data = await res.json();
@@ -28,11 +28,11 @@ export default function JobsPage() {
     } finally {
       setInitialLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+  }, [fetchJobs]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();

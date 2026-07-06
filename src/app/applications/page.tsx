@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { useToast } from '@/components/ui/Toast';
-import { Building, Calendar, ChevronRight } from 'lucide-react';
+import { Building, Calendar, ChevronRight, ExternalLink } from 'lucide-react';
 import type { Application } from '@/lib/types';
 
 type Pipeline = Record<string, Application[]>;
@@ -20,7 +20,7 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const fetchApps = async () => {
+  const fetchApps = useCallback(async () => {
     try {
       const res = await fetch('/api/applications');
       const data = await res.json();
@@ -40,11 +40,11 @@ export default function ApplicationsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchApps();
-  }, []);
+  }, [fetchApps]);
 
   const handleStatusChange = async (appId: string, newStatus: string) => {
     try {
@@ -89,7 +89,21 @@ export default function ApplicationsPage() {
             <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
               {pipeline[col.id]?.map((app) => (
                 <div key={app.id} className="bg-slate-800/80 border border-slate-700 p-4 rounded-lg hover:border-primary/50 transition-colors cursor-grab active:cursor-grabbing">
-                  <h4 className="font-medium text-white mb-1">{app.job_title}</h4>
+                  <h4 className="font-medium text-white mb-1 animate-fade-in">
+                    {app.job?.url ? (
+                      <a 
+                        href={app.job.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-cyan-400 hover:text-cyan-300 hover:underline inline-flex items-center gap-1"
+                      >
+                        {app.job_title}
+                        <ExternalLink size={12} className="opacity-60" />
+                      </a>
+                    ) : (
+                      app.job_title
+                    )}
+                  </h4>
                   <div className="flex items-center text-sm text-slate-400 gap-2 mb-3">
                     <Building size={14} /> {app.company_name}
                   </div>

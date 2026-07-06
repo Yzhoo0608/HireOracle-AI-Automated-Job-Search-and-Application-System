@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
-import { getJobMatchesByUser } from '@/lib/db';
+import { getJobMatchesByUser, getAcceptedJobMatches } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth();
     const { searchParams } = new URL(request.url);
-    const minScore = parseInt(searchParams.get('minScore') || '0', 10);
+    const acceptedOnly = searchParams.get('acceptedOnly') === 'true';
     
-    const matches = getJobMatchesByUser(user.userId, minScore);
+    let matches;
+    if (acceptedOnly) {
+      matches = getAcceptedJobMatches(user.userId);
+    } else {
+      const minScore = parseInt(searchParams.get('minScore') || '0', 10);
+      matches = getJobMatchesByUser(user.userId, minScore);
+    }
     
     return NextResponse.json({ success: true, data: matches });
   } catch (error: any) {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { FileUpload } from '@/components/ui/FileUpload';
@@ -14,7 +14,7 @@ export default function CVPage() {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const res = await fetch('/api/cv/profile');
       const data = await res.json();
@@ -26,11 +26,11 @@ export default function CVPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [fetchProfile]);
 
   const handleUpload = async (file: File) => {
     setUploading(true);

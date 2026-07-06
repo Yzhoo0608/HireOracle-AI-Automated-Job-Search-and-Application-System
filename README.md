@@ -1,13 +1,6 @@
-<<<<<<< HEAD
 # AI-job-agent
 
-<<<<<<< HEAD
-This is what YOUR local file says about your AI Job Agent.
-=======
-This is what the GITHUB cloud file says (e.g., "# AI-job-agent").
->>>>>>> origin/main
-=======
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is an AI-powered job agent application designed to automate and assist in your job search.
 
 ## Getting Started
 
