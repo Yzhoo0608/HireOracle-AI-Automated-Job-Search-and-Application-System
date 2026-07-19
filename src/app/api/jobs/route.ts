@@ -10,10 +10,10 @@ export async function GET(request: NextRequest) {
     
     let matches;
     if (acceptedOnly) {
-      matches = getAcceptedJobMatches(user.userId);
+      matches = await getAcceptedJobMatches(user.userId);
     } else {
       const minScore = parseInt(searchParams.get('minScore') || '0', 10);
-      matches = getJobMatchesByUser(user.userId, minScore);
+      matches = await getJobMatchesByUser(user.userId, minScore);
     }
     
     return NextResponse.json({ success: true, data: matches });

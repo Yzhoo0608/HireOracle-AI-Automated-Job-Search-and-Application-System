@@ -1,13 +1,14 @@
-import { getUserById, getCVProfile, searchJobs as dbSearchJobs, createJob, createJobMatch, getJobMatchesByUser, createApplication } from '../db';
+import { getUserById, getCVProfile, searchJobs as dbSearchJobs, createJob, createJobMatch, getJobMatchesByUser, createApplication, getUnmatchedJobsForUser, hasAppliedToJob, hasAppliedToCompanyAndTitle, hasAppliedToJobStreetId, getDb, getApplicationsByUser, getDashboardStats } from '../db';
 import { searchJobs as scrapeJobs } from './job-search-agent';
 import { matchJobToCV } from './matching-agent';
 import { generateCoverLetter } from './cover-letter-agent';
 import { sendApplicationEmail } from './email-agent';
+import { checkCompanyReplies } from './reply-agent';
 import type { JobSearchRequest, Job, JobMatch } from '../types';
 
 export async function runJobSearch(userId: string, filters: JobSearchRequest): Promise<Job[]> {
-  const user = getUserById(userId);
-  const profile = getCVProfile(userId);
+  const user = await getUserById(userId);
+  const profile = await getCVProfile(userId);
   
   if (!user) throw new Error('User not found');
   
@@ -20,7 +21,7 @@ export async function runJobSearch(userId: string, filters: JobSearchRequest): P
   const savedJobs: Job[] = [];
   for (const jobData of newJobsData) {
     // Simple duplicate check could be added here
-    const job = createJob(jobData);
+    const job = await createJob(jobData);
     savedJobs.push(job);
   }
   
@@ -28,18 +29,18 @@ export async function runJobSearch(userId: string, filters: JobSearchRequest): P
 }
 
 export async function runMatchAndRank(userId: string): Promise<JobMatch[]> {
-  const user = getUserById(userId);
-  const profile = getCVProfile(userId);
+  const user = await getUserById(userId);
+  const profile = await getCVProfile(userId);
   
   if (!user || !profile) throw new Error('User or CV profile not found');
   
   // Get jobs created today or recently that don't have matches yet
-  const jobs = dbSearchJobs(''); // For simplicity, grab all jobs. In prod, filter to un-matched.
+  const jobs = await dbSearchJobs(''); // For simplicity, grab all jobs. In prod, filter to un-matched.
   
   for (const job of jobs.slice(0, 10)) { // Limit to 10 to reduce rate limits on free keys
     try {
       const matchData = await matchJobToCV(profile.structured_data, job, user.preferences);
-      createJobMatch({
+      await createJobMatch({
         ...matchData,
         user_id: userId
       });
@@ -54,11 +55,11 @@ export async function runMatchAndRank(userId: string): Promise<JobMatch[]> {
     }
   }
   
-  return getJobMatchesByUser(userId);
+  return await getJobMatchesByUser(userId);
 }
 
 export async function runFullPipeline(userId: string): Promise<{ jobsFound: number; matched: number; applied: number; errors: string[] }> {
-  const user = getUserById(userId);
+  const user = await getUserById(userId);
   if (!user) throw new Error('User not found');
   
   const errors: string[] = [];
@@ -79,7 +80,7 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
     matched = matches.length;
     
     // Auto-apply logic
-    const profile = getCVProfile(userId);
+    const profile = await getCVProfile(userId);
     if (profile) {
       for (const match of matches) {
         if (match.overall_score >= 70 && match.job) {
@@ -102,7 +103,7 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
             });
 
             // 3. Save Application Record
-            createApplication({
+            await createApplication({
               user_id: userId,
               job_id: match.job_id,
               company_name: match.job.company,
@@ -129,4 +130,302 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
   }
 
   return { jobsFound, matched, applied, errors };
+}
+
+export async function runActivePipelineCycle(userId: string): Promise<{ scraped: number; matched: number; applied: number; errors: string[] }> {
+  const user = await getUserById(userId);
+  if (!user || !user.is_active) {
+    return { scraped: 0, matched: 0, applied: 0, errors: ['User not active'] };
+  }
+
+  const errors: string[] = [];
+  let scraped = 0;
+  let matched = 0;
+  let applied = 0;
+  const appliedJobs: Array<{ company: string; title: string; score: number }> = [];
+
+  const profile = await getCVProfile(userId);
+  const userSkills = profile ? profile.structured_data.skills : [];
+
+  // Step A: Search & Store
+  try {
+    const filters: JobSearchRequest = {
+      location: user.preferences?.location || '',
+      keywords: user.preferences?.industries || []
+    };
+    
+    // Scrape new jobs matching preferences
+    const newJobsData = await scrapeJobs(filters, userSkills);
+    for (const jobData of newJobsData) {
+      try {
+        await createJob(jobData);
+        scraped++;
+      } catch (e: any) {
+        // Ignore duplicate key or DB errors on insert
+      }
+    }
+  } catch (error: any) {
+    console.error('[Orchestrator] Step A Scrape Error:', error.message);
+    errors.push(`Job Search Scraper error: ${error.message}`);
+  }
+
+  // Step B: Match & Filter
+  if (profile) {
+    try {
+      const unmatched = await getUnmatchedJobsForUser(userId);
+      // Scan up to 10 unmatched jobs to respect free key rate limits
+      for (const job of unmatched.slice(0, 10)) {
+        try {
+          const matchData = await matchJobToCV(profile.structured_data, job, user.preferences);
+          await createJobMatch({
+            ...matchData,
+            user_id: userId
+          });
+          matched++;
+          // Delay to respect rate limits
+          await new Promise(resolve => setTimeout(resolve, 1500));
+        } catch (e: any) {
+          console.error(`Failed to match job ${job.title}:`, e.message);
+          if (e.message.includes('429') || e.message.toLowerCase().includes('rate limit')) {
+            await new Promise(resolve => setTimeout(resolve, 5000));
+          }
+          errors.push(`Matching error for job "${job.title}": ${e.message}`);
+        }
+      }
+    } catch (error: any) {
+      console.error('[Orchestrator] Step B Match Error:', error.message);
+      errors.push(`Matching Agent error: ${error.message}`);
+    }
+
+    // Step C: Batch Apply (Picks exactly 5 highly matched jobs)
+    try {
+      const matches = await getJobMatchesByUser(userId);
+      // Filter for highly matched (score >= 70) and not yet applied
+      const candidates = [];
+      for (const match of matches) {
+        if (!match.job) continue;
+        const score = match.overall_score >= 70;
+        if (!score) continue;
+
+        const alreadyAppliedById = await hasAppliedToJob(userId, match.job_id);
+        const alreadyAppliedByTitle = await hasAppliedToCompanyAndTitle(userId, match.job.company, match.job.title);
+        const alreadyAppliedByJobStreetId = await hasAppliedToJobStreetId(userId, match.job.url);
+
+        if (!alreadyAppliedById && !alreadyAppliedByTitle && !alreadyAppliedByJobStreetId) {
+          candidates.push(match);
+        }
+      }
+
+      // Pick exactly the first 5 highly matched jobs
+      const batchToApply = candidates.slice(0, 5);
+      for (const match of batchToApply) {
+        if (!match.job) continue;
+        
+        // Double check DB before applying to prevent double application
+        if (
+          await hasAppliedToJob(userId, match.job_id) || 
+          await hasAppliedToCompanyAndTitle(userId, match.job.company, match.job.title) ||
+          await hasAppliedToJobStreetId(userId, match.job.url)
+        ) {
+          continue;
+        }
+
+        try {
+          // 1. Generate Cover Letter
+          const { coverLetter, emailSubject, emailBody } = await generateCoverLetter(
+            profile.structured_data,
+            match.job
+          );
+
+          // 2. Email Company (simulate hr@[company].com)
+          const companyEmail = `hr@${match.job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+          await sendApplicationEmail({
+            to: companyEmail,
+            cc: user.email,
+            subject: emailSubject,
+            body: emailBody,
+            userName: user.name,
+            cvPath: profile.file_path
+          });
+
+          // 3. Save Application Record
+          await createApplication({
+            user_id: userId,
+            job_id: match.job_id,
+            company_name: match.job.company,
+            job_title: match.job.title,
+            status: 'applied',
+            date_applied: new Date().toISOString(),
+            cover_letter: coverLetter,
+            match_score: match.overall_score,
+            email_sent_to: companyEmail,
+            follow_up_date: '',
+            notes: ''
+          });
+
+          appliedJobs.push({
+            company: match.job.company,
+            title: match.job.title,
+            score: match.overall_score
+          });
+
+          applied++;
+        } catch (e: any) {
+          console.error(`[Orchestrator] Failed to auto-apply to ${match.job.title}:`, e.message);
+          errors.push(`Auto-apply error for job "${match.job.title}": ${e.message}`);
+        }
+      }
+    } catch (error: any) {
+      console.error('[Orchestrator] Step C Apply Error:', error.message);
+      errors.push(`Batch Apply error: ${error.message}`);
+    }
+  } else {
+    errors.push('No CV profile uploaded yet; skipping match and auto-apply steps.');
+  }
+
+  // Step D: Check Company Replies & Status Updates (Accepted/Rejected/Interviews)
+  let checkResults = { processed: 0, updates: [] as any[], errors: [] as string[] };
+  try {
+    checkResults = await checkCompanyReplies(userId);
+  } catch (e: any) {
+    errors.push(`Failed to check replies: ${e.message}`);
+  }
+
+  // Step E: Send Auto-Pilot Cycle Summary Email to User
+  const dateStr = new Date().toLocaleString();
+
+  // Query all-time stats and data for the user
+  let statsSummary = '';
+  let last5AppliedText = '';
+  let interviewAppsText = '';
+
+  try {
+    const allApplications = await getApplicationsByUser(userId);
+    const dashboardStats = await getDashboardStats(userId);
+
+    // Format all-time stats
+    statsSummary += `📊 ALL-TIME PIPELINE STATS:\n`;
+    statsSummary += `- Total Applications: ${dashboardStats.total_applications}\n`;
+    statsSummary += `- Under Review: ${dashboardStats.status_counts.under_review}\n`;
+    statsSummary += `- Interviews Scheduled: ${dashboardStats.status_counts.interview_scheduled}\n`;
+    statsSummary += `- Offers Received: ${dashboardStats.status_counts.offer_received}\n`;
+    statsSummary += `- Rejections: ${dashboardStats.status_counts.rejected}\n\n`;
+
+    // Format last 5 applied jobs
+    last5AppliedText += `⏮️ LAST 5 APPLICATIONS SUBMITTED:\n`;
+    const last5 = allApplications.slice(0, 5);
+    if (last5.length > 0) {
+      last5.forEach((app, index) => {
+        last5AppliedText += `  ${index + 1}. ${app.job_title} at ${app.company_name} (Status: ${app.status.replace('_', ' ')})\n`;
+      });
+    } else {
+      last5AppliedText += `- No applications submitted yet.\n`;
+    }
+    last5AppliedText += `📝 *For the complete list of all applications, please check your dashboard page (http://localhost:3000/applications).*\n\n`;
+
+    // Format interview/replied list
+    interviewAppsText += `📞 INCOMING REPLIES / INTERVIEWS SCHEDULED:\n`;
+    const interviewApps = allApplications.filter(app => app.status === 'interview_scheduled');
+    if (interviewApps.length > 0) {
+      interviewApps.forEach((app, index) => {
+        interviewAppsText += `  ${index + 1}. ${app.company_name} — ${app.job_title}\n`;
+        if (app.notes) {
+          // Show the latest note line if present
+          const latestNote = app.notes.split('\n\n')[0] || '';
+          interviewAppsText += `     Latest Update: ${latestNote}\n`;
+        }
+      });
+    } else {
+      interviewAppsText += `- No companies have scheduled interviews yet.\n`;
+    }
+    interviewAppsText += `\n`;
+  } catch (err: any) {
+    console.error('Failed to compile all-time statistics:', err.message);
+  }
+
+  let summaryBody = `Hello ${user.name},\n\nHere is your Auto-Pilot cycle summary for ${dateStr}:\n\n`;
+
+  summaryBody += `🔍 JOBS SEARCHED & SCAPED (THIS CYCLE):\n`;
+  summaryBody += `- Found ${scraped} new jobs matching your search criteria.\n`;
+  summaryBody += `- Flagged ${matched} new high-match positions.\n\n`;
+
+  summaryBody += `📨 AUTO-APPLIED (THIS CYCLE):\n`;
+  if (appliedJobs.length > 0) {
+    summaryBody += `Auto-applied to ${appliedJobs.length} job(s):\n`;
+    appliedJobs.forEach((job, index) => {
+      summaryBody += `  ${index + 1}. ${job.title} at ${job.company} (${job.score}% Match Score)\n`;
+    });
+  } else {
+    summaryBody += `- No new job applications submitted this cycle.\n`;
+  }
+  summaryBody += `\n`;
+
+  summaryBody += `✉️ NEW REPLIES DETECTED (THIS CYCLE):\n`;
+  if (checkResults.updates.length > 0) {
+    summaryBody += `Processed ${checkResults.processed} emails. Detected ${checkResults.updates.length} status updates:\n`;
+    checkResults.updates.forEach((u, index) => {
+      summaryBody += `  ${index + 1}. ${u.company} — ${u.role}: Changed from ${u.oldStatus.replace('_', ' ')} to ${u.newStatus.replace('_', ' ')}\n`;
+      summaryBody += `     Summary: ${u.summary}\n`;
+    });
+  } else {
+    summaryBody += `- No new company replies detected in your inbox during this cycle.\n`;
+  }
+  summaryBody += `\n`;
+
+  // Append all-time stats, last 5, and interviews
+  summaryBody += statsSummary;
+  summaryBody += last5AppliedText;
+  summaryBody += interviewAppsText;
+
+  if (errors.length > 0) {
+    summaryBody += `⚠️ CYCLE WARNINGS / ERRORS:\n`;
+    errors.forEach((err, index) => {
+      summaryBody += `- ${err}\n`;
+    });
+    summaryBody += `\n`;
+  }
+
+  summaryBody += `Best regards,\nYour AI Job Agent`;
+
+  try {
+    await sendApplicationEmail({
+      to: user.email,
+      subject: `[AI Job Agent] Auto-Pilot Summary - ${dateStr}`,
+      body: summaryBody,
+      userName: user.name,
+      isSystemNotification: true
+    });
+    console.log(`[Orchestrator] Summary email sent to ${user.email}`);
+  } catch (e: any) {
+    console.error('Failed to send summary email:', e.message);
+  }
+
+  return { scraped, matched, applied, errors };
+}
+
+let activeTimerInitialized = false;
+
+export function startActivePipelineTimer() {
+  if (activeTimerInitialized) return;
+  activeTimerInitialized = true;
+
+  console.log('[Orchestrator] Starting background active automation loop (10-minute cycle)');
+
+  // Run the loop cycle every 10 minutes
+  setInterval(async () => {
+    try {
+      const db = getDb();
+      // Get all active users from db
+      const result = await db.query('SELECT id FROM users WHERE is_active = 1');
+      const activeUsers = result.rows;
+      
+      for (const row of activeUsers) {
+        console.log(`[Orchestrator] Running active pipeline cycle for user: ${row.id}`);
+        const result = await runActivePipelineCycle(row.id);
+        console.log(`[Orchestrator] Active pipeline cycle completed for user ${row.id}:`, result);
+      }
+    } catch (e) {
+      console.error('[Orchestrator] Error in background active automation loop:', e);
+    }
+  }, 10 * 60 * 1000); // 10 minutes
 }

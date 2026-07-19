@@ -8,15 +8,15 @@ export async function POST(request: NextRequest) {
     const user = await requireAuth();
     const { job_id, type } = await request.json();
 
-    const job = getJobById(job_id);
-    const cv = getCVProfile(user.userId);
+    const job = await getJobById(job_id);
+    const cv = await getCVProfile(user.userId);
 
     if (!job || !cv) {
       return NextResponse.json({ success: false, error: 'Job or CV not found' }, { status: 404 });
     }
 
     const messages = await generateInterviewQuestions(job, cv.structured_data, type);
-    const session = createInterviewSession(user.userId, job_id, type, messages);
+    const session = await createInterviewSession(user.userId, job_id, type, messages);
 
     return NextResponse.json({ success: true, data: session });
   } catch (error: any) {

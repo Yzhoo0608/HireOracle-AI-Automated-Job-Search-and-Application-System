@@ -1,7 +1,7 @@
 import { ImapFlow } from 'imapflow';
 import { simpleParser } from 'mailparser';
 import { askJSON } from '../groq';
-import { getApplicationsByUser, getApplicationById, getUserById, getDb } from '../db';
+import { getApplicationsByUser, getApplicationById, getUserById, updateApplicationStatusAndNotes, updateApplicationNotes } from '../db';
 import { sendApplicationEmail } from './email-agent';
 import type { ApplicationStatus } from '../types';
 
@@ -56,7 +56,7 @@ export async function checkCompanyReplies(userId: string): Promise<{
   updates: Array<{ company: string; role: string; oldStatus: string; newStatus: string; summary: string }>;
   errors: string[];
 }> {
-  const user = getUserById(userId);
+  const user = await getUserById(userId);
   if (!user) {
     throw new Error('User not found');
   }
@@ -91,7 +91,7 @@ export async function checkCompanyReplies(userId: string): Promise<{
     
     try {
       // Get all applications for this user to match replies against
-      const applications = getApplicationsByUser(userId);
+      const applications = await getApplicationsByUser(userId);
       if (applications.length === 0) {
         lock.release();
         await client.logout();
@@ -112,12 +112,20 @@ export async function checkCompanyReplies(userId: string): Promise<{
           const bodyText = parsedMail.text || '';
           const fromAddress = parsedMail.from?.value[0]?.address || '';
           const fromName = parsedMail.from?.value[0]?.name || '';
+          const emailDate = parsedMail.date ? new Date(parsedMail.date) : new Date();
 
           // Match email to an active application using robust scoring
           let matchedApp = null;
           let highestScore = 0;
+          const emailTime = emailDate.getTime();
           
           for (const app of applications) {
+            // Safety: Ignore emails received before the application was submitted
+            const appTime = new Date(app.date_applied || app.created_at).getTime();
+            if (emailTime < appTime - 60000) {
+              continue;
+            }
+
             const score = getEmailMatchScore(app, subject, bodyText, fromAddress);
             if (score > highestScore) {
               highestScore = score;
@@ -168,13 +176,11 @@ export async function checkCompanyReplies(userId: string): Promise<{
 
             const oldStatus = matchedApp.status;
 
-            // Update Database
-            const db = getDb();
             const timestamp = new Date().toISOString();
             const newNote = `[${timestamp}] Email Reply from ${fromAddress}:\n${analysis.summary}\n\n${matchedApp.notes || ''}`;
             
             if (newStatus) {
-              db.prepare('UPDATE applications SET status = ?, notes = ? WHERE id = ?').run(newStatus, newNote, matchedApp.id);
+              await updateApplicationStatusAndNotes(matchedApp.id, newStatus, newNote);
               
               updates.push({
                 company: matchedApp.company_name,
@@ -185,7 +191,7 @@ export async function checkCompanyReplies(userId: string): Promise<{
               });
             } else {
               // Just update notes if it's 'other'
-              db.prepare('UPDATE applications SET notes = ? WHERE id = ?').run(newNote, matchedApp.id);
+              await updateApplicationNotes(matchedApp.id, newNote);
             }
 
             // Forward reply copy to the candidate
@@ -222,13 +228,12 @@ export async function simulateCompanyReply(
   replyText: string
 ): Promise<{ success: boolean; newStatus: ApplicationStatus | 'no_change'; summary: string; error?: string }> {
   try {
-    const db = getDb();
-    const app = getApplicationById(applicationId);
+    const app = await getApplicationById(applicationId);
     if (!app) {
       return { success: false, newStatus: 'no_change', summary: '', error: 'Application not found' };
     }
 
-    const user = getUserById(app.user_id);
+    const user = await getUserById(app.user_id);
     if (!user) {
       return { success: false, newStatus: 'no_change', summary: '', error: 'User not found' };
     }
@@ -271,9 +276,9 @@ export async function simulateCompanyReply(
     const newNote = `[${timestamp}] [SIMULATED] Email Reply:\n${analysis.summary}\n\n${app.notes || ''}`;
 
     if (newStatus) {
-      db.prepare('UPDATE applications SET status = ?, notes = ? WHERE id = ?').run(newStatus, newNote, app.id);
+      await updateApplicationStatusAndNotes(app.id, newStatus, newNote);
     } else {
-      db.prepare('UPDATE applications SET notes = ? WHERE id = ?').run(newNote, app.id);
+      await updateApplicationNotes(app.id, newNote);
     }
 
     // Forward copy to the candidate

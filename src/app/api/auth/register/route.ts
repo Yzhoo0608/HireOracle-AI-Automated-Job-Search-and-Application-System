@@ -10,12 +10,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
 
-    if (getUserByEmail(email)) {
+    if (await getUserByEmail(email)) {
       return NextResponse.json({ success: false, error: 'Email already exists' }, { status: 400 });
     }
 
     const passwordHash = await hashPassword(password);
-    const user = createUser(email, passwordHash, name);
+    const user = await createUser(email, passwordHash, name);
     const token = generateToken({ userId: user.id, email: user.email });
 
     const response = NextResponse.json({ 

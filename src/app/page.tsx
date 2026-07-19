@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/Card';
 import { StatCard } from '@/components/ui/StatCard';
 import { Button } from '@/components/ui/Button';
 import { MatchScore } from '@/components/ui/MatchScore';
-import { Briefcase, FileText, CheckCircle, Search, Play, RefreshCw, ExternalLink } from 'lucide-react';
+import { Briefcase, FileText, CheckCircle, Search, Play, Square, RefreshCw, ExternalLink } from 'lucide-react';
 import type { DashboardStats } from '@/lib/types';
 
 export default function DashboardPage() {
@@ -32,6 +32,8 @@ export default function DashboardPage() {
     return `${greet}, ${name}!`;
   };
 
+  const [isActivePipeline, setIsActivePipeline] = useState(false);
+
   const fetchStats = useCallback(async () => {
     try {
       const res = await fetch('/api/applications/stats');
@@ -49,23 +51,44 @@ export default function DashboardPage() {
       .then(data => {
         if (data.success) {
           setUserName(data.data.name);
+          setIsActivePipeline(!!data.data.is_active);
         }
       })
       .catch(err => console.error(err));
   }, [fetchStats]);
 
-  const handleAutoPilot = async () => {
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isActivePipeline) {
+      interval = setInterval(() => {
+        fetchStats();
+      }, 5000); // Poll every 5 seconds
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isActivePipeline, fetchStats]);
+
+  const handleTogglePipeline = async () => {
     setRunning(true);
     setPipelineResult(null);
+    const nextState = !isActivePipeline;
     try {
-      const res = await fetch('/api/orchestrator/run', { method: 'POST' });
+      const res = await fetch('/api/orchestrator/active', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ active: nextState })
+      });
       const data = await res.json();
       if (data.success) {
+        setIsActivePipeline(nextState);
         setPipelineResult(
-          `✅ Pipeline complete! Found ${data.data.jobsFound} jobs, matched ${data.data.matched}, auto-applied to ${data.data.applied}.`
+          nextState 
+            ? '🚀 Pipeline automation started! The agent will check, match, and batch-apply (up to 5 jobs) every 10 minutes in the background.' 
+            : '🛑 Pipeline automation stopped.'
         );
       } else {
-        setPipelineResult(`❌ Pipeline error: ${data.error}`);
+        setPipelineResult(`❌ Error: ${data.error}`);
       }
       await fetchStats();
     } catch (e: any) {
@@ -155,23 +178,30 @@ export default function DashboardPage() {
             )}
           </button>
           <button
-            onClick={handleAutoPilot}
+            onClick={handleTogglePipeline}
             disabled={running}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 ${
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 cursor-pointer ${
               running
                 ? 'bg-slate-700 cursor-not-allowed opacity-70'
-                : 'bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 shadow-lg hover:shadow-cyan-500/25 hover:scale-105'
+                : isActivePipeline
+                  ? 'bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 shadow-lg hover:shadow-rose-500/25 hover:scale-105'
+                  : 'bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 shadow-lg hover:shadow-cyan-500/25 hover:scale-105'
             }`}
           >
             {running ? (
               <>
                 <RefreshCw size={16} className="animate-spin" />
-                Running Pipeline...
+                {isActivePipeline ? 'Stopping Pipeline...' : 'Starting Pipeline...'}
+              </>
+            ) : isActivePipeline ? (
+              <>
+                <Square size={16} fill="white" />
+                Stop Pipeline
               </>
             ) : (
               <>
-                <Play size={16} />
-                Start Auto-Pilot
+                <Play size={16} fill="white" />
+                Start Pipeline
               </>
             )}
           </button>
@@ -186,6 +216,17 @@ export default function DashboardPage() {
             : 'bg-red-900/30 border-red-700/50 text-red-300'
         }`}>
           {pipelineResult}
+        </div>
+      )}
+
+      {/* Live Auto-Pilot Running Banner */}
+      {isActivePipeline && (
+        <div className="bg-cyan-950/40 border border-cyan-800/60 rounded-2xl px-4 py-3 text-sm font-semibold text-cyan-300 animate-pulse flex items-center justify-between shadow-sm">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
+            <span>Live Auto-Pilot Loop is Running: Scrapes and batch-applies to new matching jobs every 10 minutes. Dashboard auto-updates live!</span>
+          </div>
+          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-cyan-900/60 border border-cyan-700/50">Active</span>
         </div>
       )}
 
@@ -278,6 +319,17 @@ export default function DashboardPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+          {stats.recent_applications.length > 0 && (
+            <div className="mt-4 pt-3 border-t border-slate-800/80 text-center">
+              <a 
+                href="/applications" 
+                className="text-xs text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1.5 hover:underline font-medium transition-all"
+              >
+                📝 Check your complete list of applications in the Applications tab
+                <ExternalLink size={12} />
+              </a>
             </div>
           )}
         </Card>

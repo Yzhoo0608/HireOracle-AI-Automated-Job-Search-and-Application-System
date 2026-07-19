@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { simulateCompanyReply } from '@/lib/agents/reply-agent';
-import { getDb } from '@/lib/db';
+import { getApplicationById } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'applicationId and replyText are required' }, { status: 400 });
     }
 
-    const db = getDb();
-    const app = db.prepare('SELECT * FROM applications WHERE id = ?').get(applicationId) as any;
+    const app = await getApplicationById(applicationId);
     if (!app || app.user_id !== authUser.userId) {
       return NextResponse.json({ success: false, error: 'Application not found or unauthorized' }, { status: 404 });
     }

@@ -5,7 +5,7 @@ import { getDashboardStats } from '@/lib/db';
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth();
-    const stats = getDashboardStats(user.userId);
+    const stats = await getDashboardStats(user.userId);
     return NextResponse.json({ success: true, data: stats });
   } catch (error: any) {
     if (error.message === 'Authentication required') {

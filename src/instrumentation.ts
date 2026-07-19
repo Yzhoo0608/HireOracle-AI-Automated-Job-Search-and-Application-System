@@ -2,7 +2,16 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     const cron = await import('node-cron');
     const { checkCompanyReplies } = await import('@/lib/agents/reply-agent');
-    const { getDb } = await import('@/lib/db');
+    const { getDb, initializeDatabase } = await import('@/lib/db');
+
+    // Bootstrap database tables
+    try {
+      console.log('🏁 [Database] Bootstrapping PostgreSQL schema...');
+      await initializeDatabase();
+      console.log('🏁 [Database] PostgreSQL schema initialized successfully.');
+    } catch (e: any) {
+      console.error('❌ [Database Error] Failed to initialize database:', e.message);
+    }
 
     // Prevent duplicate cron jobs during Next.js hot-reloading
     const globalRef = global as any;
@@ -18,7 +27,8 @@ export async function register() {
         console.log('⏰ [Cron] Checking company replies...');
         
         const db = getDb();
-        const users = db.prepare('SELECT id FROM users').all() as { id: string }[];
+        const result = await db.query('SELECT id FROM users');
+        const users = result.rows;
         
         if (users.length === 0) {
           console.log('⏰ [Cron] No registered users. Skipping.');

@@ -17,6 +17,7 @@ export function Sidebar() {
   const navItems = [
     { href: '/', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/cv', label: 'CV Profile', icon: FileText },
+    { href: '/applications', label: 'Applications', icon: Briefcase },
     { href: '/interview', label: 'Interview Prep', icon: MessageSquare },
     { href: '/settings', label: 'Settings', icon: Settings },
   ];

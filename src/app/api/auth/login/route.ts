@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
 
-    const user = getUserByEmail(email);
+    const user = await getUserByEmail(email);
     if (!user || !(await verifyPassword(password, user.password_hash || ''))) {
       return NextResponse.json({ success: false, error: 'Invalid credentials' }, { status: 401 });
     }

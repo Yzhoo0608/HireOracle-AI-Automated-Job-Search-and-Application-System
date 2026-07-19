@@ -2,7 +2,7 @@ import { getApplicationsByUser, getDashboardStats } from '../db';
 import type { Application, ApplicationStatus, DashboardStats } from '../types';
 
 export async function getApplicationPipeline(userId: string): Promise<Record<ApplicationStatus, Application[]>> {
-  const applications = getApplicationsByUser(userId);
+  const applications = await getApplicationsByUser(userId);
   
   const pipeline: Record<ApplicationStatus, Application[]> = {
     applied: [],
@@ -23,5 +23,5 @@ export async function getApplicationPipeline(userId: string): Promise<Record<App
 
 export async function generateApplicationStats(userId: string): Promise<DashboardStats> {
   // We can just rely on the existing db.ts function which already aggregates this nicely
-  return getDashboardStats(userId);
+  return await getDashboardStats(userId);
 }

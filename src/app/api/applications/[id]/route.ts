@@ -7,7 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const user = await requireAuth();
     const resolvedParams = await params;
-    const app = getApplicationById(resolvedParams.id);
+    const app = await getApplicationById(resolvedParams.id);
     
     if (!app || app.user_id !== user.userId) {
       return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
@@ -26,18 +26,18 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   try {
     const user = await requireAuth();
     const resolvedParams = await params;
-    const app = getApplicationById(resolvedParams.id);
+    const app = await getApplicationById(resolvedParams.id);
     
     if (!app || app.user_id !== user.userId) {
       return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
     }
     
     const { status } = await request.json();
-    updateApplicationStatus(resolvedParams.id, status);
+    await updateApplicationStatus(resolvedParams.id, status);
     
     // Auto-notify user on interview
     if (status === 'interview_scheduled') {
-      const fullUser = getUserById(user.userId);
+      const fullUser = await getUserById(user.userId);
       if (fullUser) {
         await sendApplicationEmail({
           to: fullUser.email,

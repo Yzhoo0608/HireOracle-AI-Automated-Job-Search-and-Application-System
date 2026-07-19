@@ -5,7 +5,7 @@ import { getCVProfile } from '@/lib/db';
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth();
-    const profile = getCVProfile(user.userId);
+    const profile = await getCVProfile(user.userId);
     
     return NextResponse.json({ success: true, data: profile });
   } catch (error: any) {

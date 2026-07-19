@@ -11,6 +11,7 @@ export interface User {
   name: string;
   preferences: UserPreferences | null;
   created_at: string;
+  is_active?: boolean;
 }
 
 export interface UserPreferences {

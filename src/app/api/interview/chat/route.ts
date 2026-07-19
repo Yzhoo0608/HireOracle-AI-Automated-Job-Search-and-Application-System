@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const user = await requireAuth();
     const { session_id, answer } = await request.json();
 
-    const session = getInterviewSession(session_id);
+    const session = await getInterviewSession(session_id);
 
     if (!session || session.user_id !== user.userId) {
       return NextResponse.json({ success: false, error: 'Session not found' }, { status: 404 });
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     const scores = session.messages.filter(m => m.score !== undefined).map(m => m.score as number);
     const overallScore = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : null;
 
-    updateInterviewSession(session.id, session.messages, overallScore, evaluation.feedback);
+    await updateInterviewSession(session.id, session.messages, overallScore, evaluation.feedback);
 
     return NextResponse.json({ success: true, data: session });
   } catch (error: any) {

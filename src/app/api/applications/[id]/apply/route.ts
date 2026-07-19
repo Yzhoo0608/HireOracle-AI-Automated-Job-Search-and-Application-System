@@ -8,15 +8,15 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   try {
     const authUser = await requireAuth();
     const resolvedParams = await params;
-    const app = getApplicationById(resolvedParams.id);
+    const app = await getApplicationById(resolvedParams.id);
     
     if (!app || app.user_id !== authUser.userId) {
       return NextResponse.json({ success: false, error: 'Application not found' }, { status: 404 });
     }
 
-    const job = getJobById(app.job_id);
-    const cv = getCVProfile(authUser.userId);
-    const user = getUserById(authUser.userId);
+    const job = await getJobById(app.job_id);
+    const cv = await getCVProfile(authUser.userId);
+    const user = await getUserById(authUser.userId);
 
     if (!job || !cv || !user) {
       return NextResponse.json({ success: false, error: 'Missing job, CV, or user data' }, { status: 400 });
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       });
 
       // 3. Log Email
-      createEmailLog({
+      await createEmailLog({
         user_id: user.id,
         application_id: app.id,
         to_email: app.email_sent_to,

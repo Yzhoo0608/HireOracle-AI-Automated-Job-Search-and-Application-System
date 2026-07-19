@@ -1,10 +1,8 @@
 // ============================================================
-// SQLite Database Layer — All CRUD Operations
+// PostgreSQL Database Layer — All CRUD Operations
 // ============================================================
 
-import Database from 'better-sqlite3';
-import path from 'path';
-import fs from 'fs';
+import { Pool } from 'pg';
 import { v4 as uuid } from 'uuid';
 import type {
   User,
@@ -24,48 +22,43 @@ import type {
 
 // ── Database Singleton ──────────────────────────────────────
 
-let _db: Database.Database | null = null;
+let _pool: Pool | null = null;
 
-export function getDb(): Database.Database {
-  if (!_db) {
-    const dbPath = process.env.DATABASE_PATH || './data/database.sqlite';
-    const dir = path.dirname(dbPath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    _db = new Database(dbPath);
-    _db.pragma('journal_mode = WAL');
-    _db.pragma('foreign_keys = ON');
-    initializeDatabase(_db);
+export function getDb(): Pool {
+  if (!_pool) {
+    const connectionString = process.env.DATABASE_URL;
+    _pool = new Pool({ connectionString });
   }
-  return _db;
+  return _pool;
 }
 
 // ── Schema Initialization ───────────────────────────────────
 
-function initializeDatabase(db: Database.Database) {
-  db.exec(`
+export async function initializeDatabase() {
+  const db = getDb();
+  await db.query(`
     CREATE TABLE IF NOT EXISTS users (
-      id TEXT PRIMARY KEY,
+      id VARCHAR(255) PRIMARY KEY,
       email TEXT UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
       name TEXT NOT NULL DEFAULT '',
       preferences TEXT DEFAULT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      is_active INTEGER DEFAULT 0
     );
 
     CREATE TABLE IF NOT EXISTS cv_profiles (
-      id TEXT PRIMARY KEY,
-      user_id TEXT NOT NULL,
+      id VARCHAR(255) PRIMARY KEY,
+      user_id VARCHAR(255) NOT NULL,
       raw_text TEXT DEFAULT '',
       structured_data TEXT DEFAULT '{}',
       file_path TEXT DEFAULT '',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS jobs (
-      id TEXT PRIMARY KEY,
+      id VARCHAR(255) PRIMARY KEY,
       title TEXT NOT NULL,
       company TEXT DEFAULT '',
       location TEXT DEFAULT '',
@@ -75,65 +68,65 @@ function initializeDatabase(db: Database.Database) {
       url TEXT DEFAULT '',
       source TEXT DEFAULT 'manual',
       posted_date TEXT DEFAULT '',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS job_matches (
-      id TEXT PRIMARY KEY,
-      user_id TEXT NOT NULL,
-      job_id TEXT NOT NULL,
-      overall_score REAL DEFAULT 0,
-      skill_score REAL DEFAULT 0,
-      experience_score REAL DEFAULT 0,
-      location_score REAL DEFAULT 0,
-      preference_score REAL DEFAULT 0,
+      id VARCHAR(255) PRIMARY KEY,
+      user_id VARCHAR(255) NOT NULL,
+      job_id VARCHAR(255) NOT NULL,
+      overall_score DOUBLE PRECISION DEFAULT 0,
+      skill_score DOUBLE PRECISION DEFAULT 0,
+      experience_score DOUBLE PRECISION DEFAULT 0,
+      location_score DOUBLE PRECISION DEFAULT 0,
+      preference_score DOUBLE PRECISION DEFAULT 0,
       skill_gaps TEXT DEFAULT '[]',
       recommendations TEXT DEFAULT '[]',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE,
       UNIQUE(user_id, job_id)
     );
 
     CREATE TABLE IF NOT EXISTS applications (
-      id TEXT PRIMARY KEY,
-      user_id TEXT NOT NULL,
-      job_id TEXT NOT NULL,
+      id VARCHAR(255) PRIMARY KEY,
+      user_id VARCHAR(255) NOT NULL,
+      job_id VARCHAR(255) NOT NULL,
       company_name TEXT DEFAULT '',
       job_title TEXT DEFAULT '',
       status TEXT DEFAULT 'applied',
       cover_letter TEXT DEFAULT '',
       email_sent_to TEXT DEFAULT '',
-      date_applied DATETIME DEFAULT CURRENT_TIMESTAMP,
-      follow_up_date DATETIME DEFAULT NULL,
+      date_applied TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      follow_up_date TIMESTAMP DEFAULT NULL,
       notes TEXT DEFAULT '',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS email_log (
-      id TEXT PRIMARY KEY,
-      user_id TEXT NOT NULL,
-      application_id TEXT DEFAULT NULL,
+      id VARCHAR(255) PRIMARY KEY,
+      user_id VARCHAR(255) NOT NULL,
+      application_id VARCHAR(255) DEFAULT NULL,
       to_email TEXT DEFAULT '',
       subject TEXT DEFAULT '',
       body TEXT DEFAULT '',
       status TEXT DEFAULT 'sent',
-      sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE SET NULL
     );
 
     CREATE TABLE IF NOT EXISTS interview_sessions (
-      id TEXT PRIMARY KEY,
-      user_id TEXT NOT NULL,
-      job_id TEXT DEFAULT NULL,
+      id VARCHAR(255) PRIMARY KEY,
+      user_id VARCHAR(255) NOT NULL,
+      job_id VARCHAR(255) DEFAULT NULL,
       type TEXT DEFAULT 'hr',
       messages TEXT DEFAULT '[]',
-      overall_score REAL DEFAULT NULL,
+      overall_score DOUBLE PRECISION DEFAULT NULL,
       feedback TEXT DEFAULT '',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE SET NULL
     );
@@ -149,274 +142,346 @@ function initializeDatabase(db: Database.Database) {
 
 // ── User Operations ─────────────────────────────────────────
 
-export function createUser(email: string, passwordHash: string, name: string): User {
+export async function createUser(email: string, passwordHash: string, name: string): Promise<User> {
   const db = getDb();
   const id = uuid();
-  db.prepare(
-    'INSERT INTO users (id, email, password_hash, name) VALUES (?, ?, ?, ?)'
-  ).run(id, email, passwordHash, name);
-  return getUserById(id)!;
+  await db.query(
+    'INSERT INTO users (id, email, password_hash, name) VALUES ($1, $2, $3, $4)',
+    [id, email, passwordHash, name]
+  );
+  const user = await getUserById(id);
+  if (!user) throw new Error("Failed to create user");
+  return user;
 }
 
-export function getUserByEmail(email: string): User | null {
+export async function getUserByEmail(email: string): Promise<User | null> {
   const db = getDb();
-  const row = db.prepare('SELECT * FROM users WHERE email = ?').get(email) as Record<string, unknown> | undefined;
-  return row ? deserializeUser(row) : null;
+  const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+  return result.rows.length ? deserializeUser(result.rows[0]) : null;
 }
 
-export function getUserById(id: string): User | null {
+export async function getUserById(id: string): Promise<User | null> {
   const db = getDb();
-  const row = db.prepare('SELECT * FROM users WHERE id = ?').get(id) as Record<string, unknown> | undefined;
-  return row ? deserializeUser(row) : null;
+  const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+  return result.rows.length ? deserializeUser(result.rows[0]) : null;
 }
 
-export function updateUserPreferences(userId: string, prefs: UserPreferences): void {
+export async function updateUserPreferences(userId: string, prefs: UserPreferences): Promise<void> {
   const db = getDb();
-  db.prepare('UPDATE users SET preferences = ? WHERE id = ?').run(
+  await db.query('UPDATE users SET preferences = $1 WHERE id = $2', [
     JSON.stringify(prefs),
     userId
-  );
+  ]);
 }
 
-function deserializeUser(row: Record<string, unknown>): User {
+function deserializeUser(row: Record<string, any>): User {
   return {
-    id: row.id as string,
-    email: row.email as string,
-    password_hash: row.password_hash as string,
-    name: row.name as string,
-    preferences: row.preferences ? JSON.parse(row.preferences as string) : null,
-    created_at: row.created_at as string,
+    id: row.id,
+    email: row.email,
+    password_hash: row.password_hash,
+    name: row.name,
+    preferences: row.preferences ? (typeof row.preferences === 'string' ? JSON.parse(row.preferences) : row.preferences) : null,
+    created_at: row.created_at,
+    is_active: row.is_active === 1 || row.is_active === true,
   };
 }
 
 // ── CV Profile Operations ───────────────────────────────────
 
-export function createCVProfile(
+export async function createCVProfile(
   userId: string,
   rawText: string,
   structuredData: ParsedCV,
   filePath: string
-): CVProfile {
+): Promise<CVProfile> {
   const db = getDb();
   const id = uuid();
-  // Delete any existing CV for this user (one CV per user)
-  db.prepare('DELETE FROM cv_profiles WHERE user_id = ?').run(userId);
-  db.prepare(
-    'INSERT INTO cv_profiles (id, user_id, raw_text, structured_data, file_path) VALUES (?, ?, ?, ?, ?)'
-  ).run(id, userId, rawText, JSON.stringify(structuredData), filePath);
-  return getCVProfile(userId)!;
+  await db.query('DELETE FROM cv_profiles WHERE user_id = $1', [userId]);
+  await db.query(
+    'INSERT INTO cv_profiles (id, user_id, raw_text, structured_data, file_path) VALUES ($1, $2, $3, $4, $5)',
+    [id, userId, rawText, JSON.stringify(structuredData), filePath]
+  );
+  const profile = await getCVProfile(userId);
+  if (!profile) throw new Error("Failed to create CV profile");
+  return profile;
 }
 
-export function getCVProfile(userId: string): CVProfile | null {
+export async function getCVProfile(userId: string): Promise<CVProfile | null> {
   const db = getDb();
-  const row = db.prepare(
-    'SELECT * FROM cv_profiles WHERE user_id = ? ORDER BY created_at DESC LIMIT 1'
-  ).get(userId) as Record<string, unknown> | undefined;
-  if (!row) return null;
+  const result = await db.query(
+    'SELECT * FROM cv_profiles WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1',
+    [userId]
+  );
+  if (!result.rows.length) return null;
+  const row = result.rows[0];
   return {
-    id: row.id as string,
-    user_id: row.user_id as string,
-    raw_text: row.raw_text as string,
-    structured_data: JSON.parse((row.structured_data as string) || '{}'),
-    file_path: row.file_path as string,
-    created_at: row.created_at as string,
+    id: row.id,
+    user_id: row.user_id,
+    raw_text: row.raw_text,
+    structured_data: (typeof row.structured_data === 'string') ? JSON.parse(row.structured_data || '{}') : (row.structured_data || {}),
+    file_path: row.file_path,
+    created_at: row.created_at,
   };
 }
 
 // ── Job Operations ──────────────────────────────────────────
 
-export function createJob(job: Omit<Job, 'id' | 'created_at'>): Job {
+export function extractJobStreetId(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const match = url.match(new RegExp('/job/(\\\\d+)', 'i'));
+  return match ? match[1] : null;
+}
+
+export async function getJobByJobStreetId(jobStreetId: string): Promise<Job | null> {
   const db = getDb();
+  const result = await db.query("SELECT * FROM jobs WHERE url LIKE $1", [`%/job/${jobStreetId}%`]);
+  for (const row of result.rows) {
+    const url = row.url;
+    if (url) {
+      const id = extractJobStreetId(url);
+      if (id === jobStreetId) {
+        return deserializeJob(row);
+      }
+    }
+  }
+  return null;
+}
+
+export async function createJob(job: Omit<Job, 'id' | 'created_at'>): Promise<Job> {
+  const db = getDb();
+  if (job.url) {
+    const jobStreetId = extractJobStreetId(job.url);
+    if (jobStreetId) {
+      const existing = await getJobByJobStreetId(jobStreetId);
+      if (existing) {
+        return existing;
+      }
+    } else {
+      const existing = await getJobByUrl(job.url);
+      if (existing) {
+        return existing;
+      }
+    }
+  }
   const id = uuid();
-  db.prepare(
+  await db.query(
     `INSERT INTO jobs (id, title, company, location, description, requirements, salary_range, url, source, posted_date)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(
-    id,
-    job.title,
-    job.company,
-    job.location,
-    job.description,
-    JSON.stringify(job.requirements),
-    job.salary_range,
-    job.url,
-    job.source,
-    job.posted_date
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+    [
+      id,
+      job.title,
+      job.company,
+      job.location,
+      job.description,
+      JSON.stringify(job.requirements),
+      job.salary_range,
+      job.url,
+      job.source,
+      job.posted_date
+    ]
   );
-  return getJobById(id)!;
+  const newJob = await getJobById(id);
+  if (!newJob) throw new Error("Failed to create job");
+  return newJob;
 }
 
-export function getJobById(id: string): Job | null {
+export async function getJobById(id: string): Promise<Job | null> {
   const db = getDb();
-  const row = db.prepare('SELECT * FROM jobs WHERE id = ?').get(id) as Record<string, unknown> | undefined;
-  return row ? deserializeJob(row) : null;
+  const result = await db.query('SELECT * FROM jobs WHERE id = $1', [id]);
+  return result.rows.length ? deserializeJob(result.rows[0]) : null;
 }
 
-export function getAllJobs(limit = 100, offset = 0): Job[] {
+export async function getJobByUrl(url: string): Promise<Job | null> {
   const db = getDb();
-  const rows = db.prepare(
-    'SELECT * FROM jobs ORDER BY created_at DESC LIMIT ? OFFSET ?'
-  ).all(limit, offset) as Record<string, unknown>[];
-  return rows.map(deserializeJob);
+  const result = await db.query('SELECT * FROM jobs WHERE url = $1', [url]);
+  return result.rows.length ? deserializeJob(result.rows[0]) : null;
 }
 
-export function searchJobs(query: string): Job[] {
+export async function getAllJobs(limit = 100, offset = 0): Promise<Job[]> {
+  const db = getDb();
+  const result = await db.query(
+    'SELECT * FROM jobs ORDER BY created_at DESC LIMIT $1 OFFSET $2',
+    [limit, offset]
+  );
+  return result.rows.map(deserializeJob);
+}
+
+export async function searchJobs(query: string): Promise<Job[]> {
   const db = getDb();
   const pattern = `%${query}%`;
-  const rows = db.prepare(
-    `SELECT * FROM jobs WHERE title LIKE ? OR company LIKE ? OR description LIKE ? OR location LIKE ?
-     ORDER BY created_at DESC LIMIT 50`
-  ).all(pattern, pattern, pattern, pattern) as Record<string, unknown>[];
-  return rows.map(deserializeJob);
+  const result = await db.query(
+    `SELECT * FROM jobs WHERE title ILIKE $1 OR company ILIKE $2 OR description ILIKE $3 OR location ILIKE $4
+     ORDER BY created_at DESC LIMIT 50`,
+    [pattern, pattern, pattern, pattern]
+  );
+  return result.rows.map(deserializeJob);
 }
 
-export function getJobsCreatedToday(): number {
+export async function getJobsCreatedToday(userId: string): Promise<number> {
   const db = getDb();
-  const row = db.prepare(
-    "SELECT COUNT(*) as count FROM jobs WHERE date(created_at) = date('now')"
-  ).get() as Record<string, unknown>;
-  return (row?.count as number) || 0;
+  const result = await db.query(
+    "SELECT COUNT(*) as count FROM job_matches WHERE user_id = $1 AND DATE(created_at) = CURRENT_DATE",
+    [userId]
+  );
+  return parseInt(result.rows[0]?.count || '0', 10);
 }
 
-function deserializeJob(row: Record<string, unknown>): Job {
+function deserializeJob(row: Record<string, any>): Job {
   return {
-    id: row.id as string,
-    title: row.title as string,
-    company: row.company as string,
-    location: row.location as string,
-    description: row.description as string,
-    requirements: JSON.parse((row.requirements as string) || '{}'),
-    salary_range: row.salary_range as string,
-    url: row.url as string,
-    source: row.source as string,
-    posted_date: row.posted_date as string,
-    created_at: row.created_at as string,
+    id: row.id,
+    title: row.title,
+    company: row.company,
+    location: row.location,
+    description: row.description,
+    requirements: typeof row.requirements === 'string' ? JSON.parse(row.requirements || '{}') : (row.requirements || {}),
+    salary_range: row.salary_range,
+    url: row.url,
+    source: row.source,
+    posted_date: row.posted_date,
+    created_at: row.created_at,
   };
 }
 
 // ── Job Match Operations ────────────────────────────────────
 
-export function createJobMatch(match: Omit<JobMatch, 'id' | 'created_at'>): JobMatch {
+export async function createJobMatch(match: Omit<JobMatch, 'id' | 'created_at'>): Promise<JobMatch> {
   const db = getDb();
   const id = uuid();
-  db.prepare(
-    `INSERT OR REPLACE INTO job_matches 
+  await db.query(
+    `INSERT INTO job_matches 
      (id, user_id, job_id, overall_score, skill_score, experience_score, location_score, preference_score, skill_gaps, recommendations)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(
-    id,
-    match.user_id,
-    match.job_id,
-    match.overall_score,
-    match.skill_score,
-    match.experience_score,
-    match.location_score,
-    match.preference_score,
-    JSON.stringify(match.skill_gaps),
-    JSON.stringify(match.recommendations)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+     ON CONFLICT (user_id, job_id) DO UPDATE SET
+       overall_score = EXCLUDED.overall_score,
+       skill_score = EXCLUDED.skill_score,
+       experience_score = EXCLUDED.experience_score,
+       location_score = EXCLUDED.location_score,
+       preference_score = EXCLUDED.preference_score,
+       skill_gaps = EXCLUDED.skill_gaps,
+       recommendations = EXCLUDED.recommendations`,
+    [
+      id,
+      match.user_id,
+      match.job_id,
+      match.overall_score,
+      match.skill_score,
+      match.experience_score,
+      match.location_score,
+      match.preference_score,
+      JSON.stringify(match.skill_gaps),
+      JSON.stringify(match.recommendations)
+    ]
   );
-  return getJobMatchById(id)!;
+  
+  const result = await db.query('SELECT * FROM job_matches WHERE user_id = $1 AND job_id = $2', [match.user_id, match.job_id]);
+  return deserializeMatch(result.rows[0]);
 }
 
-export function getJobMatchById(id: string): JobMatch | null {
+export async function getJobMatchById(id: string): Promise<JobMatch | null> {
   const db = getDb();
-  const row = db.prepare('SELECT * FROM job_matches WHERE id = ?').get(id) as Record<string, unknown> | undefined;
-  return row ? deserializeMatch(row) : null;
+  const result = await db.query('SELECT * FROM job_matches WHERE id = $1', [id]);
+  return result.rows.length ? deserializeMatch(result.rows[0]) : null;
 }
 
-export function getJobMatchesByUser(userId: string, minScore = 0): JobMatch[] {
+export async function getJobMatchesByUser(userId: string, minScore = 0): Promise<JobMatch[]> {
   const db = getDb();
-  const rows = db.prepare(
+  const result = await db.query(
     `SELECT jm.*, j.title, j.company, j.location, j.description, j.requirements,
             j.salary_range, j.url, j.source, j.posted_date, j.created_at as job_created_at
      FROM job_matches jm
      JOIN jobs j ON jm.job_id = j.id
-     WHERE jm.user_id = ? AND jm.overall_score >= ?
-     ORDER BY jm.overall_score DESC`
-  ).all(userId, minScore) as Record<string, unknown>[];
-  return rows.map((row) => {
+     WHERE jm.user_id = $1 AND jm.overall_score >= $2
+     ORDER BY jm.overall_score DESC`,
+    [userId, minScore]
+  );
+  return result.rows.map((row) => {
     const match = deserializeMatch(row);
     match.job = {
-      id: row.job_id as string,
-      title: row.title as string,
-      company: row.company as string,
-      location: row.location as string,
-      description: row.description as string,
-      requirements: JSON.parse((row.requirements as string) || '{}'),
-      salary_range: row.salary_range as string,
-      url: row.url as string,
-      source: row.source as string,
-      posted_date: row.posted_date as string,
-      created_at: row.job_created_at as string,
+      id: row.job_id,
+      title: row.title,
+      company: row.company,
+      location: row.location,
+      description: row.description,
+      requirements: typeof row.requirements === 'string' ? JSON.parse(row.requirements || '{}') : (row.requirements || {}),
+      salary_range: row.salary_range,
+      url: row.url,
+      source: row.source,
+      posted_date: row.posted_date,
+      created_at: row.job_created_at,
     };
     return match;
   });
 }
 
-function deserializeMatch(row: Record<string, unknown>): JobMatch {
+function deserializeMatch(row: Record<string, any>): JobMatch {
   return {
-    id: row.id as string,
-    user_id: row.user_id as string,
-    job_id: row.job_id as string,
-    overall_score: row.overall_score as number,
-    skill_score: row.skill_score as number,
-    experience_score: row.experience_score as number,
-    location_score: row.location_score as number,
-    preference_score: row.preference_score as number,
-    skill_gaps: JSON.parse((row.skill_gaps as string) || '[]'),
-    recommendations: JSON.parse((row.recommendations as string) || '[]'),
-    created_at: row.created_at as string,
+    id: row.id,
+    user_id: row.user_id,
+    job_id: row.job_id,
+    overall_score: row.overall_score,
+    skill_score: row.skill_score,
+    experience_score: row.experience_score,
+    location_score: row.location_score,
+    preference_score: row.preference_score,
+    skill_gaps: typeof row.skill_gaps === 'string' ? JSON.parse(row.skill_gaps || '[]') : (row.skill_gaps || []),
+    recommendations: typeof row.recommendations === 'string' ? JSON.parse(row.recommendations || '[]') : (row.recommendations || []),
+    created_at: row.created_at,
   };
 }
 
 // ── Application Operations ──────────────────────────────────
 
-export function createApplication(app: Omit<Application, 'id' | 'created_at'>): Application {
+export async function createApplication(app: Omit<Application, 'id' | 'created_at'>): Promise<Application> {
   const db = getDb();
   const id = uuid();
-  db.prepare(
+  await db.query(
     `INSERT INTO applications 
      (id, user_id, job_id, company_name, job_title, status, cover_letter, email_sent_to, date_applied, follow_up_date, notes)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(
-    id,
-    app.user_id,
-    app.job_id,
-    app.company_name,
-    app.job_title,
-    app.status || 'applied',
-    app.cover_letter,
-    app.email_sent_to,
-    app.date_applied || new Date().toISOString(),
-    app.follow_up_date || null,
-    app.notes || ''
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+    [
+      id,
+      app.user_id,
+      app.job_id,
+      app.company_name,
+      app.job_title,
+      app.status || 'applied',
+      app.cover_letter,
+      app.email_sent_to,
+      app.date_applied || new Date().toISOString(),
+      app.follow_up_date || null,
+      app.notes || ''
+    ]
   );
-  return getApplicationById(id)!;
+  const application = await getApplicationById(id);
+  if (!application) throw new Error("Failed to create application");
+  return application;
 }
 
-export function getApplicationById(id: string): Application | null {
+export async function getApplicationById(id: string): Promise<Application | null> {
   const db = getDb();
-  const row = db.prepare(
+  const result = await db.query(
     `SELECT a.*, j.title as j_title, j.company as j_company, j.location as j_location,
             j.description as j_description, j.url as j_url
      FROM applications a
      LEFT JOIN jobs j ON a.job_id = j.id
-     WHERE a.id = ?`
-  ).get(id) as Record<string, unknown> | undefined;
+     WHERE a.id = $1`,
+    [id]
+  );
   
-  if (!row) return null;
+  if (!result.rows.length) return null;
+  const row = result.rows[0];
   
   const app = deserializeApplication(row);
   if (row.j_title) {
     app.job = {
-      id: row.job_id as string,
-      title: row.j_title as string,
-      company: row.j_company as string,
-      location: row.j_location as string,
-      description: row.j_description as string,
+      id: row.job_id,
+      title: row.j_title,
+      company: row.j_company,
+      location: row.j_location,
+      description: row.j_description,
       requirements: { skills: [], experience_years: 0, education: '', other: [] },
       salary_range: '',
-      url: row.j_url as string,
+      url: row.j_url,
       source: '',
       posted_date: '',
       created_at: '',
@@ -425,28 +490,29 @@ export function getApplicationById(id: string): Application | null {
   return app;
 }
 
-export function getApplicationsByUser(userId: string): Application[] {
+export async function getApplicationsByUser(userId: string): Promise<Application[]> {
   const db = getDb();
-  const rows = db.prepare(
+  const result = await db.query(
     `SELECT a.*, j.title as j_title, j.company as j_company, j.location as j_location,
             j.description as j_description, j.url as j_url
      FROM applications a
      LEFT JOIN jobs j ON a.job_id = j.id
-     WHERE a.user_id = ?
-     ORDER BY a.created_at DESC`
-  ).all(userId) as Record<string, unknown>[];
-  return rows.map((row) => {
+     WHERE a.user_id = $1
+     ORDER BY a.created_at DESC`,
+    [userId]
+  );
+  return result.rows.map((row) => {
     const app = deserializeApplication(row);
     if (row.j_title) {
       app.job = {
-        id: row.job_id as string,
-        title: row.j_title as string,
-        company: row.j_company as string,
-        location: row.j_location as string,
-        description: row.j_description as string,
+        id: row.job_id,
+        title: row.j_title,
+        company: row.j_company,
+        location: row.j_location,
+        description: row.j_description,
         requirements: { skills: [], experience_years: 0, education: '', other: [] },
         salary_range: '',
-        url: row.j_url as string,
+        url: row.j_url,
         source: '',
         posted_date: '',
         created_at: '',
@@ -456,105 +522,124 @@ export function getApplicationsByUser(userId: string): Application[] {
   });
 }
 
-export function updateApplicationStatus(id: string, status: ApplicationStatus): void {
+export async function updateApplicationStatus(id: string, status: ApplicationStatus): Promise<void> {
   const db = getDb();
-  db.prepare('UPDATE applications SET status = ? WHERE id = ?').run(status, id);
+  await db.query('UPDATE applications SET status = $1 WHERE id = $2', [status, id]);
 }
 
-export function checkDuplicateApplication(userId: string, jobId: string): boolean {
+export async function updateApplicationStatusAndNotes(id: string, status: ApplicationStatus, notes: string): Promise<void> {
   const db = getDb();
-  const row = db.prepare(
-    'SELECT COUNT(*) as count FROM applications WHERE user_id = ? AND job_id = ?'
-  ).get(userId, jobId) as Record<string, unknown>;
-  return ((row?.count as number) || 0) > 0;
+  await db.query('UPDATE applications SET status = $1, notes = $2 WHERE id = $3', [status, notes, id]);
 }
 
-function deserializeApplication(row: Record<string, unknown>): Application {
+export async function updateApplicationNotes(id: string, notes: string): Promise<void> {
+  const db = getDb();
+  await db.query('UPDATE applications SET notes = $1 WHERE id = $2', [notes, id]);
+}
+
+export async function checkDuplicateApplication(userId: string, jobId: string): Promise<boolean> {
+  const db = getDb();
+  const result = await db.query(
+    'SELECT COUNT(*) as count FROM applications WHERE user_id = $1 AND job_id = $2',
+    [userId, jobId]
+  );
+  return parseInt(result.rows[0]?.count || '0', 10) > 0;
+}
+
+function deserializeApplication(row: Record<string, any>): Application {
   return {
-    id: row.id as string,
-    user_id: row.user_id as string,
-    job_id: row.job_id as string,
-    company_name: row.company_name as string,
-    job_title: row.job_title as string,
-    status: row.status as ApplicationStatus,
-    cover_letter: row.cover_letter as string,
-    email_sent_to: row.email_sent_to as string,
-    date_applied: row.date_applied as string,
-    follow_up_date: row.follow_up_date as string,
-    notes: row.notes as string,
-    created_at: row.created_at as string,
+    id: row.id,
+    user_id: row.user_id,
+    job_id: row.job_id,
+    company_name: row.company_name,
+    job_title: row.job_title,
+    status: row.status,
+    cover_letter: row.cover_letter,
+    email_sent_to: row.email_sent_to,
+    date_applied: row.date_applied,
+    follow_up_date: row.follow_up_date,
+    notes: row.notes,
+    created_at: row.created_at,
   };
 }
 
 // ── Email Log Operations ────────────────────────────────────
 
-export function createEmailLog(log: Omit<EmailLog, 'id' | 'sent_at'>): EmailLog {
+export async function createEmailLog(log: Omit<EmailLog, 'id' | 'sent_at'>): Promise<EmailLog> {
   const db = getDb();
   const id = uuid();
-  db.prepare(
-    'INSERT INTO email_log (id, user_id, application_id, to_email, subject, body, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
-  ).run(id, log.user_id, log.application_id, log.to_email, log.subject, log.body, log.status);
+  await db.query(
+    'INSERT INTO email_log (id, user_id, application_id, to_email, subject, body, status) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+    [id, log.user_id, log.application_id, log.to_email, log.subject, log.body, log.status]
+  );
   return { ...log, id, sent_at: new Date().toISOString() };
 }
 
-export function checkDuplicateEmail(userId: string, toEmail: string, subject: string): boolean {
+export async function checkDuplicateEmail(userId: string, toEmail: string, subject: string): Promise<boolean> {
   const db = getDb();
-  const row = db.prepare(
-    'SELECT COUNT(*) as count FROM email_log WHERE user_id = ? AND to_email = ? AND subject = ?'
-  ).get(userId, toEmail, subject) as Record<string, unknown>;
-  return ((row?.count as number) || 0) > 0;
+  const result = await db.query(
+    'SELECT COUNT(*) as count FROM email_log WHERE user_id = $1 AND to_email = $2 AND subject = $3',
+    [userId, toEmail, subject]
+  );
+  return parseInt(result.rows[0]?.count || '0', 10) > 0;
 }
 
-export function getEmailLogByApplication(applicationId: string): EmailLog[] {
+export async function getEmailLogByApplication(applicationId: string): Promise<EmailLog[]> {
   const db = getDb();
-  const rows = db.prepare(
-    'SELECT * FROM email_log WHERE application_id = ? ORDER BY sent_at DESC'
-  ).all(applicationId) as Record<string, unknown>[];
-  return rows.map((row) => ({
-    id: row.id as string,
-    user_id: row.user_id as string,
-    application_id: row.application_id as string,
-    to_email: row.to_email as string,
-    subject: row.subject as string,
-    body: row.body as string,
+  const result = await db.query(
+    'SELECT * FROM email_log WHERE application_id = $1 ORDER BY sent_at DESC',
+    [applicationId]
+  );
+  return result.rows.map((row) => ({
+    id: row.id,
+    user_id: row.user_id,
+    application_id: row.application_id,
+    to_email: row.to_email,
+    subject: row.subject,
+    body: row.body,
     status: row.status as 'sent' | 'delivered' | 'failed',
-    sent_at: row.sent_at as string,
+    sent_at: row.sent_at,
   }));
 }
 
 // ── Interview Session Operations ────────────────────────────
 
-export function createInterviewSession(
+export async function createInterviewSession(
   userId: string,
   jobId: string,
   type: 'hr' | 'technical',
   initialMessages: InterviewMessage[] = []
-): InterviewSession {
+): Promise<InterviewSession> {
   const db = getDb();
   const id = uuid();
-  db.prepare(
-    'INSERT INTO interview_sessions (id, user_id, job_id, type, messages) VALUES (?, ?, ?, ?, ?)'
-  ).run(id, userId, jobId, type, JSON.stringify(initialMessages));
-  return getInterviewSession(id)!;
+  await db.query(
+    'INSERT INTO interview_sessions (id, user_id, job_id, type, messages) VALUES ($1, $2, $3, $4, $5)',
+    [id, userId, jobId, type, JSON.stringify(initialMessages)]
+  );
+  const session = await getInterviewSession(id);
+  if (!session) throw new Error("Failed to create interview session");
+  return session;
 }
 
-export function getInterviewSession(id: string): InterviewSession | null {
+export async function getInterviewSession(id: string): Promise<InterviewSession | null> {
   const db = getDb();
-  const row = db.prepare(
+  const result = await db.query(
     `SELECT s.*, j.title, j.company, j.description
      FROM interview_sessions s
      LEFT JOIN jobs j ON s.job_id = j.id
-     WHERE s.id = ?`
-  ).get(id) as Record<string, unknown> | undefined;
-  if (!row) return null;
+     WHERE s.id = $1`,
+    [id]
+  );
+  if (!result.rows.length) return null;
+  const row = result.rows[0];
   const session = deserializeSession(row);
   if (row.title) {
     session.job = {
-      id: row.job_id as string,
-      title: row.title as string,
-      company: row.company as string,
+      id: row.job_id,
+      title: row.title,
+      company: row.company,
       location: '',
-      description: row.description as string,
+      description: row.description,
       requirements: { skills: [], experience_years: 0, education: '', other: [] },
       salary_range: '',
       url: '',
@@ -566,34 +651,36 @@ export function getInterviewSession(id: string): InterviewSession | null {
   return session;
 }
 
-export function updateInterviewSession(
+export async function updateInterviewSession(
   id: string,
   messages: InterviewMessage[],
   overallScore: number | null,
   feedback: string
-): void {
+): Promise<void> {
   const db = getDb();
-  db.prepare(
-    'UPDATE interview_sessions SET messages = ?, overall_score = ?, feedback = ? WHERE id = ?'
-  ).run(JSON.stringify(messages), overallScore, feedback, id);
+  await db.query(
+    'UPDATE interview_sessions SET messages = $1, overall_score = $2, feedback = $3 WHERE id = $4',
+    [JSON.stringify(messages), overallScore, feedback, id]
+  );
 }
 
-export function getInterviewSessionsByUser(userId: string): InterviewSession[] {
+export async function getInterviewSessionsByUser(userId: string): Promise<InterviewSession[]> {
   const db = getDb();
-  const rows = db.prepare(
+  const result = await db.query(
     `SELECT s.*, j.title, j.company
      FROM interview_sessions s
      LEFT JOIN jobs j ON s.job_id = j.id
-     WHERE s.user_id = ?
-     ORDER BY s.created_at DESC`
-  ).all(userId) as Record<string, unknown>[];
-  return rows.map((row) => {
+     WHERE s.user_id = $1
+     ORDER BY s.created_at DESC`,
+    [userId]
+  );
+  return result.rows.map((row) => {
     const session = deserializeSession(row);
     if (row.title) {
       session.job = {
-        id: row.job_id as string,
-        title: row.title as string,
-        company: row.company as string,
+        id: row.job_id,
+        title: row.title,
+        company: row.company,
         location: '',
         description: '',
         requirements: { skills: [], experience_years: 0, education: '', other: [] },
@@ -608,31 +695,33 @@ export function getInterviewSessionsByUser(userId: string): InterviewSession[] {
   });
 }
 
-function deserializeSession(row: Record<string, unknown>): InterviewSession {
+function deserializeSession(row: Record<string, any>): InterviewSession {
   return {
-    id: row.id as string,
-    user_id: row.user_id as string,
-    job_id: row.job_id as string,
+    id: row.id,
+    user_id: row.user_id,
+    job_id: row.job_id,
     type: row.type as 'hr' | 'technical',
-    messages: JSON.parse((row.messages as string) || '[]'),
-    overall_score: row.overall_score as number | null,
-    feedback: row.feedback as string,
-    created_at: row.created_at as string,
+    messages: typeof row.messages === 'string' ? JSON.parse(row.messages || '[]') : (row.messages || []),
+    overall_score: row.overall_score,
+    feedback: row.feedback,
+    created_at: row.created_at,
   };
 }
 
 // ── Dashboard Statistics ────────────────────────────────────
 
-export function getDashboardStats(userId: string): DashboardStats {
+export async function getDashboardStats(userId: string): Promise<DashboardStats> {
   const db = getDb();
 
-  const total = db.prepare(
-    'SELECT COUNT(*) as count FROM applications WHERE user_id = ?'
-  ).get(userId) as Record<string, unknown>;
+  const total = await db.query(
+    'SELECT COUNT(*) as count FROM applications WHERE user_id = $1',
+    [userId]
+  );
 
-  const statusRows = db.prepare(
-    'SELECT status, COUNT(*) as count FROM applications WHERE user_id = ? GROUP BY status'
-  ).all(userId) as Record<string, unknown>[];
+  const statusResult = await db.query(
+    'SELECT status, COUNT(*) as count FROM applications WHERE user_id = $1 GROUP BY status',
+    [userId]
+  );
 
   const statusCounts: Record<string, number> = {
     applied: 0,
@@ -641,25 +730,26 @@ export function getDashboardStats(userId: string): DashboardStats {
     rejected: 0,
     offer_received: 0,
   };
-  for (const row of statusRows) {
-    statusCounts[row.status as string] = row.count as number;
+  for (const row of statusResult.rows) {
+    statusCounts[row.status] = parseInt(row.count, 10);
   }
 
-  const avgScore = db.prepare(
-    'SELECT AVG(overall_score) as avg FROM job_matches WHERE user_id = ?'
-  ).get(userId) as Record<string, unknown>;
+  const avgScoreRes = await db.query(
+    'SELECT AVG(overall_score) as avg FROM job_matches WHERE user_id = $1',
+    [userId]
+  );
 
-  const jobsToday = getJobsCreatedToday();
+  const jobsToday = await getJobsCreatedToday(userId);
 
-  const recent = getApplicationsByUser(userId).slice(0, 50);
+  const recent = (await getApplicationsByUser(userId)).slice(0, 50);
 
-  const topMatches = getJobMatchesByUser(userId, 50).slice(0, 5);
+  const topMatches = (await getJobMatchesByUser(userId, 50)).slice(0, 5);
 
   return {
-    total_applications: (total?.count as number) || 0,
+    total_applications: parseInt(total.rows[0]?.count || '0', 10),
     status_counts: statusCounts as Record<ApplicationStatus, number>,
     jobs_found_today: jobsToday,
-    avg_match_score: Math.round(((avgScore?.avg as number) || 0) * 10) / 10,
+    avg_match_score: Math.round((parseFloat(avgScoreRes.rows[0]?.avg || '0')) * 10) / 10,
     interviews_scheduled: statusCounts.interview_scheduled || 0,
     offers_received: statusCounts.offer_received || 0,
     recent_applications: recent,
@@ -667,33 +757,101 @@ export function getDashboardStats(userId: string): DashboardStats {
   };
 }
 
-export function getAcceptedJobMatches(userId: string): JobMatch[] {
+export async function getAcceptedJobMatches(userId: string): Promise<JobMatch[]> {
   const db = getDb();
-  const rows = db.prepare(
+  const result = await db.query(
     `SELECT jm.*, j.title, j.company, j.location, j.description, j.requirements,
             j.salary_range, j.url, j.source, j.posted_date, j.created_at as job_created_at
      FROM job_matches jm
      JOIN jobs j ON jm.job_id = j.id
      JOIN applications a ON a.job_id = j.id AND a.user_id = jm.user_id
-     WHERE jm.user_id = ? AND a.status = 'interview_scheduled'
-     ORDER BY jm.overall_score DESC`
-  ).all(userId) as Record<string, unknown>[];
+     WHERE jm.user_id = $1 AND a.status = 'interview_scheduled'
+     ORDER BY jm.overall_score DESC`,
+    [userId]
+  );
   
-  return rows.map((row) => {
+  return result.rows.map((row) => {
     const match = deserializeMatch(row);
     match.job = {
-      id: row.job_id as string,
-      title: row.title as string,
-      company: row.company as string,
-      location: row.location as string,
-      description: row.description as string,
-      requirements: JSON.parse((row.requirements as string) || '{}'),
-      salary_range: row.salary_range as string,
-      url: row.url as string,
-      source: row.source as string,
-      posted_date: row.posted_date as string,
-      created_at: row.job_created_at as string,
+      id: row.job_id,
+      title: row.title,
+      company: row.company,
+      location: row.location,
+      description: row.description,
+      requirements: typeof row.requirements === 'string' ? JSON.parse(row.requirements || '{}') : (row.requirements || {}),
+      salary_range: row.salary_range,
+      url: row.url,
+      source: row.source,
+      posted_date: row.posted_date,
+      created_at: row.job_created_at,
     };
     return match;
   });
+}
+
+export async function updateUserActiveStatus(userId: string, isActive: boolean): Promise<void> {
+  const db = getDb();
+  await db.query('UPDATE users SET is_active = $1 WHERE id = $2', [
+    isActive ? 1 : 0,
+    userId
+  ]);
+}
+
+export async function getUnmatchedJobsForUser(userId: string): Promise<Job[]> {
+  const db = getDb();
+  const result = await db.query(`
+    SELECT * FROM jobs 
+    WHERE id NOT IN (SELECT job_id FROM job_matches WHERE user_id = $1)
+    ORDER BY created_at DESC
+  `, [userId]);
+  return result.rows.map(deserializeJob);
+}
+
+export async function hasAppliedToJob(userId: string, jobId: string): Promise<boolean> {
+  const db = getDb();
+  const result = await db.query(
+    'SELECT COUNT(*) as count FROM applications WHERE user_id = $1 AND job_id = $2',
+    [userId, jobId]
+  );
+  return parseInt(result.rows[0]?.count || '0', 10) > 0;
+}
+
+export async function hasAppliedToCompanyAndTitle(userId: string, company: string, title: string): Promise<boolean> {
+  const db = getDb();
+  const result = await db.query('SELECT company_name, job_title FROM applications WHERE user_id = $1', [userId]);
+  
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const normCompany = norm(company);
+  const normTitle = norm(title);
+  
+  for (const row of result.rows) {
+    if (norm(row.company_name) === normCompany && norm(row.job_title) === normTitle) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export async function hasAppliedToJobStreetId(userId: string, url: string | null | undefined): Promise<boolean> {
+  if (!url) return false;
+  const targetId = extractJobStreetId(url);
+  if (!targetId) return false;
+
+  const db = getDb();
+  const result = await db.query(`
+    SELECT j.url 
+    FROM applications a 
+    JOIN jobs j ON a.job_id = j.id 
+    WHERE a.user_id = $1
+  `, [userId]);
+
+  for (const row of result.rows) {
+    if (row.url) {
+      const appJobStreetId = extractJobStreetId(row.url);
+      if (appJobStreetId && appJobStreetId === targetId) {
+        return true;
+      }
+    }
+  }
+  return false;
 }

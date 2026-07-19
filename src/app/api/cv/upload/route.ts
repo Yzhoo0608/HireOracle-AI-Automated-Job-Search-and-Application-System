@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     const parsed = await parseCV(buffer, fileType);
     
     // Save profile
-    const profile = createCVProfile(user.userId, parsed.rawText, parsed.structured, filePath);
+    const profile = await createCVProfile(user.userId, parsed.rawText, parsed.structured, filePath);
 
     return NextResponse.json({ success: true, data: profile });
   } catch (error: any) {

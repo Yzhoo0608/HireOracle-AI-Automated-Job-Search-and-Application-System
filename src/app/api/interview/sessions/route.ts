@@ -5,7 +5,7 @@ import { getInterviewSessionsByUser } from '@/lib/db';
 export async function GET(request: NextRequest) {
   try {
     const user = await requireAuth();
-    const sessions = getInterviewSessionsByUser(user.userId);
+    const sessions = await getInterviewSessionsByUser(user.userId);
     return NextResponse.json({ success: true, data: sessions });
   } catch (error: any) {
     if (error.message === 'Authentication required') {
