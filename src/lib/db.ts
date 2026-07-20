@@ -174,6 +174,19 @@ export async function updateUserPreferences(userId: string, prefs: UserPreferenc
   ]);
 }
 
+export async function updateUserPassword(userId: string, passwordHash: string): Promise<void> {
+  const db = getDb();
+  await db.query('UPDATE users SET password_hash = $1 WHERE id = $2', [
+    passwordHash,
+    userId
+  ]);
+}
+
+export async function deleteUser(userId: string): Promise<void> {
+  const db = getDb();
+  await db.query('DELETE FROM users WHERE id = $1', [userId]);
+}
+
 function deserializeUser(row: Record<string, any>): User {
   return {
     id: row.id,

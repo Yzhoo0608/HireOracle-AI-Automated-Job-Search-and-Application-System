@@ -59,3 +59,60 @@ export async function evaluateAnswer(job: Job, question: string, answer: string,
     nextQuestion: result.nextQuestion || 'Could you tell me more about your experience?'
   };
 }
+
+export async function generateFinalReport(
+  job: Job,
+  messages: InterviewMessage[],
+  type: 'hr' | 'technical'
+): Promise<{ overallSummary: string; recommendations: string[] }> {
+  // Extract questions and answers
+  const QAs = [];
+  let currentQ = '';
+  for (const m of messages) {
+    if (m.role === 'interviewer') {
+      currentQ = m.content;
+    } else if (m.role === 'candidate' && currentQ) {
+      QAs.push({
+        question: currentQ,
+        answer: m.content,
+        score: m.score,
+        feedback: m.feedback
+      });
+      currentQ = '';
+    }
+  }
+
+  const prompt = `
+    You are an expert hiring manager debriefing after a job interview.
+    Review the full transcript of this interview (questions, answers, scores, and feedback for each answer) and generate:
+    1. A detailed overall summary of the candidate's performance.
+    2. A list of 3-4 specific, actionable recommendations for improvement.
+
+    Job Title: ${job.title}
+    Job Description: ${job.description}
+    Interview Type: ${type}
+    
+    Transcript:
+    ${JSON.stringify(QAs, null, 2)}
+
+    Return ONLY a valid JSON object matching this structure:
+    {
+      "overallSummary": "string",
+      "recommendations": ["string"]
+    }
+  `;
+
+  try {
+    const result = await askJSON<any>(prompt, "You are a professional hiring manager. Return ONLY JSON.");
+    return {
+      overallSummary: result.overallSummary || 'Interview completed successfully.',
+      recommendations: result.recommendations || ['Continue practicing with different job profiles.']
+    };
+  } catch (err: any) {
+    console.error('Failed to generate final report:', err.message);
+    return {
+      overallSummary: 'Interview completed. Great job practicing your skills!',
+      recommendations: ['Review your answers and keep practicing.']
+    };
+  }
+}

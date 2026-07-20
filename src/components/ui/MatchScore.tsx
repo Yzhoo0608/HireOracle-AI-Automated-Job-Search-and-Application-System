@@ -11,7 +11,7 @@ export function MatchScore({ score }: { score: number }) {
     <div className="relative w-16 h-16 flex items-center justify-center">
       <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
         <path
-          className="stroke-slate-700"
+          className="stroke-slate-200"
           d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
           fill="none"
           strokeWidth="3"
@@ -24,7 +24,7 @@ export function MatchScore({ score }: { score: number }) {
           strokeWidth="3"
         />
       </svg>
-      <div className="absolute font-bold text-sm text-slate-200">
+      <div className="absolute font-bold text-sm text-slate-700">
         {Math.round(score)}%
       </div>
     </div>

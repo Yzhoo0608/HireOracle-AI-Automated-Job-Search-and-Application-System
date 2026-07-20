@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0f172a; /* Slate 900 */
-  --color-foreground: #f8fafc; /* Slate 50 */
-  --color-primary: #38bdf8; /* Light Blue 400 */
-  --color-secondary: #818cf8; /* Indigo 400 */
-  --color-accent: #c084fc; /* Purple 400 */
-  --color-card: rgba(30, 41, 59, 0.7); /* Slate 800 semi-transparent */
-  --color-border: rgba(148, 163, 184, 0.2); /* Slate 400 semi-transparent */
+  --color-background: #f8fafc; /* Off-white background */
+  --color-foreground: #0f172a; /* Dark slate text */
+  --color-primary: #3b82f6; /* Pastel blue */
+  --color-secondary: #64748b; /* Slate 500 */
+  --color-accent: #60a5fa; /* Soft accent blue */
+  --color-card: #ffffff; /* Clean white card */
+  --color-border: #e2e8f0; /* Light slate border */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 body {
@@ -22,19 +22,14 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   min-height: 100vh;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(192, 132, 252, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.15) 0px, transparent 50%);
-  background-attachment: fixed;
+  background-image: none; /* Minimalist flat design */
 }
 
-/* Glassmorphism utilities */
+/* Glassmorphism/Flat SaaS Card utilities */
 .glass {
-  background: rgba(30, 41, 59, 0.7) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* Custom Scrollbar */

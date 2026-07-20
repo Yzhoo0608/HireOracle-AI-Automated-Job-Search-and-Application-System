@@ -54,7 +54,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   // Render the full dashboard layout
   return (
     <ToastProvider>
-      <div className="min-h-screen bg-[#0f172a] flex text-[#f8fafc]">
+      <div className="min-h-screen flex" style={{ backgroundColor: '#f8fafc', color: '#0f172a' }}>
         <Sidebar />
         <div className="flex-1 flex flex-col md:ml-64">
           <Header />

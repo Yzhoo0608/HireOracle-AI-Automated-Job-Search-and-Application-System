@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
 import { getInterviewSession, updateInterviewSession } from '@/lib/db';
-import { evaluateAnswer } from '@/lib/agents/interview-agent';
+import { evaluateAnswer, generateFinalReport } from '@/lib/agents/interview-agent';
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,14 +30,39 @@ export async function POST(request: NextRequest) {
     session.messages[session.messages.length - 1].score = evaluation.score;
     session.messages[session.messages.length - 1].feedback = evaluation.feedback;
 
-    // Add next question
-    session.messages.push({ role: 'interviewer', content: evaluation.nextQuestion });
+    // Count candidate answers
+    const answersCount = session.messages.filter(m => m.role === 'candidate').length;
+    let overallScore = null;
+    let finalFeedback = '';
+
+    if (answersCount < 5) {
+      // Add next question
+      session.messages.push({ role: 'interviewer', content: evaluation.nextQuestion });
+    } else {
+      // Generate final report
+      if (session.job) {
+        const report = await generateFinalReport(session.job, session.messages, session.type);
+        finalFeedback = JSON.stringify({
+          summary: report.overallSummary,
+          recommendations: report.recommendations
+        });
+      }
+      
+      // Add system message
+      session.messages.push({
+        role: 'system',
+        content: 'Interview completed.'
+      });
+    }
 
     // Recalculate overall score
     const scores = session.messages.filter(m => m.score !== undefined).map(m => m.score as number);
-    const overallScore = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : null;
+    overallScore = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : null;
 
-    await updateInterviewSession(session.id, session.messages, overallScore, evaluation.feedback);
+    session.feedback = finalFeedback;
+    session.overall_score = overallScore;
+
+    await updateInterviewSession(session.id, session.messages, overallScore, finalFeedback);
 
     return NextResponse.json({ success: true, data: session });
   } catch (error: any) {

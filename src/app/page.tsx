@@ -84,7 +84,7 @@ export default function DashboardPage() {
         setIsActivePipeline(nextState);
         setPipelineResult(
           nextState 
-            ? '🚀 Pipeline automation started! The agent will check, match, and batch-apply (up to 5 jobs) every 10 minutes in the background.' 
+            ? '🚀 Pipeline automation started! The agent will check, match, and batch-apply every 10 minutes in the background.' 
             : '🛑 Pipeline automation stopped.'
         );
       } else {
@@ -154,16 +154,16 @@ export default function DashboardPage() {
       {/* Header with Auto-Pilot Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-slate-800">
             {userName ? getDynamicGreeting(userName) : 'Dashboard'}
           </h1>
-          <p className="text-slate-400 text-sm mt-1">Your AI job search overview</p>
+          <p className="text-slate-500 text-sm mt-1">Your AI job search overview</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={handleCheckReplies}
             disabled={checkingReplies}
-            className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white border border-slate-700 shadow-md hover:scale-105 transition-all duration-200`}
+            className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-slate-600 bg-white hover:bg-slate-50 hover:text-slate-900 border border-slate-200 shadow-sm hover:scale-105 transition-all duration-200`}
           >
             {checkingReplies ? (
               <>
@@ -212,8 +212,8 @@ export default function DashboardPage() {
       {pipelineResult && (
         <div className={`rounded-xl px-4 py-3 text-sm font-medium border ${
           pipelineResult.startsWith('✅')
-            ? 'bg-emerald-900/30 border-emerald-700/50 text-emerald-300'
-            : 'bg-red-900/30 border-red-700/50 text-red-300'
+            ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+            : 'bg-rose-50 border-rose-200 text-rose-800'
         }`}>
           {pipelineResult}
         </div>
@@ -221,12 +221,12 @@ export default function DashboardPage() {
 
       {/* Live Auto-Pilot Running Banner */}
       {isActivePipeline && (
-        <div className="bg-cyan-950/40 border border-cyan-800/60 rounded-2xl px-4 py-3 text-sm font-semibold text-cyan-300 animate-pulse flex items-center justify-between shadow-sm">
+        <div className="bg-sky-50 border border-sky-100 rounded-2xl px-4 py-3 text-sm font-semibold text-sky-900 animate-pulse flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-cyan-400 rounded-full"></span>
+            <span className="w-2 h-2 bg-sky-500 rounded-full"></span>
             <span>Live Auto-Pilot Loop is Running: Scrapes and batch-applies to new matching jobs every 10 minutes. Dashboard auto-updates live!</span>
           </div>
-          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-cyan-900/60 border border-cyan-700/50">Active</span>
+          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-sky-600 text-white">Active</span>
         </div>
       )}
 
@@ -258,18 +258,18 @@ export default function DashboardPage() {
         {/* Recent Applications */}
         <Card className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Recent Applications</h2>
-            <span className="text-xs bg-slate-800 text-slate-400 px-3 py-1 rounded-full border border-slate-700">Auto-applied to matches ≥ 70%</span>
+            <h2 className="text-xl font-semibold text-slate-800">Recent Applications</h2>
+            <span className="text-xs bg-slate-50 text-slate-500 px-3 py-1 rounded-full border border-slate-200">Auto-applied to matches ≥ 70%</span>
           </div>
           {stats.recent_applications.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-slate-400 mb-2">No applications yet.</p>
+              <p className="text-slate-600 mb-2">No applications yet.</p>
               <p className="text-slate-500 text-sm">Upload your CV and click "Start Auto-Pilot" to begin!</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="text-slate-400 border-b border-slate-800">
+                <thead className="text-slate-500 border-b border-slate-200">
                   <tr>
                     <th className="pb-3 font-medium">Company</th>
                     <th className="pb-3 font-medium">Role</th>
@@ -277,21 +277,21 @@ export default function DashboardPage() {
                     <th className="pb-3 font-medium">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/50">
+                <tbody className="divide-y divide-slate-100">
                   {stats.recent_applications.map((app) => (
                     <tr 
                       key={app.id} 
-                      className="hover:bg-slate-800/20 transition-colors cursor-pointer"
+                      className="hover:bg-slate-50 transition-colors cursor-pointer"
                       onClick={() => setSelectedApp(app)}
                     >
-                      <td className="py-3 font-medium text-slate-200">{app.company_name}</td>
-                      <td className="py-3 text-slate-300 truncate max-w-[140px]">
+                      <td className="py-3 font-medium text-slate-800">{app.company_name}</td>
+                      <td className="py-3 text-slate-700 truncate max-w-[140px]">
                         {app.job?.url ? (
                           <a 
                             href={app.job.url} 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            className="text-cyan-400 hover:text-cyan-300 hover:underline inline-flex items-center gap-1"
+                            className="text-blue-600 hover:text-blue-500 hover:underline inline-flex items-center gap-1"
                             onClick={(e) => e.stopPropagation()}
                           >
                             {app.job_title}
@@ -301,10 +301,10 @@ export default function DashboardPage() {
                           app.job_title
                         )}
                       </td>
-                      <td className="py-3 text-slate-400 text-xs">{new Date(app.date_applied).toLocaleDateString()}</td>
+                      <td className="py-3 text-slate-500 text-xs">{new Date(app.date_applied).toLocaleDateString()}</td>
                       <td className="py-3" onClick={(e) => e.stopPropagation()}>
                         <select
-                          className="bg-slate-800 border border-slate-700 rounded text-xs px-2 py-1 text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+                          className="bg-white border border-slate-200 rounded text-xs px-2 py-1 text-slate-700 focus:outline-none focus:border-blue-500 cursor-pointer"
                           value={app.status}
                           onChange={(e) => updateStatus(app.id, e.target.value)}
                         >
@@ -322,10 +322,10 @@ export default function DashboardPage() {
             </div>
           )}
           {stats.recent_applications.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-slate-800/80 text-center">
+            <div className="mt-4 pt-3 border-t border-slate-100 text-center">
               <a 
                 href="/applications" 
-                className="text-xs text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1.5 hover:underline font-medium transition-all"
+                className="text-xs text-blue-600 hover:text-blue-500 inline-flex items-center gap-1.5 hover:underline font-medium transition-all"
               >
                 📝 Check your complete list of applications in the Applications tab
                 <ExternalLink size={12} />
@@ -337,7 +337,7 @@ export default function DashboardPage() {
         {/* Top Matches */}
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Top Matches</h2>
+            <h2 className="text-xl font-semibold text-slate-800">Top Matches</h2>
           </div>
           <div className="space-y-3">
             {stats.top_matches.length === 0 ? (
@@ -348,12 +348,12 @@ export default function DashboardPage() {
               stats.top_matches.map((match) => (
                 <div
                   key={match.id}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/50 transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 hover:bg-slate-100/50 transition-colors"
                 >
                   <MatchScore score={match.overall_score} />
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-slate-200 truncate">{match.job?.title}</h4>
-                    <p className="text-xs text-slate-400 truncate">{match.job?.company}</p>
+                    <h4 className="text-sm font-semibold text-slate-800 truncate">{match.job?.title}</h4>
+                    <p className="text-xs text-slate-500 truncate">{match.job?.company}</p>
                   </div>
                 </div>
               ))
@@ -365,7 +365,7 @@ export default function DashboardPage() {
       {/* Status Pipeline */}
       {stats.total_applications > 0 && (
         <Card>
-          <h2 className="text-xl font-semibold text-white mb-4">Application Pipeline</h2>
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">Application Pipeline</h2>
           <div className="flex flex-wrap gap-3">
             {[
               { key: 'applied', label: 'Applied', color: 'bg-blue-500' },
@@ -374,10 +374,10 @@ export default function DashboardPage() {
               { key: 'offer_received', label: 'Offer', color: 'bg-emerald-500' },
               { key: 'rejected', label: 'Rejected', color: 'bg-red-500' },
             ].map(({ key, label, color }) => (
-              <div key={key} className="flex items-center gap-2 bg-slate-800/50 rounded-lg px-4 py-2 border border-slate-700/50">
+              <div key={key} className="flex items-center gap-2 bg-slate-50 rounded-lg px-4 py-2 border border-slate-200/60">
                 <div className={`w-3 h-3 rounded-full ${color}`}></div>
-                <span className="text-slate-300 text-sm font-medium">{label}</span>
-                <span className="text-white font-bold ml-1">
+                <span className="text-slate-600 text-sm font-medium">{label}</span>
+                <span className="text-slate-700 font-bold ml-1">
                   {stats.status_counts[key as keyof typeof stats.status_counts] ?? 0}
                 </span>
               </div>
@@ -393,16 +393,16 @@ export default function DashboardPage() {
           <Card className="w-full max-w-2xl max-h-[90vh] flex flex-col p-6 shadow-2xl border-slate-700 relative">
             <button
               onClick={() => setSelectedApp(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
-            <h2 className="text-xl font-bold text-white mb-1">{selectedApp.job_title}</h2>
-            <p className="text-cyan-400 mb-2">{selectedApp.company_name}</p>
+            <h2 className="text-xl font-bold text-slate-800 mb-1">{selectedApp.job_title}</h2>
+            <p className="text-blue-600 mb-2">{selectedApp.company_name}</p>
             
             {selectedApp.email_sent_to && (
-              <div className="mb-4 bg-emerald-900/30 border border-emerald-700/50 rounded-lg p-3 text-sm">
-                <p className="text-emerald-300 flex items-center gap-2">
+              <div className="mb-4 bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-sm">
+                <p className="text-emerald-800 flex items-center gap-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                   <span><strong>Auto-Applied:</strong> An email was automatically sent to {selectedApp.email_sent_to} with your CV attached!</span>
                 </p>
@@ -411,21 +411,21 @@ export default function DashboardPage() {
             
             {selectedApp.notes && (
               <div className="mb-4 max-h-40 overflow-y-auto pr-2">
-                <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">Communication Logs & History</h3>
-                <div className="bg-slate-900/40 rounded-lg p-3 text-xs text-slate-300 border border-slate-800/50 whitespace-pre-wrap font-mono">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Communication Logs & History</h3>
+                <div className="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 border border-slate-100 whitespace-pre-wrap font-mono">
                   {selectedApp.notes}
                 </div>
               </div>
             )}
             
             <div className="flex-1 overflow-y-auto pr-2 mb-4">
-              <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">Cover Letter</h3>
-              <div className="bg-slate-900/50 rounded-lg p-4 text-sm text-slate-300 whitespace-pre-wrap border border-slate-800 font-mono">
+              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Cover Letter</h3>
+              <div className="bg-slate-50 rounded-lg p-4 text-sm text-slate-600 whitespace-pre-wrap border border-slate-100 font-mono">
                 {selectedApp.cover_letter || "No cover letter generated."}
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
               <Button
                 variant="secondary"
                 onClick={() => {

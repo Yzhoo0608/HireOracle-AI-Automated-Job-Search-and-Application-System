@@ -6,7 +6,7 @@ import { sendApplicationEmail } from './email-agent';
 import type { ApplicationStatus } from '../types';
 
 interface ReplyAnalysis {
-  classification: 'accepted' | 'rejected' | 'other';
+  classification: 'interview' | 'under_review' | 'rejected' | 'other';
   summary: string;
   sentiment_score: number;
 }
@@ -145,9 +145,10 @@ export async function checkCompanyReplies(userId: string): Promise<{
             const prompt = `
               Analyze this email reply from a company regarding a job application.
               Determine if the company is:
-              1. "accepted" - inviting for an interview, requesting a screening call, or making an offer.
-              2. "rejected" - notifying they are not moving forward.
-              3. "other" - asking clarifying questions, acknowledging receipt, or a neutral update.
+              1. "interview" - inviting for an interview, requesting a screening call, or next round discussions.
+              2. "under_review" - acknowledging receipt, stating the application is under review / consideration / active process (without booking an interview yet).
+              3. "rejected" - notifying they are not moving forward.
+              4. "other" - asking clarifying questions, other updates.
 
               Email Subject: ${subject}
               Email From: ${fromName} <${fromAddress}>
@@ -156,7 +157,7 @@ export async function checkCompanyReplies(userId: string): Promise<{
 
               Return ONLY a valid JSON object matching this structure:
               {
-                "classification": "accepted" | "rejected" | "other",
+                "classification": "interview" | "under_review" | "rejected" | "other",
                 "summary": "Brief 1-2 sentence summary of the email",
                 "sentiment_score": number (0 to 100)
               }
@@ -168,8 +169,10 @@ export async function checkCompanyReplies(userId: string): Promise<{
             );
 
             let newStatus: ApplicationStatus | null = null;
-            if (analysis.classification === 'accepted') {
+            if (analysis.classification === 'interview') {
               newStatus = 'interview_scheduled';
+            } else if (analysis.classification === 'under_review') {
+              newStatus = 'under_review';
             } else if (analysis.classification === 'rejected') {
               newStatus = 'rejected';
             }
@@ -242,9 +245,10 @@ export async function simulateCompanyReply(
     const prompt = `
       Analyze this simulated email reply from a company regarding a job application.
       Determine if the company is:
-      1. "accepted" - inviting for an interview, requesting a screening call, or making an offer.
-      2. "rejected" - notifying they are not moving forward.
-      3. "other" - asking clarifying questions, acknowledging receipt, or a neutral update.
+      1. "interview" - inviting for an interview, requesting a screening call, or next round discussions.
+      2. "under_review" - acknowledging receipt, stating the application is under review / consideration / active process (without booking an interview yet).
+      3. "rejected" - notifying they are not moving forward.
+      4. "other" - asking clarifying questions, other updates.
 
       Company: ${app.company_name}
       Role: ${app.job_title}
@@ -253,7 +257,7 @@ export async function simulateCompanyReply(
 
       Return ONLY a valid JSON object matching this structure:
       {
-        "classification": "accepted" | "rejected" | "other",
+        "classification": "interview" | "under_review" | "rejected" | "other",
         "summary": "Brief 1-2 sentence summary of the email",
         "sentiment_score": number (0 to 100)
       }
@@ -265,8 +269,10 @@ export async function simulateCompanyReply(
     );
 
     let newStatus: ApplicationStatus | null = null;
-    if (analysis.classification === 'accepted') {
+    if (analysis.classification === 'interview') {
       newStatus = 'interview_scheduled';
+    } else if (analysis.classification === 'under_review') {
+      newStatus = 'under_review';
     } else if (analysis.classification === 'rejected') {
       newStatus = 'rejected';
     }

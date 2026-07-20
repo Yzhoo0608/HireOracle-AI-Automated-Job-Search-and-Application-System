@@ -49,7 +49,7 @@ export function FileUpload({ onUpload, accept = ".pdf,.docx", maxSize = 5 }: Fil
   return (
     <div 
       className={`relative w-full rounded-2xl border-2 border-dashed transition-all duration-300 ${
-        isDragging ? 'border-primary bg-primary/5' : 'border-slate-700 bg-slate-800/50 hover:bg-slate-800 hover:border-slate-600'
+        isDragging ? 'border-blue-500 bg-blue-50/50' : 'border-slate-200 bg-slate-50 hover:bg-slate-100/50 hover:border-slate-300'
       } flex flex-col items-center justify-center p-12 text-center cursor-pointer`}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
@@ -65,29 +65,29 @@ export function FileUpload({ onUpload, accept = ".pdf,.docx", maxSize = 5 }: Fil
       
       {!file ? (
         <>
-          <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mb-4 text-primary">
+          <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4 text-blue-600">
             <UploadCloud size={32} />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-1">Upload your CV</h3>
-          <p className="text-sm text-slate-400 mb-4">Drag and drop or click to browse</p>
+          <h3 className="text-lg font-semibold text-slate-800 mb-1">Upload your CV</h3>
+          <p className="text-sm text-slate-500 mb-4">Drag and drop or click to browse</p>
           <div className="flex gap-2">
-            <span className="px-2 py-1 rounded bg-slate-800 text-xs text-slate-300 font-mono">PDF</span>
-            <span className="px-2 py-1 rounded bg-slate-800 text-xs text-slate-300 font-mono">DOCX</span>
+            <span className="px-2 py-1 rounded bg-slate-100 text-xs text-slate-600 font-mono">PDF</span>
+            <span className="px-2 py-1 rounded bg-slate-100 text-xs text-slate-600 font-mono">DOCX</span>
           </div>
         </>
       ) : (
         <div className="flex flex-col items-center">
-          <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary relative">
+          <div className="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center mb-4 text-blue-600 relative border border-blue-100">
             <File size={32} />
             <button 
               onClick={(e) => { e.preventDefault(); setFile(null); }}
-              className="absolute -top-2 -right-2 bg-slate-800 rounded-full p-1 border border-slate-700 text-slate-400 hover:text-white"
+              className="absolute -top-2 -right-2 bg-slate-100 rounded-full p-1 border border-slate-200 text-slate-500 hover:text-slate-700"
             >
               <X size={14} />
             </button>
           </div>
-          <p className="font-medium text-white">{file.name}</p>
-          <p className="text-sm text-slate-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+          <p className="font-medium text-slate-800">{file.name}</p>
+          <p className="text-sm text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
         </div>
       )}
     </div>

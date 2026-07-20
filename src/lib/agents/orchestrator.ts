@@ -343,49 +343,10 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
     console.error('Failed to compile all-time statistics:', err.message);
   }
 
-  let summaryBody = `Hello ${user.name},\n\nHere is your Auto-Pilot cycle summary for ${dateStr}:\n\n`;
-
-  summaryBody += `🔍 JOBS SEARCHED & SCAPED (THIS CYCLE):\n`;
-  summaryBody += `- Found ${scraped} new jobs matching your search criteria.\n`;
-  summaryBody += `- Flagged ${matched} new high-match positions.\n\n`;
-
-  summaryBody += `📨 AUTO-APPLIED (THIS CYCLE):\n`;
-  if (appliedJobs.length > 0) {
-    summaryBody += `Auto-applied to ${appliedJobs.length} job(s):\n`;
-    appliedJobs.forEach((job, index) => {
-      summaryBody += `  ${index + 1}. ${job.title} at ${job.company} (${job.score}% Match Score)\n`;
-    });
-  } else {
-    summaryBody += `- No new job applications submitted this cycle.\n`;
-  }
-  summaryBody += `\n`;
-
-  summaryBody += `✉️ NEW REPLIES DETECTED (THIS CYCLE):\n`;
-  if (checkResults.updates.length > 0) {
-    summaryBody += `Processed ${checkResults.processed} emails. Detected ${checkResults.updates.length} status updates:\n`;
-    checkResults.updates.forEach((u, index) => {
-      summaryBody += `  ${index + 1}. ${u.company} — ${u.role}: Changed from ${u.oldStatus.replace('_', ' ')} to ${u.newStatus.replace('_', ' ')}\n`;
-      summaryBody += `     Summary: ${u.summary}\n`;
-    });
-  } else {
-    summaryBody += `- No new company replies detected in your inbox during this cycle.\n`;
-  }
-  summaryBody += `\n`;
-
-  // Append all-time stats, last 5, and interviews
+  let summaryBody = '';
   summaryBody += statsSummary;
   summaryBody += last5AppliedText;
   summaryBody += interviewAppsText;
-
-  if (errors.length > 0) {
-    summaryBody += `⚠️ CYCLE WARNINGS / ERRORS:\n`;
-    errors.forEach((err, index) => {
-      summaryBody += `- ${err}\n`;
-    });
-    summaryBody += `\n`;
-  }
-
-  summaryBody += `Best regards,\nYour AI Job Agent`;
 
   try {
     await sendApplicationEmail({

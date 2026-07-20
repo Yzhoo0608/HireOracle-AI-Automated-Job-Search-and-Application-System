@@ -71,7 +71,7 @@ export default function ApplicationsPage() {
   ];
 
   if (loading) {
-    return <div className="flex justify-center py-20 text-slate-400">Loading pipeline...</div>;
+    return <div className="flex justify-center py-20 text-slate-500">Loading pipeline...</div>;
   }
 
   return (
@@ -80,22 +80,22 @@ export default function ApplicationsPage() {
         {columns.map((col) => (
           <div key={col.id} className={`flex flex-col min-w-[300px] w-full rounded-xl border ${col.color} p-4 h-full`}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-slate-200">{col.title}</h3>
-              <span className="bg-slate-800 text-slate-300 text-xs px-2 py-1 rounded-full">
+              <h3 className="font-semibold text-slate-800">{col.title}</h3>
+              <span className="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full border border-slate-200">
                 {pipeline[col.id]?.length || 0}
               </span>
             </div>
             
             <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
               {pipeline[col.id]?.map((app) => (
-                <div key={app.id} className="bg-slate-800/80 border border-slate-700 p-4 rounded-lg hover:border-primary/50 transition-colors cursor-grab active:cursor-grabbing">
-                  <h4 className="font-medium text-white mb-1 animate-fade-in">
+                <div key={app.id} className="bg-white border border-slate-200/60 p-4 rounded-lg hover:border-blue-500/50 transition-colors cursor-grab active:cursor-grabbing shadow-sm">
+                  <h4 className="font-medium text-slate-800 mb-1 animate-fade-in">
                     {app.job?.url ? (
                       <a 
                         href={app.job.url} 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="text-cyan-400 hover:text-cyan-300 hover:underline inline-flex items-center gap-1"
+                        className="text-blue-600 hover:text-blue-500 hover:underline inline-flex items-center gap-1"
                       >
                         {app.job_title}
                         <ExternalLink size={12} className="opacity-60" />
@@ -104,7 +104,7 @@ export default function ApplicationsPage() {
                       app.job_title
                     )}
                   </h4>
-                  <div className="flex items-center text-sm text-slate-400 gap-2 mb-3">
+                  <div className="flex items-center text-sm text-slate-500 gap-2 mb-3">
                     <Building size={14} /> {app.company_name}
                   </div>
                   <div className="flex items-center justify-between">
@@ -112,15 +112,15 @@ export default function ApplicationsPage() {
                       <Calendar size={12} /> {new Date(app.date_applied).toLocaleDateString()}
                     </div>
                     {app.match_score && (
-                      <span className="text-xs font-bold text-primary">{Math.round(app.match_score)}% Match</span>
+                      <span className="text-xs font-bold text-blue-600">{Math.round(app.match_score)}% Match</span>
                     )}
                   </div>
                   
-                  <div className="mt-3 pt-3 border-t border-slate-700/50">
+                  <div className="mt-3 pt-3 border-t border-slate-100">
                     <select 
                       value={app.status}
                       onChange={(e) => handleStatusChange(app.id, e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-700 rounded text-xs text-slate-300 p-1 focus:outline-none focus:border-primary"
+                      className="w-full bg-white border border-slate-200 rounded text-xs text-slate-700 p-1 focus:outline-none focus:border-blue-500 cursor-pointer"
                     >
                       <option value="applied">Applied</option>
                       <option value="under_review">Under Review</option>
