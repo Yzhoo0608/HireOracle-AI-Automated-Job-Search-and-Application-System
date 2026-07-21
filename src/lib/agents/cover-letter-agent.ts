@@ -1,5 +1,7 @@
 import { askJSON } from '../groq';
 import type { ParsedCV, Job } from '../types';
+import PDFDocument from 'pdfkit';
+import fs from 'fs';
 
 export async function generateCoverLetter(cv: ParsedCV, job: Job, customNotes: string = ''): Promise<{ coverLetter: string; emailSubject: string; emailBody: string }> {
   const prompt = `
@@ -22,7 +24,23 @@ export async function generateCoverLetter(cv: ParsedCV, job: Job, customNotes: s
     Custom Notes/Instructions from candidate: ${customNotes}
   `;
 
-  const result = await askJSON<any>(prompt, "You are an expert career coach writing compelling cover letters. Return ONLY JSON.");
+  let result: any = {};
+  try {
+    result = await askJSON<any>(prompt, "You are an expert career coach writing compelling cover letters. Return ONLY JSON.");
+  } catch (e) {
+    console.error('[CoverLetterAgent] LLM failed:', e);
+  }
+
+  const defaultCoverLetter = `Dear Hiring Manager,
+
+I am writing to express my interest in the ${job.title} position at ${job.company}. Based on my background and experience, I believe I can make a significant contribution to your team.
+
+My skills include: ${cv.skills ? cv.skills.join(', ') : ''}.
+
+I look forward to discussing how my experience aligns with the requirements of this role.
+
+Sincerely,
+${cv.name}`;
 
   const defaultBody = `Dear Hiring Manager,
 
@@ -34,8 +52,33 @@ Best regards,
 ${cv.name}`;
 
   return {
-    coverLetter: result.coverLetter || '',
+    coverLetter: (result.coverLetter && result.coverLetter.trim()) ? result.coverLetter.trim() : defaultCoverLetter,
     emailSubject: result.emailSubject || `Application for ${job.title} - ${cv.name}`,
     emailBody: (result.emailBody && result.emailBody.trim()) ? result.emailBody.trim() : defaultBody
   };
+}
+
+export function saveTextAsPDF(text: string, outputPath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = new PDFDocument({ margin: 50 });
+      const stream = fs.createWriteStream(outputPath);
+      doc.pipe(stream);
+
+      doc.fontSize(12).font('Helvetica').lineGap(4).text(text, {
+        align: 'left',
+        paragraphGap: 12
+      });
+
+      doc.end();
+      stream.on('finish', () => {
+        resolve();
+      });
+      stream.on('error', (err) => {
+        reject(err);
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
 }

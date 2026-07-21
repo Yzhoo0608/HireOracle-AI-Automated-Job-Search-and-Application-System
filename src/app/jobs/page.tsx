@@ -68,7 +68,6 @@ export default function JobsPage() {
 
   const handleApply = async (matchId: string) => {
     toast('Generating cover letter & applying...', 'info');
-    // Implement apply logic
     try {
       const match = matches.find(m => m.id === matchId);
       const res = await fetch(`/api/applications`, {
@@ -84,8 +83,26 @@ export default function JobsPage() {
         }),
       });
       const data = await res.json();
-      if (data.success) {
-        toast('Application tracked successfully!', 'success');
+      if (!data.success) {
+        toast(data.error || 'Failed to track application', 'error');
+        return;
+      }
+
+      const appId = data.data.id;
+
+      // Trigger cover letter generation, email dispatch, and status updates
+      const applyRes = await fetch(`/api/applications/${appId}/apply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customNotes: '' })
+      });
+      const applyData = await applyRes.json();
+      
+      if (applyData.success) {
+        toast('Application sent and tracked successfully!', 'success');
+        fetchJobs(); // Refresh match lists
+      } else {
+        toast(applyData.error || 'Failed to send application email', 'error');
       }
     } catch (e) {
       toast('Failed to apply', 'error');

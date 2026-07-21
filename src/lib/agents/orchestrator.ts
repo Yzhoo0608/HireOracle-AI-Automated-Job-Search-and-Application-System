@@ -1,9 +1,11 @@
 import { getUserById, getCVProfile, searchJobs as dbSearchJobs, createJob, createJobMatch, getJobMatchesByUser, createApplication, getUnmatchedJobsForUser, hasAppliedToJob, hasAppliedToCompanyAndTitle, hasAppliedToJobStreetId, getDb, getApplicationsByUser, getDashboardStats } from '../db';
 import { searchJobs as scrapeJobs } from './job-search-agent';
 import { matchJobToCV } from './matching-agent';
-import { generateCoverLetter } from './cover-letter-agent';
+import { generateCoverLetter, saveTextAsPDF } from './cover-letter-agent';
 import { sendApplicationEmail } from './email-agent';
 import { checkCompanyReplies } from './reply-agent';
+import path from 'path';
+import fs from 'fs/promises';
 import type { JobSearchRequest, Job, JobMatch } from '../types';
 
 export async function runJobSearch(userId: string, filters: JobSearchRequest): Promise<Job[]> {
@@ -91,6 +93,12 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
               match.job
             );
 
+            // Generate cover letter PDF file
+            const uploadsDir = path.join(process.cwd(), 'uploads');
+            await fs.mkdir(uploadsDir, { recursive: true });
+            const coverLetterPath = path.join(uploadsDir, `${userId}-${Date.now()}-cover-letter.pdf`);
+            await saveTextAsPDF(coverLetter, coverLetterPath);
+
             // 2. Email Company (simulate company email using hr@[company].com)
             const companyEmail = `hr@${match.job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
             await sendApplicationEmail({
@@ -99,7 +107,8 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
               subject: emailSubject,
               body: emailBody,
               userName: user.name,
-              cvPath: profile.file_path
+              cvPath: profile.file_path,
+              coverLetterPath: coverLetterPath
             });
 
             // 3. Save Application Record
@@ -237,6 +246,12 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
             match.job
           );
 
+          // Generate cover letter PDF file
+          const uploadsDir = path.join(process.cwd(), 'uploads');
+          await fs.mkdir(uploadsDir, { recursive: true });
+          const coverLetterPath = path.join(uploadsDir, `${userId}-${Date.now()}-cover-letter.pdf`);
+          await saveTextAsPDF(coverLetter, coverLetterPath);
+
           // 2. Email Company (simulate hr@[company].com)
           const companyEmail = `hr@${match.job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
           await sendApplicationEmail({
@@ -245,7 +260,8 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
             subject: emailSubject,
             body: emailBody,
             userName: user.name,
-            cvPath: profile.file_path
+            cvPath: profile.file_path,
+            coverLetterPath: coverLetterPath
           });
 
           // 3. Save Application Record

@@ -7,6 +7,7 @@ export async function sendApplicationEmail(options: {
   subject: string; 
   body: string; 
   cvPath?: string; 
+  coverLetterPath?: string;
   userName: string;
   isSystemNotification?: boolean;
 }): Promise<{ success: boolean; messageId?: string; error?: string }> {
@@ -40,13 +41,21 @@ export async function sendApplicationEmail(options: {
       mailOptions.cc = options.cc;
     }
 
+    const attachments: any[] = [];
     if (options.cvPath) {
-      mailOptions.attachments = [
-        {
-          filename: path.basename(options.cvPath),
-          path: options.cvPath
-        }
-      ];
+      attachments.push({
+        filename: path.basename(options.cvPath),
+        path: options.cvPath
+      });
+    }
+    if (options.coverLetterPath) {
+      attachments.push({
+        filename: 'Cover_Letter.pdf',
+        path: options.coverLetterPath
+      });
+    }
+    if (attachments.length > 0) {
+      mailOptions.attachments = attachments;
     }
 
     const info = await transporter.sendMail(mailOptions);

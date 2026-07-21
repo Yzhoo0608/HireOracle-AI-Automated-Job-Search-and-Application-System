@@ -142,13 +142,14 @@ export async function checkCompanyReplies(userId: string): Promise<{
             processedCount++;
             
             // Call Groq LLM to classify response
-            const prompt = `
+             const prompt = `
               Analyze this email reply from a company regarding a job application.
               Determine if the company is:
               1. "interview" - inviting for an interview, requesting a screening call, or next round discussions.
               2. "under_review" - acknowledging receipt, stating the application is under review / consideration / active process (without booking an interview yet).
               3. "rejected" - notifying they are not moving forward.
-              4. "other" - asking clarifying questions, other updates.
+              4. "offer" - offering the job / position, or congratulating on acceptance.
+              5. "other" - asking clarifying questions, other updates.
 
               Email Subject: ${subject}
               Email From: ${fromName} <${fromAddress}>
@@ -157,13 +158,13 @@ export async function checkCompanyReplies(userId: string): Promise<{
 
               Return ONLY a valid JSON object matching this structure:
               {
-                "classification": "interview" | "under_review" | "rejected" | "other",
+                "classification": "interview" | "under_review" | "rejected" | "offer" | "other",
                 "summary": "Brief 1-2 sentence summary of the email",
                 "sentiment_score": number (0 to 100)
               }
             `;
 
-            const analysis = await askJSON<ReplyAnalysis>(
+            const analysis = await askJSON<any>(
               prompt, 
               "You are an assistant tracking job applications. Classify email replies accurately. Return JSON only."
             );
@@ -175,6 +176,8 @@ export async function checkCompanyReplies(userId: string): Promise<{
               newStatus = 'under_review';
             } else if (analysis.classification === 'rejected') {
               newStatus = 'rejected';
+            } else if (analysis.classification === 'offer') {
+              newStatus = 'offer_received';
             }
 
             const oldStatus = matchedApp.status;
@@ -248,7 +251,8 @@ export async function simulateCompanyReply(
       1. "interview" - inviting for an interview, requesting a screening call, or next round discussions.
       2. "under_review" - acknowledging receipt, stating the application is under review / consideration / active process (without booking an interview yet).
       3. "rejected" - notifying they are not moving forward.
-      4. "other" - asking clarifying questions, other updates.
+      4. "offer" - offering the job / position, or congratulating on acceptance.
+      5. "other" - asking clarifying questions, other updates.
 
       Company: ${app.company_name}
       Role: ${app.job_title}
@@ -257,13 +261,13 @@ export async function simulateCompanyReply(
 
       Return ONLY a valid JSON object matching this structure:
       {
-        "classification": "interview" | "under_review" | "rejected" | "other",
+        "classification": "interview" | "under_review" | "rejected" | "offer" | "other",
         "summary": "Brief 1-2 sentence summary of the email",
         "sentiment_score": number (0 to 100)
       }
     `;
 
-    const analysis = await askJSON<ReplyAnalysis>(
+    const analysis = await askJSON<any>(
       prompt, 
       "You are an assistant tracking job applications. Classify email replies accurately. Return JSON only."
     );
@@ -275,6 +279,8 @@ export async function simulateCompanyReply(
       newStatus = 'under_review';
     } else if (analysis.classification === 'rejected') {
       newStatus = 'rejected';
+    } else if (analysis.classification === 'offer') {
+      newStatus = 'offer_received';
     }
 
     const oldStatus = app.status;

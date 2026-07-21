@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
-import { getApplicationById, getJobById, getCVProfile, getUserById, createEmailLog } from '@/lib/db';
-import { generateCoverLetter } from '@/lib/agents/cover-letter-agent';
+import { getApplicationById, getJobById, getCVProfile, getUserById, createEmailLog, getDb } from '@/lib/db';
+import { generateCoverLetter, saveTextAsPDF } from '@/lib/agents/cover-letter-agent';
 import { sendApplicationEmail } from '@/lib/agents/email-agent';
+import path from 'path';
+import fs from 'fs/promises';
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -27,31 +29,45 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // 1. Generate Cover Letter & Email
     const { coverLetter, emailSubject, emailBody } = await generateCoverLetter(cv.structured_data, job, customNotes);
 
-    // 2. Send Email
-    if (app.email_sent_to) {
-      const emailResult = await sendApplicationEmail({
-        to: app.email_sent_to,
-        cc: user.email,
-        subject: emailSubject,
-        body: emailBody,
-        cvPath: cv.file_path,
-        userName: user.name
-      });
+    // Generate cover letter PDF file
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    await fs.mkdir(uploadsDir, { recursive: true });
+    const coverLetterPath = path.join(uploadsDir, `${authUser.userId}-${Date.now()}-cover-letter.pdf`);
+    await saveTextAsPDF(coverLetter, coverLetterPath);
 
-      // 3. Log Email
-      await createEmailLog({
-        user_id: user.id,
-        application_id: app.id,
-        to_email: app.email_sent_to,
-        subject: emailSubject,
-        body: emailBody,
-        status: emailResult.success ? 'sent' : 'failed'
-      });
-      
-      if (!emailResult.success) {
-        return NextResponse.json({ success: false, error: emailResult.error }, { status: 500 });
-      }
+    const targetEmail = app.email_sent_to || `hr@${job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+
+    // 2. Send Email
+    const emailResult = await sendApplicationEmail({
+      to: targetEmail,
+      cc: user.email,
+      subject: emailSubject,
+      body: emailBody,
+      cvPath: cv.file_path,
+      coverLetterPath: coverLetterPath,
+      userName: user.name
+    });
+
+    // 3. Log Email
+    await createEmailLog({
+      user_id: user.id,
+      application_id: app.id,
+      to_email: targetEmail,
+      subject: emailSubject,
+      body: emailBody,
+      status: emailResult.success ? 'sent' : 'failed'
+    });
+    
+    if (!emailResult.success) {
+      return NextResponse.json({ success: false, error: emailResult.error }, { status: 500 });
     }
+
+    // 4. Update Database Application row with cover letter and email target
+    const db = getDb();
+    await db.query(
+      'UPDATE applications SET cover_letter = $1, status = $2, email_sent_to = $3 WHERE id = $4',
+      [coverLetter, 'applied', targetEmail, app.id]
+    );
 
     return NextResponse.json({ success: true, data: { coverLetter } });
   } catch (error: any) {
