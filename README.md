@@ -12,3 +12,32 @@ Additionally, the platform features an interactive AI Mock Interview trainer for
 * **Database**: PostgreSQL (`pg` connection pool)
 * **AI Engine**: Groq SDK (`llama-3.1-8b-instant`)
 * **Protocols & Utilities**: Nodemailer (SMTP), ImapFlow (IMAP), PDFKit
+
+---
+
+### How to Use
+
+#### 1. Setup & Installation
+```bash
+# Install dependencies
+pnpm install
+
+# Configure environment variables in .env.local
+GROQ_API_KEY=your_groq_api_key
+EMAIL_USER=your_email@gmail.com
+EMAIL_APP_PASSWORD=your_google_app_password
+DATABASE_URL=postgresql://postgres:password@localhost:5432/job_search_agent
+```
+
+#### 2. Run the Application
+```bash
+# Start PostgreSQL database, then run dev server
+pnpm dev
+```
+
+#### 3. Operating the Agent
+1. **Login / Register**: Open `http://localhost:3000` and create an account.
+2. **Upload CV**: Navigate to **CV Profile** to upload your resume (PDF).
+3. **Set Preferences**: Adjust target job keywords and locations in **Settings**.
+4. **Start Auto-Pilot**: On the **Dashboard**, click **Start Pipeline** to let the agent discover, match, and apply to jobs automatically every 10 minutes.
+5. **Interview Prep**: Use the **Interview** page to practice AI mock interviews for scheduled company responses.
