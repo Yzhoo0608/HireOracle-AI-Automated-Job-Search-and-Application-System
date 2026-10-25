@@ -1,0 +1,76 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+
+# project data
+/uploads/
+/data/
+
+# research experiments and datasets
+/experiments/
+
+# local database backups
+/db_backup.sql
+/recreate_db.sql
+
+# scratch and temporary scripts
+/scratch/
+
+# Python virtual environments and cache
+/.venv/
+/venv/
+__pycache__/
+*.py[cod]
+
+# local credentials and private keys
+/secrets/
+/credentials/
+*.key
+*.p12
+*.pfx
+# temporary email testing scripts
+/test-email.js
+/test-email2.js
+/test-env-email.js
+
+# temporary development script (exclude if not part of the application)
+/fix.js

@@ -1,0 +1,126 @@
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+
+export default function RegisterPage() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    setLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        window.location.href = '/';
+      } else {
+        setError(data.error || 'Registration failed');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex-1 flex items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-md relative z-10 bg-white border border-slate-200 shadow-sm" gradientBorder>
+        <div className="text-center mb-8">
+          <img src="/logo.png" alt="HireOracle" className="h-14 w-auto object-contain mx-auto mb-4" />
+          <h1 className="text-xl font-bold text-slate-800 mb-1">Create an Account</h1>
+          <p className="text-slate-500 text-sm">Join HireOracle to start your job search</p>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm mb-4 text-center">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleRegister} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Full Name</label>
+            <input 
+              type="text" 
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              placeholder="John Doe"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Email Address</label>
+            <input 
+              type="email" 
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Password</label>
+            <input 
+              type="password" 
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              placeholder="••••••••"
+              required
+              minLength={6}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Confirm Password</label>
+            <input 
+              type="password" 
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              placeholder="••••••••"
+              required
+              minLength={6}
+            />
+          </div>
+          
+          <Button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-medium" size="lg" isLoading={loading}>
+            Sign Up
+          </Button>
+        </form>
+
+        <div className="mt-6 text-center text-sm text-slate-500">
+          Already have an account?{' '}
+          <Link href="/login" className="text-blue-600 hover:text-blue-500 transition-colors font-medium">
+            Sign In
+          </Link>
+        </div>
+      </Card>
+    </div>
+  );
+}
