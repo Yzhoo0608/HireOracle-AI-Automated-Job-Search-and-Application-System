@@ -43,7 +43,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
           to: fullUser.email,
           subject: `Interview Scheduled for ${app.job_title} at ${app.company_name}`,
           body: `Congratulations ${fullUser.name}!\n\nYou have an interview scheduled for the ${app.job_title} position at ${app.company_name}.\n\nPlease come to the AI Job Agent app to practice your interview: http://localhost:3000/interview\n\nGood luck!`,
-          userName: 'AI Job Agent'
+          userName: 'AI Job Agent',
+          isSystemNotification: true
         });
       }
     }

@@ -2,7 +2,7 @@
 // Groq LLM Client — llama-3.1-8b-instant
 // ============================================================
 
-import Groq from 'groq-sdk';
+import Groq, { toFile } from 'groq-sdk';
 
 let _client: Groq | null = null;
 
@@ -34,7 +34,7 @@ export async function chat(
   options: ChatOptions = {}
 ): Promise<string> {
   const client = getClient();
-  const model = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
+  const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 
   const completion = await client.chat.completions.create({
     model,
@@ -88,3 +88,62 @@ export async function askJSON<T = unknown>(
     throw new Error(`Failed to parse LLM JSON response: ${result.slice(0, 200)}`);
   }
 }
+
+/**
+ * Transcribe an audio file using Groq's Whisper API.
+ * Uses official Groq SDK with toFile buffer conversion and hallucination filtering.
+ */
+export async function transcribeAudio(file: File): Promise<string> {
+  const client = getClient();
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  console.log(`[Whisper API] Received file: name=${file.name}, type=${file.type}, size=${buffer.length} bytes`);
+
+  // Audio smaller than 1.5KB is unlikely to contain any audible speech
+  if (buffer.length < 1500) {
+    console.warn(`[Whisper API] Audio buffer too small (${buffer.length} bytes), returning empty transcript.`);
+    return '';
+  }
+
+  const fileName = file.name && file.name.includes('.') ? file.name : 'audio.webm';
+  const fileMime = file.type || 'audio/webm';
+
+  const audioFile = await toFile(buffer, fileName, {
+    type: fileMime,
+  });
+
+  try {
+    const transcription = await client.audio.transcriptions.create({
+      file: audioFile,
+      model: 'whisper-large-v3-turbo',
+      language: 'en',
+      prompt: 'Interview candidate speaking in English about their professional experience and technical skills.',
+      temperature: 0.0,
+    });
+
+    const text = (transcription.text || '').trim();
+    console.log(`[Whisper API] Raw transcription: "${text}"`);
+
+    // Whisper hallucinations on silence or quiet background noise
+    const hallucinations = [
+      'thank you', 'thanks', 'thank you.', 'thanks.',
+      'thank you for watching', 'thanks for watching',
+      'you', 'bye', 'goodbye', 'thank you so much',
+      'thank you for listening', 'subtitles by',
+      'please subscribe', 'subscribe', 'thumbs up',
+    ];
+
+    const normalized = text.toLowerCase().replace(/[.!?,]/g, '').trim();
+    if (hallucinations.includes(normalized)) {
+      console.warn(`[Whisper API] Filtered hallucination: "${text}"`);
+      return '';
+    }
+
+    return text;
+  } catch (err: any) {
+    console.error('[Whisper API] Groq transcription error:', err);
+    throw err;
+  }
+}
+

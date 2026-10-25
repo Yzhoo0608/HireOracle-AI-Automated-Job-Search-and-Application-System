@@ -9,7 +9,9 @@ import type { UserPreferences } from '@/lib/types';
 export default function SettingsPage() {
   const [preferences, setPreferences] = useState<UserPreferences>({
     location: '',
-    remote_preference: 'remote',
+    job_type: 'any',
+    remote_preference: 'any',
+    job_titles: [],
     industries: [],
     salary_min: 0,
     salary_max: 0,
@@ -26,7 +28,7 @@ export default function SettingsPage() {
       .then(res => {
         if (res.success && res.data) {
           setPreferences(res.data);
-          setIndustriesInput(res.data.industries?.join(', ') || '');
+          setIndustriesInput(res.data.job_titles?.join(', ') || res.data.industries?.join(', ') || '');
         }
       })
       .finally(() => setLoading(false));
@@ -38,7 +40,8 @@ export default function SettingsPage() {
     
     const prefsToSave = {
       ...preferences,
-      industries: industriesInput.split(',').map(i => i.trim()).filter(i => i)
+      industries: industriesInput.split(',').map(i => i.trim()).filter(i => i),
+      job_titles: industriesInput.split(',').map(i => i.trim()).filter(i => i)
     };
 
     try {
@@ -50,7 +53,7 @@ export default function SettingsPage() {
       const data = await res.json();
       
       if (data.success) {
-        toast('Settings saved successfully', 'success');
+        toast('Settings saved! Searching and matching jobs in background...', 'success');
       } else {
         toast(data.error || 'Failed to save settings', 'error');
       }
@@ -81,12 +84,12 @@ export default function SettingsPage() {
                 value={preferences.location || ''}
                 onChange={e => setPreferences({...preferences, location: e.target.value})}
                 className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2 text-slate-800 focus:border-blue-500 focus:outline-none"
-                placeholder="e.g. New York, NY"
+                placeholder="e.g. Kuala Lumpur, Selangor, Johor (or leave empty for nationwide)"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">Remote Preference</label>
+              <label className="block text-sm font-medium text-slate-600 mb-1">Remote/Work Mode Preference</label>
               <select 
                 value={preferences.remote_preference || 'any'}
                 onChange={e => setPreferences({...preferences, remote_preference: e.target.value as any})}
@@ -100,15 +103,32 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">Target Industries / Keywords</label>
-            <input 
-              type="text" 
-              value={industriesInput}
-              onChange={e => setIndustriesInput(e.target.value)}
-              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2 text-slate-800 focus:border-blue-500 focus:outline-none"
-              placeholder="e.g. FinTech, Healthcare, Machine Learning (comma separated)"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-1">Target Job Titles</label>
+              <input 
+                type="text" 
+                value={industriesInput}
+                onChange={e => setIndustriesInput(e.target.value)}
+                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2 text-slate-800 focus:border-blue-500 focus:outline-none"
+                placeholder="e.g. Software Engineer, Data Scientist"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-1">Job Type Preference</label>
+              <select 
+                value={preferences.job_type || 'any'}
+                onChange={e => setPreferences({...preferences, job_type: e.target.value})}
+                className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2 text-slate-800 focus:border-blue-500 focus:outline-none cursor-pointer"
+              >
+                <option value="full-time">Full-time</option>
+                <option value="part-time">Part-time</option>
+                <option value="contract">Contract</option>
+                <option value="internship">Internship</option>
+                <option value="any">Any</option>
+              </select>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

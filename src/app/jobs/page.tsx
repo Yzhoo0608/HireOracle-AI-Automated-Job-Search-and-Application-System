@@ -54,8 +54,13 @@ export default function JobsPage() {
       
       const data = await res.json();
       if (data.success) {
-        toast('Search completed! Found new matches.', 'success');
-        fetchJobs(); // Refresh the list
+        if (data.data && data.data.length > 0) {
+          setMatches(data.data);
+          toast(`Search completed! Found ${data.data.length} matches.`, 'success');
+        } else {
+          toast('Search completed. No matching jobs found for these criteria.', 'info');
+          fetchJobs();
+        }
       } else {
         toast(data.error || 'Search failed', 'error');
       }

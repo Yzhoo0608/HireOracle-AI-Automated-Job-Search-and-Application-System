@@ -40,6 +40,30 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
 # project data
 /uploads/
 /data/
+
+# research experiments and datasets
+/experiments/
+
+# local database backups
+/db_backup.sql
+/recreate_db.sql
+
+# scratch and temporary scripts
+/scratch/
+
+# Python virtual environments and cache
+/.venv/
+/venv/
+__pycache__/
+*.py[cod]
+
+# local credentials and private keys
+/secrets/
+/credentials/
+*.key
+*.p12
+*.pfx

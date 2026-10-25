@@ -1,5 +1,5 @@
-import { getUserById, getCVProfile, searchJobs as dbSearchJobs, createJob, createJobMatch, getJobMatchesByUser, createApplication, getUnmatchedJobsForUser, hasAppliedToJob, hasAppliedToCompanyAndTitle, hasAppliedToJobStreetId, getDb, getApplicationsByUser, getDashboardStats } from '../db';
-import { searchJobs as scrapeJobs } from './job-search-agent';
+import { getUserById, getCVProfile, createJob, createJobMatch, getJobMatchesByUser, createApplication, getUnmatchedJobsForUser, hasAppliedToJob, hasAppliedToCompanyAndTitle, hasAppliedToJobStreetId, getDb, getApplicationsByUser, getDashboardStats, markJobInactive } from '../db';
+import { searchJobs as scrapeJobs, verifyJobIsActive } from './job-search-agent';
 import { matchJobToCV } from './matching-agent';
 import { generateCoverLetter, saveTextAsPDF } from './cover-letter-agent';
 import { sendApplicationEmail } from './email-agent';
@@ -14,12 +14,24 @@ export async function runJobSearch(userId: string, filters: JobSearchRequest): P
   
   if (!user) throw new Error('User not found');
   
+  // Fallback to user saved preferences if filters are empty
+  const effectiveKeywords = (filters.keywords && filters.keywords.length > 0)
+    ? filters.keywords
+    : (user.preferences?.job_titles?.length ? user.preferences.job_titles : (user.preferences?.industries || []));
+  const effectiveLocation = filters.location || user.preferences?.location || '';
+
+  const effectiveFilters: JobSearchRequest = {
+    keywords: effectiveKeywords,
+    location: effectiveLocation,
+    remote: filters.remote ?? (user.preferences?.remote_preference === 'remote')
+  };
+
   const userSkills = profile ? profile.structured_data.skills : [];
   
   // 1. Scrape new jobs
-  const newJobsData = await scrapeJobs(filters, userSkills);
+  const newJobsData = await scrapeJobs(effectiveFilters, userSkills);
   
-  // 2. Save jobs to DB (avoid duplicates based on URL ideally, but for now just create)
+  // 2. Save jobs to DB
   const savedJobs: Job[] = [];
   for (const jobData of newJobsData) {
     // Simple duplicate check could be added here
@@ -36,8 +48,8 @@ export async function runMatchAndRank(userId: string): Promise<JobMatch[]> {
   
   if (!user || !profile) throw new Error('User or CV profile not found');
   
-  // Get jobs created today or recently that don't have matches yet
-  const jobs = await dbSearchJobs(''); // For simplicity, grab all jobs. In prod, filter to un-matched.
+  // Get newest unmatched and active jobs
+  const jobs = await getUnmatchedJobsForUser(userId);
   
   for (const job of jobs.slice(0, 10)) { // Limit to 10 to reduce rate limits on free keys
     try {
@@ -72,7 +84,7 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
   try {
     const filters: JobSearchRequest = {
       location: user.preferences?.location || '',
-      keywords: user.preferences?.industries || []
+      keywords: user.preferences?.job_titles?.length ? user.preferences.job_titles : (user.preferences?.industries || [])
     };
     
     const jobs = await runJobSearch(userId, filters);
@@ -84,52 +96,79 @@ export async function runFullPipeline(userId: string): Promise<{ jobsFound: numb
     // Auto-apply logic
     const profile = await getCVProfile(userId);
     if (profile) {
-      for (const match of matches) {
-        if (match.overall_score >= 70 && match.job) {
-          try {
-            // 1. Generate Cover Letter
-            const { coverLetter, emailSubject, emailBody } = await generateCoverLetter(
-              profile.structured_data,
-              match.job
-            );
+      // Prioritize newest jobs first, then older suitable jobs (score >= 70)
+      const sortedMatches = [...matches]
+        .filter(m => m.overall_score >= 70 && m.job && m.job.is_active !== false)
+        .sort((a, b) => {
+          const dateA = a.job?.created_at ? new Date(a.job.created_at).getTime() : 0;
+          const dateB = b.job?.created_at ? new Date(b.job.created_at).getTime() : 0;
+          if (dateB !== dateA) return dateB - dateA; // Newest first
+          return b.overall_score - a.overall_score; // Highest score next
+        });
 
-            // Generate cover letter PDF file
-            const uploadsDir = path.join(process.cwd(), 'uploads');
-            await fs.mkdir(uploadsDir, { recursive: true });
-            const coverLetterPath = path.join(uploadsDir, `${userId}-${Date.now()}-cover-letter.pdf`);
-            await saveTextAsPDF(coverLetter, coverLetterPath);
+      for (const match of sortedMatches) {
+        if (!match.job) continue;
 
-            // 2. Email Company (simulate company email using hr@[company].com)
-            const companyEmail = `hr@${match.job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
-            await sendApplicationEmail({
-              to: companyEmail,
-              cc: user.email,
-              subject: emailSubject,
-              body: emailBody,
-              userName: user.name,
-              cvPath: profile.file_path,
-              coverLetterPath: coverLetterPath
-            });
+        // Skip if already applied
+        if (
+          await hasAppliedToJob(userId, match.job_id) || 
+          await hasAppliedToCompanyAndTitle(userId, match.job.company, match.job.title) ||
+          await hasAppliedToJobStreetId(userId, match.job.url)
+        ) {
+          continue;
+        }
 
-            // 3. Save Application Record
-            await createApplication({
-              user_id: userId,
-              job_id: match.job_id,
-              company_name: match.job.company,
-              job_title: match.job.title,
-              status: 'applied',
-              date_applied: new Date().toISOString(),
-              cover_letter: coverLetter,
-              match_score: match.overall_score,
-              email_sent_to: companyEmail,
-              follow_up_date: '',
-              notes: ''
-            });
+        // Verify job is still active on JobStreet before applying
+        const isActive = await verifyJobIsActive(match.job.url);
+        if (!isActive) {
+          console.log(`[Auto-Apply] Job is no longer available on JobStreet: "${match.job.title}". Skipping and marking inactive.`);
+          await markJobInactive(match.job_id);
+          continue; // Proceed to next suitable job
+        }
 
-            applied++;
-          } catch (e: any) {
-            errors.push(`Failed to auto-apply to ${match.job.title}: ${e.message}`);
-          }
+        try {
+          // 1. Generate Cover Letter
+          const { coverLetter, emailSubject, emailBody } = await generateCoverLetter(
+            profile.structured_data,
+            match.job
+          );
+
+          // Generate cover letter PDF file
+          const uploadsDir = path.join(process.cwd(), 'uploads');
+          await fs.mkdir(uploadsDir, { recursive: true });
+          const coverLetterPath = path.join(uploadsDir, `${userId}-${Date.now()}-cover-letter.pdf`);
+          await saveTextAsPDF(coverLetter, coverLetterPath);
+
+          // 2. Email Company (simulate company email using hr@[company].com)
+          const companyEmail = `hr@${match.job.company.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`;
+          await sendApplicationEmail({
+            to: companyEmail,
+            cc: user.email,
+            subject: emailSubject,
+            body: emailBody,
+            userName: user.name,
+            cvPath: profile.file_path,
+            coverLetterPath: coverLetterPath
+          });
+
+          // 3. Save Application Record
+          await createApplication({
+            user_id: userId,
+            job_id: match.job_id,
+            company_name: match.job.company,
+            job_title: match.job.title,
+            status: 'applied',
+            date_applied: new Date().toISOString(),
+            cover_letter: coverLetter,
+            match_score: match.overall_score,
+            email_sent_to: companyEmail,
+            follow_up_date: '',
+            notes: ''
+          });
+
+          applied++;
+        } catch (e: any) {
+          errors.push(`Failed to auto-apply to ${match.job.title}: ${e.message}`);
         }
       }
     }
@@ -160,7 +199,7 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
   try {
     const filters: JobSearchRequest = {
       location: user.preferences?.location || '',
-      keywords: user.preferences?.industries || []
+      keywords: user.preferences?.job_titles?.length ? user.preferences.job_titles : (user.preferences?.industries || [])
     };
     
     // Scrape new jobs matching preferences
@@ -209,10 +248,11 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
     // Step C: Batch Apply (Picks exactly 5 highly matched jobs)
     try {
       const matches = await getJobMatchesByUser(userId);
-      // Filter for highly matched (score >= 70) and not yet applied
+      // Filter for highly matched (score >= 70), active in DB, and not yet applied
       const candidates = [];
       for (const match of matches) {
         if (!match.job) continue;
+        if (match.job.is_active === false) continue;
         const score = match.overall_score >= 70;
         if (!score) continue;
 
@@ -225,9 +265,18 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
         }
       }
 
-      // Pick exactly the first 5 highly matched jobs
-      const batchToApply = candidates.slice(0, 5);
-      for (const match of batchToApply) {
+      // Prioritize newest jobs first, then older suitable jobs
+      candidates.sort((a, b) => {
+        const dateA = a.job?.created_at ? new Date(a.job.created_at).getTime() : 0;
+        const dateB = b.job?.created_at ? new Date(b.job.created_at).getTime() : 0;
+        if (dateB !== dateA) return dateB - dateA; // Newest first
+        return b.overall_score - a.overall_score; // Highest score next
+      });
+
+      // Apply to up to 5 verified active jobs in this cycle
+      let appliedCount = 0;
+      for (const match of candidates) {
+        if (appliedCount >= 5) break;
         if (!match.job) continue;
         
         // Double check DB before applying to prevent double application
@@ -237,6 +286,14 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
           await hasAppliedToJobStreetId(userId, match.job.url)
         ) {
           continue;
+        }
+
+        // Liveness verification: check if job is still active on JobStreet
+        const isActive = await verifyJobIsActive(match.job.url);
+        if (!isActive) {
+          console.log(`[Batch Apply] Job is no longer available on JobStreet: "${match.job.title}". Skipping and marking inactive.`);
+          await markJobInactive(match.job_id);
+          continue; // Automatically move to the next candidate (even if older)
         }
 
         try {
@@ -286,6 +343,7 @@ export async function runActivePipelineCycle(userId: string): Promise<{ scraped:
           });
 
           applied++;
+          appliedCount++;
         } catch (e: any) {
           console.error(`[Orchestrator] Failed to auto-apply to ${match.job.title}:`, e.message);
           errors.push(`Auto-apply error for job "${match.job.title}": ${e.message}`);

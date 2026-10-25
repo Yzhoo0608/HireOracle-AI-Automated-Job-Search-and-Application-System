@@ -12,15 +12,18 @@ export interface User {
   preferences: UserPreferences | null;
   created_at: string;
   is_active?: boolean;
+  force_password_change?: boolean;
 }
 
 export interface UserPreferences {
   location: string;
+  job_type: 'full-time' | 'part-time' | 'contract' | 'internship' | 'any' | string;
   salary_min: number;
   salary_max: number;
-  industries: string[];
-  remote_preference: 'remote' | 'onsite' | 'hybrid' | 'any';
-  experience_level: 'entry' | 'mid' | 'senior' | 'lead';
+  job_titles: string[];
+  industries?: string[]; // Keep for backward compatibility
+  remote_preference: 'remote' | 'onsite' | 'hybrid' | 'any' | string;
+  experience_level: 'entry' | 'mid' | 'senior' | 'lead' | string;
 }
 
 // ── CV Types ────────────────────────────────────────────────
@@ -73,6 +76,9 @@ export interface Job {
   salary?: string;
   source: string;
   posted_date: string;
+  job_type?: string;
+  remote_mode?: string;
+  is_active?: boolean;
   created_at: string;
 }
 
@@ -93,8 +99,11 @@ export interface JobMatch {
   overall_score: number;
   skill_score: number;
   experience_score: number;
+  education_score: number;
   location_score: number;
-  preference_score: number;
+  salary_score: number;
+  job_title_score: number;
+  job_type_score: number;
   skill_gaps: string[];
   recommendations: string[];
   created_at: string;

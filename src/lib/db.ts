@@ -68,6 +68,9 @@ export async function initializeDatabase() {
       url TEXT DEFAULT '',
       source TEXT DEFAULT 'manual',
       posted_date TEXT DEFAULT '',
+      job_type TEXT DEFAULT '',
+      remote_mode TEXT DEFAULT '',
+      is_active BOOLEAN DEFAULT TRUE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -78,8 +81,11 @@ export async function initializeDatabase() {
       overall_score DOUBLE PRECISION DEFAULT 0,
       skill_score DOUBLE PRECISION DEFAULT 0,
       experience_score DOUBLE PRECISION DEFAULT 0,
+      education_score DOUBLE PRECISION DEFAULT 0,
       location_score DOUBLE PRECISION DEFAULT 0,
-      preference_score DOUBLE PRECISION DEFAULT 0,
+      salary_score DOUBLE PRECISION DEFAULT 0,
+      job_title_score DOUBLE PRECISION DEFAULT 0,
+      job_type_score DOUBLE PRECISION DEFAULT 0,
       skill_gaps TEXT DEFAULT '[]',
       recommendations TEXT DEFAULT '[]',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -87,6 +93,32 @@ export async function initializeDatabase() {
       FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE CASCADE,
       UNIQUE(user_id, job_id)
     );
+
+    -- Run basic migrations for existing tables
+    DO $$ 
+    BEGIN 
+      BEGIN
+        ALTER TABLE jobs ADD COLUMN job_type TEXT DEFAULT '';
+      EXCEPTION WHEN duplicate_column THEN END;
+      BEGIN
+        ALTER TABLE jobs ADD COLUMN remote_mode TEXT DEFAULT '';
+      EXCEPTION WHEN duplicate_column THEN END;
+      BEGIN
+        ALTER TABLE jobs ADD COLUMN is_active BOOLEAN DEFAULT TRUE;
+      EXCEPTION WHEN duplicate_column THEN END;
+      BEGIN
+        ALTER TABLE job_matches ADD COLUMN education_score DOUBLE PRECISION DEFAULT 0;
+      EXCEPTION WHEN duplicate_column THEN END;
+      BEGIN
+        ALTER TABLE job_matches ADD COLUMN salary_score DOUBLE PRECISION DEFAULT 0;
+      EXCEPTION WHEN duplicate_column THEN END;
+      BEGIN
+        ALTER TABLE job_matches ADD COLUMN job_title_score DOUBLE PRECISION DEFAULT 0;
+      EXCEPTION WHEN duplicate_column THEN END;
+      BEGIN
+        ALTER TABLE job_matches ADD COLUMN job_type_score DOUBLE PRECISION DEFAULT 0;
+      EXCEPTION WHEN duplicate_column THEN END;
+    END $$;
 
     CREATE TABLE IF NOT EXISTS applications (
       id VARCHAR(255) PRIMARY KEY,
@@ -129,6 +161,15 @@ export async function initializeDatabase() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE SET NULL
+    );
+
+
+    CREATE TABLE IF NOT EXISTS magic_links (
+      id VARCHAR(255) PRIMARY KEY,
+      user_id VARCHAR(255) NOT NULL,
+      token TEXT NOT NULL,
+      expires_at TIMESTAMPTZ NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
     CREATE INDEX IF NOT EXISTS idx_cv_user ON cv_profiles(user_id);
@@ -182,6 +223,11 @@ export async function updateUserPassword(userId: string, passwordHash: string): 
   ]);
 }
 
+export async function setForcePasswordChange(userId: string, flag: boolean): Promise<void> {
+  const db = getDb();
+  await db.query('UPDATE users SET force_password_change = $1 WHERE id = $2', [flag, userId]);
+}
+
 export async function deleteUser(userId: string): Promise<void> {
   const db = getDb();
   await db.query('DELETE FROM users WHERE id = $1', [userId]);
@@ -196,6 +242,7 @@ function deserializeUser(row: Record<string, any>): User {
     preferences: row.preferences ? (typeof row.preferences === 'string' ? JSON.parse(row.preferences) : row.preferences) : null,
     created_at: row.created_at,
     is_active: row.is_active === 1 || row.is_active === true,
+    force_password_change: row.force_password_change === true || row.force_password_change === 't',
   };
 }
 
@@ -278,8 +325,8 @@ export async function createJob(job: Omit<Job, 'id' | 'created_at'>): Promise<Jo
   }
   const id = uuid();
   await db.query(
-    `INSERT INTO jobs (id, title, company, location, description, requirements, salary_range, url, source, posted_date)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+    `INSERT INTO jobs (id, title, company, location, description, requirements, salary_range, url, source, posted_date, job_type, remote_mode, is_active)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
     [
       id,
       job.title,
@@ -290,7 +337,10 @@ export async function createJob(job: Omit<Job, 'id' | 'created_at'>): Promise<Jo
       job.salary_range,
       job.url,
       job.source,
-      job.posted_date
+      job.posted_date,
+      job.job_type || '',
+      job.remote_mode || '',
+      job.is_active !== false
     ]
   );
   const newJob = await getJobById(id);
@@ -351,6 +401,9 @@ function deserializeJob(row: Record<string, any>): Job {
     url: row.url,
     source: row.source,
     posted_date: row.posted_date,
+    job_type: row.job_type,
+    remote_mode: row.remote_mode,
+    is_active: row.is_active !== false && row.is_active !== 0 && row.is_active !== 'f',
     created_at: row.created_at,
   };
 }
@@ -362,14 +415,17 @@ export async function createJobMatch(match: Omit<JobMatch, 'id' | 'created_at'>)
   const id = uuid();
   await db.query(
     `INSERT INTO job_matches 
-     (id, user_id, job_id, overall_score, skill_score, experience_score, location_score, preference_score, skill_gaps, recommendations)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+     (id, user_id, job_id, overall_score, skill_score, experience_score, education_score, location_score, salary_score, job_title_score, job_type_score, skill_gaps, recommendations)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
      ON CONFLICT (user_id, job_id) DO UPDATE SET
        overall_score = EXCLUDED.overall_score,
        skill_score = EXCLUDED.skill_score,
        experience_score = EXCLUDED.experience_score,
+       education_score = EXCLUDED.education_score,
        location_score = EXCLUDED.location_score,
-       preference_score = EXCLUDED.preference_score,
+       salary_score = EXCLUDED.salary_score,
+       job_title_score = EXCLUDED.job_title_score,
+       job_type_score = EXCLUDED.job_type_score,
        skill_gaps = EXCLUDED.skill_gaps,
        recommendations = EXCLUDED.recommendations`,
     [
@@ -379,8 +435,11 @@ export async function createJobMatch(match: Omit<JobMatch, 'id' | 'created_at'>)
       match.overall_score,
       match.skill_score,
       match.experience_score,
+      match.education_score || 0,
       match.location_score,
-      match.preference_score,
+      match.salary_score || 0,
+      match.job_title_score || 0,
+      match.job_type_score || 0,
       JSON.stringify(match.skill_gaps),
       JSON.stringify(match.recommendations)
     ]
@@ -400,7 +459,7 @@ export async function getJobMatchesByUser(userId: string, minScore = 0): Promise
   const db = getDb();
   const result = await db.query(
     `SELECT jm.*, j.title, j.company, j.location, j.description, j.requirements,
-            j.salary_range, j.url, j.source, j.posted_date, j.created_at as job_created_at
+            j.salary_range, j.url, j.source, j.posted_date, j.job_type, j.remote_mode, j.is_active, j.created_at as job_created_at
      FROM job_matches jm
      JOIN jobs j ON jm.job_id = j.id
      WHERE jm.user_id = $1 AND jm.overall_score >= $2
@@ -420,6 +479,9 @@ export async function getJobMatchesByUser(userId: string, minScore = 0): Promise
       url: row.url,
       source: row.source,
       posted_date: row.posted_date,
+      job_type: row.job_type,
+      remote_mode: row.remote_mode,
+      is_active: row.is_active !== false && row.is_active !== 0 && row.is_active !== 'f',
       created_at: row.job_created_at,
     };
     return match;
@@ -434,8 +496,11 @@ function deserializeMatch(row: Record<string, any>): JobMatch {
     overall_score: row.overall_score,
     skill_score: row.skill_score,
     experience_score: row.experience_score,
+    education_score: row.education_score || 0,
     location_score: row.location_score,
-    preference_score: row.preference_score,
+    salary_score: row.salary_score || 0,
+    job_title_score: row.job_title_score || 0,
+    job_type_score: row.job_type_score || 0,
     skill_gaps: typeof row.skill_gaps === 'string' ? JSON.parse(row.skill_gaps || '[]') : (row.skill_gaps || []),
     recommendations: typeof row.recommendations === 'string' ? JSON.parse(row.recommendations || '[]') : (row.recommendations || []),
     created_at: row.created_at,
@@ -815,9 +880,15 @@ export async function getUnmatchedJobsForUser(userId: string): Promise<Job[]> {
   const result = await db.query(`
     SELECT * FROM jobs 
     WHERE id NOT IN (SELECT job_id FROM job_matches WHERE user_id = $1)
+      AND (is_active IS NULL OR is_active = TRUE)
     ORDER BY created_at DESC
   `, [userId]);
   return result.rows.map(deserializeJob);
+}
+
+export async function markJobInactive(jobId: string): Promise<void> {
+  const db = getDb();
+  await db.query('UPDATE jobs SET is_active = FALSE WHERE id = $1', [jobId]);
 }
 
 export async function hasAppliedToJob(userId: string, jobId: string): Promise<boolean> {
@@ -867,4 +938,30 @@ export async function hasAppliedToJobStreetId(userId: string, url: string | null
     }
   }
   return false;
+}
+
+// ── Authentication Tokens ───────────────────────────────────
+
+export async function createMagicLinkToken(userId: string, token: string, expiresAt: Date): Promise<void> {
+  const db = getDb();
+  const id = uuid();
+  await db.query(
+    'INSERT INTO magic_links (id, user_id, token, expires_at) VALUES ($1, $2, $3, $4)',
+    [id, userId, token, expiresAt]
+  );
+}
+
+export async function getMagicLinkToken(token: string): Promise<{ user_id: string; expires_at: Date } | null> {
+  const db = getDb();
+  const result = await db.query('SELECT user_id, expires_at FROM magic_links WHERE token = $1', [token]);
+  if (!result.rows.length) return null;
+  return {
+    user_id: result.rows[0].user_id,
+    expires_at: new Date(result.rows[0].expires_at)
+  };
+}
+
+export async function deleteMagicLinkToken(token: string): Promise<void> {
+  const db = getDb();
+  await db.query('DELETE FROM magic_links WHERE token = $1', [token]);
 }

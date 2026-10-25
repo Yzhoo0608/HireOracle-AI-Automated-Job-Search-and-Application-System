@@ -9,25 +9,17 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const adjectives = ['Swift', 'Clever', 'Stellar', 'Sharp', 'Mighty', 'Curious', 'Epic', 'Dynamic', 'Vibrant', 'Valiant'];
-  const nouns = ['Wizard', 'Coder', 'Analyst', 'Ninja', 'Hustler', 'Explorer', 'Leader', 'Developer', 'Maven', 'Pioneer'];
-
-  const generateNickname = () => {
-    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    const num = Math.floor(Math.random() * 90) + 10;
-    setName(`${adj}${noun}${num}`);
-  };
-
-  React.useEffect(() => {
-    generateNickname();
-  }, []);
-
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
     setLoading(true);
     setError('');
 
@@ -56,8 +48,8 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md relative z-10 bg-white border border-slate-200 shadow-sm" gradientBorder>
         <div className="text-center mb-8">
           <img src="/logo.png" alt="HireOracle" className="h-14 w-auto object-contain mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-slate-800 mb-1">Create Account</h1>
-          <p className="text-slate-500 text-sm">Start your automated job search journey</p>
+          <h1 className="text-xl font-bold text-slate-800 mb-1">Create an Account</h1>
+          <p className="text-slate-500 text-sm">Join HireOracle to start your job search</p>
         </div>
 
         {error && (
@@ -68,22 +60,13 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-sm font-medium text-slate-600">Nickname</label>
-              <button 
-                type="button" 
-                onClick={generateNickname} 
-                className="text-xs text-blue-600 hover:text-blue-500 transition-colors flex items-center gap-1 font-medium"
-              >
-                🎲 Randomize
-              </button>
-            </div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Full Name</label>
             <input 
               type="text" 
               value={name}
               onChange={e => setName(e.target.value)}
               className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-              placeholder="e.g. SwiftWizard42"
+              placeholder="John Doe"
               required
             />
           </div>
@@ -112,9 +95,22 @@ export default function RegisterPage() {
               minLength={6}
             />
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-600 mb-1">Confirm Password</label>
+            <input 
+              type="password" 
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              className="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+              placeholder="••••••••"
+              required
+              minLength={6}
+            />
+          </div>
           
           <Button type="submit" className="w-full mt-6 bg-blue-600 hover:bg-blue-500 text-white font-medium" size="lg" isLoading={loading}>
-            Create Account
+            Sign Up
           </Button>
         </form>
 
