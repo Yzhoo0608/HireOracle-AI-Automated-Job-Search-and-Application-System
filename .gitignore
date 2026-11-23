@@ -45,8 +45,21 @@ next-env.d.ts
 /uploads/
 /data/
 
-# research experiments and datasets
-/experiments/
+# research experiments: ignore large raw datasets, drafts, and unnecessary reports
+experiments/candidate_audit_report.md
+experiments/dataset_inspection_report.md
+experiments/dataset/job_dataset/jobstreet_all_job_dataset.csv
+experiments/dataset/job_dataset/.cache/
+experiments/dataset/resume dataset/
+experiments/dataset/processed/resumes_extracted.csv
+experiments/dataset/processed/job_quality_review.csv
+experiments/dataset/processed/benchmark_ground_truth.csv
+experiments/dataset/processed/benchmark_ground_truthtest.csv
+experiments/dataset/processed/benchmark_ground_truthv1.csv
+experiments/dataset/processed/resume_extraction_errors.csv
+experiments/dataset/processed/resume_extraction_review.csv
+*.ipynb.bak
+.ipynb_checkpoints/
 
 # local database backups
 /db_backup.sql
