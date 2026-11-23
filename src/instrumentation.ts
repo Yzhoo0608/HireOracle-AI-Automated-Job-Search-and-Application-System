@@ -1,8 +1,8 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     const cron = await import('node-cron');
-    const { checkCompanyReplies } = await import('@/lib/agents/reply-agent');
-    const { getDb, initializeDatabase } = await import('@/lib/db');
+    const { checkCompanyReplies } = await import('@/backend/agents/reply-agent');
+    const { getDb, initializeDatabase } = await import('@/backend/db');
 
     // Bootstrap database tables
     try {

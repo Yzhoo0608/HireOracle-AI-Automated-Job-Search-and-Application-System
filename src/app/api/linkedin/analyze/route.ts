@@ -1,23 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { askJSON } from '@/lib/groq';
+import { requireAuth } from '@/backend/auth';
+import { askJSON } from '@/backend/groq';
+import type { LinkedInAnalysis } from '@/shared/types';
+
+export type { LinkedInAnalysis };
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const pdfParse = require('pdf-parse') as (buffer: Buffer) => Promise<{ text: string }>;
-
-export interface LinkedInAnalysis {
-  score: number; // 0-100 overall profile strength
-  headline_score: number;
-  about_score: number;
-  experience_score: number;
-  skills_score: number;
-  completeness_score: number;
-  strengths: string[];
-  missing_sections: string[];
-  improvements: string[];
-  keyword_gaps: string[];
-  summary: string;
-}
 
 export async function POST(request: NextRequest) {
   try {

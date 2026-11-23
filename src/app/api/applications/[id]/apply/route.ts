@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getApplicationById, getJobById, getCVProfile, getUserById, createEmailLog, getDb } from '@/lib/db';
-import { generateCoverLetter, saveTextAsPDF } from '@/lib/agents/cover-letter-agent';
-import { sendApplicationEmail } from '@/lib/agents/email-agent';
+import { requireAuth } from '@/backend/auth';
+import { getApplicationById, getJobById, getCVProfile, getUserById, createEmailLog, getDb } from '@/backend/db';
+import { generateCoverLetter, saveTextAsPDF } from '@/backend/agents/cover-letter-agent';
+import { sendApplicationEmail } from '@/backend/agents/email-agent';
 import path from 'path';
 import fs from 'fs/promises';
 

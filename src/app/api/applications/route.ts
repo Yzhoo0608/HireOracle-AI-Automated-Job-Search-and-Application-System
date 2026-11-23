@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getApplicationsByUser, createApplication, checkDuplicateApplication } from '@/lib/db';
+import { requireAuth } from '@/backend/auth';
+import { getApplicationsByUser, createApplication, checkDuplicateApplication } from '@/backend/db';
 
 export async function GET(request: NextRequest) {
   try {

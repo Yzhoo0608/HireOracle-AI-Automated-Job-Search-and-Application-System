@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserByEmail, updateUserPassword, setForcePasswordChange } from '@/lib/db';
-import { sendApplicationEmail } from '@/lib/agents/email-agent';
-import { hashPassword } from '@/lib/auth';
+import { getUserByEmail, updateUserPassword, setForcePasswordChange } from '@/backend/db';
+import { sendApplicationEmail } from '@/backend/agents/email-agent';
+import { hashPassword } from '@/backend/auth';
 
 function generateTempPassword(): string {
   const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Email is required' }, { status: 400 });
     }
 
-    const user = await getUserByEmail(email);
+    const normalizedEmail = (email || '').trim().toLowerCase();
+    const user = await getUserByEmail(normalizedEmail);
     if (!user) {
       return NextResponse.json({ success: true, message: 'If an account exists, a temporary password has been sent.' });
     }
@@ -33,12 +34,14 @@ export async function POST(request: NextRequest) {
     await sendApplicationEmail({
       to: user.email,
       subject: 'Your temporary password — HireOracle',
-      body: `Hi ${user.name || 'there'},\n\nA temporary password has been generated for your account:\n\n  ${tempPassword}\n\nPlease log in with this temporary password. You will be asked to set a new password immediately after logging in.\n\nThis temporary password can only be used once.\n\nIf you did not request this, please contact support immediately.`,
+      body: `Hi ${user.name || 'there'},\n\nA temporary password has been generated for your account:\n\n${tempPassword}\n\nPlease log in using this temporary password (case-sensitive, enter without leading or trailing spaces). You will be required to set a new password immediately after logging in.\n\nThis temporary password can only be used once.\n\nIf you did not request this, please contact support immediately.`,
       userName: 'HireOracle Security',
       isSystemNotification: true,
     });
 
-    return NextResponse.json({ success: true, message: 'A temporary password has been sent to your email.' });
+    const response = NextResponse.json({ success: true, message: 'A temporary password has been sent to your email.' });
+    response.cookies.delete('auth_token');
+    return response;
   } catch (error: any) {
     console.error('Forgot password error:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

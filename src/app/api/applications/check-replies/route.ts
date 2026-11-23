@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { checkCompanyReplies } from '@/lib/agents/reply-agent';
+import { requireAuth } from '@/backend/auth';
+import { checkCompanyReplies } from '@/backend/agents/reply-agent';
 
 export async function POST(request: NextRequest) {
   try {

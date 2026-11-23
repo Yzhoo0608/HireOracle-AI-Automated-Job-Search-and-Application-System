@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getUserById, updateUserPreferences } from '@/lib/db';
-import { runJobSearch, runMatchAndRank } from '@/lib/agents/orchestrator';
+import { requireAuth } from '@/backend/auth';
+import { getUserById, updateUserPreferences } from '@/backend/db';
+import { runJobSearch, runMatchAndRank } from '@/backend/agents/orchestrator';
 
 export async function GET(request: NextRequest) {
   try {

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getJobMatchesByUser, getAcceptedJobMatches, getUnmatchedJobsForUser } from '@/lib/db';
-import { runMatchAndRank } from '@/lib/agents/orchestrator';
+import { requireAuth } from '@/backend/auth';
+import { getJobMatchesByUser, getAcceptedJobMatches, getUnmatchedJobsForUser } from '@/backend/db';
+import { runMatchAndRank } from '@/backend/agents/orchestrator';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,7 +32,16 @@ export async function GET(request: NextRequest) {
       }
     }
     
-    return NextResponse.json({ success: true, data: matches });
+    return NextResponse.json(
+      { success: true, data: matches },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        }
+      }
+    );
   } catch (error: any) {
     if (error.message === 'Authentication required') {
       return NextResponse.json({ success: false, error: error.message }, { status: 401 });

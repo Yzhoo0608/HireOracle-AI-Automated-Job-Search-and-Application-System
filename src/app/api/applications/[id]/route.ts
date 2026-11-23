@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getApplicationById, updateApplicationStatus, getUserById } from '@/lib/db';
-import { sendApplicationEmail } from '@/lib/agents/email-agent';
+import { requireAuth } from '@/backend/auth';
+import { getApplicationById, updateApplicationStatus, getUserById } from '@/backend/db';
+import { sendApplicationEmail } from '@/backend/agents/email-agent';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -35,21 +35,26 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const { status } = await request.json();
     await updateApplicationStatus(resolvedParams.id, status);
     
-    // Auto-notify user on interview
+    // Auto-notify user on interview asynchronously (non-blocking)
     if (status === 'interview_scheduled') {
-      const fullUser = await getUserById(user.userId);
-      if (fullUser) {
-        await sendApplicationEmail({
-          to: fullUser.email,
-          subject: `Interview Scheduled for ${app.job_title} at ${app.company_name}`,
-          body: `Congratulations ${fullUser.name}!\n\nYou have an interview scheduled for the ${app.job_title} position at ${app.company_name}.\n\nPlease come to the AI Job Agent app to practice your interview: http://localhost:3000/interview\n\nGood luck!`,
-          userName: 'AI Job Agent',
-          isSystemNotification: true
-        });
-      }
+      getUserById(user.userId).then((fullUser) => {
+        if (fullUser) {
+          sendApplicationEmail({
+            to: fullUser.email,
+            subject: `Interview Scheduled for ${app.job_title} at ${app.company_name}`,
+            body: `Congratulations ${fullUser.name}!\n\nYou have an interview scheduled for the ${app.job_title} position at ${app.company_name}.\n\nPlease come to the AI Job Agent app to practice your interview: http://localhost:3000/interview\n\nGood luck!`,
+            userName: 'AI Job Agent',
+            isSystemNotification: true
+          }).catch((err) => console.error('[Interview Email Notification Error]:', err));
+        }
+      }).catch((err) => console.error('[Interview User Fetch Error]:', err));
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      }
+    });
   } catch (error: any) {
     if (error.message === 'Authentication required') {
       return NextResponse.json({ success: false, error: error.message }, { status: 401 });

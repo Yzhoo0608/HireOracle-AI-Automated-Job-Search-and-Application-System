@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getMagicLinkToken, deleteMagicLinkToken, getUserById } from '@/lib/db';
-import { generateToken } from '@/lib/auth';
+import { getMagicLinkToken, deleteMagicLinkToken, getUserById, setForcePasswordChange } from '@/backend/db';
+import { generateToken } from '@/backend/auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const user = await getUserById(tokenRecord.user_id);
     if (!user) {
       await deleteMagicLinkToken(code);
-      return NextResponse.json({ success: false, error: 'User not found' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }
 
     // Verify the email matches the user who requested the OTP
@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
     // Generate session token and clean up
     const sessionToken = generateToken({ userId: user.id, email: user.email });
     await deleteMagicLinkToken(code);
+    await setForcePasswordChange(user.id, false);
 
     const response = NextResponse.json({
       success: true,

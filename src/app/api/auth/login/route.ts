@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyPassword, generateToken } from '@/lib/auth';
-import { getUserByEmail } from '@/lib/db';
+import { verifyPassword, generateToken, JWT_SECRET } from '@/backend/auth';
+import { getUserByEmail } from '@/backend/db';
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-change-me';
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,15 +11,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
 
-    const user = await getUserByEmail(email);
-    if (!user || !(await verifyPassword(password, user.password_hash || ''))) {
+    const normalizedEmail = (email || '').trim().toLowerCase();
+    const user = await getUserByEmail(normalizedEmail);
+    if (!user) {
+      return NextResponse.json({ success: false, error: 'Invalid credentials' }, { status: 401 });
+    }
+
+    const rawPass = typeof password === 'string' ? password : '';
+    const trimmedPass = rawPass.trim();
+    let isMatch = await verifyPassword(rawPass, user.password_hash || '');
+    if (!isMatch && trimmedPass !== rawPass) {
+      isMatch = await verifyPassword(trimmedPass, user.password_hash || '');
+    }
+
+    if (!isMatch) {
       return NextResponse.json({ success: false, error: 'Invalid credentials' }, { status: 401 });
     }
 
     // If user must change their password (used temp password)
     if (user.force_password_change) {
       const tempToken = jwt.sign({ userId: user.id, email: user.email, scope: 'change_password' }, JWT_SECRET, { expiresIn: '15m' });
-      return NextResponse.json({ success: true, requirePasswordChange: true, tempToken });
+      const response = NextResponse.json({ success: true, requirePasswordChange: true, tempToken });
+      response.cookies.delete('auth_token');
+      return response;
     }
 
     const token = generateToken({ userId: user.id, email: user.email });

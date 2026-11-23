@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { parseCV } from '@/lib/agents/cv-agent';
-import { createCVProfile } from '@/lib/db';
+import { requireAuth } from '@/backend/auth';
+import { parseCV } from '@/backend/agents/cv-agent';
+import { createCVProfile } from '@/backend/db';
 import fs from 'fs/promises';
 import path from 'path';
 

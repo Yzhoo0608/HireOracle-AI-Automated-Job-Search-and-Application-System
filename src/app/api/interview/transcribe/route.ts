@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { transcribeAudio } from '@/lib/groq';
+import { requireAuth } from '@/backend/auth';
+import { transcribeAudio } from '@/backend/groq';
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'No audio file provided' }, { status: 400 });
     }
 
-    const text = await transcribeAudio(file);
+    const language = (formData.get('language') as string) || 'en';
+
+    const text = await transcribeAudio(file, language);
 
     return NextResponse.json({ success: true, text });
   } catch (error: any) {

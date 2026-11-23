@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getJobById, getCVProfile, createInterviewSession } from '@/lib/db';
-import { generateInterviewQuestions } from '@/lib/agents/interview-agent';
+import { requireAuth } from '@/backend/auth';
+import { getJobById, getCVProfile, createInterviewSession } from '@/backend/db';
+import { generateInterviewQuestions } from '@/backend/agents/interview-agent';
 
 export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth();
-    const { job_id, type } = await request.json();
+    const { job_id, type, language } = await request.json();
 
     const job = await getJobById(job_id);
     const cv = await getCVProfile(user.userId);
@@ -15,8 +15,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Job or CV not found' }, { status: 404 });
     }
 
-    const messages = await generateInterviewQuestions(job, cv.structured_data, type);
-    const session = await createInterviewSession(user.userId, job_id, type, messages);
+    const messages = await generateInterviewQuestions(job, cv.structured_data, type, 'en');
+    const session = await createInterviewSession(user.userId, job_id, type, messages, 'en');
 
     return NextResponse.json({ success: true, data: session });
   } catch (error: any) {
