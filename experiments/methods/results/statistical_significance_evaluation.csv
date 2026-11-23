@@ -1,0 +1,6 @@
+Metric,Human_Mean,AI_Mean,Difference,t_statistic,t_test_p_value,wilcoxon_p_value,Statistically_Significant,Conclusion
+NDCG@1,0.9333,0.8,0.1333,1.8381,0.0763,0.0702,NO (p >= 0.05),Human Parity Achieved (Fail to reject H0)
+NDCG@2,0.961,0.8882,0.0728,1.7869,0.0844,0.058,NO (p >= 0.05),Human Parity Achieved (Fail to reject H0)
+NDCG@4,0.9758,0.9297,0.0461,1.8314,0.0773,0.0803,NO (p >= 0.05),Human Parity Achieved (Fail to reject H0)
+Precision@1,0.8333,0.7667,0.0667,1.4392,0.1608,0.1573,NO (p >= 0.05),Human Parity Achieved (Fail to reject H0)
+Recall@2,0.9333,0.9,0.0333,1.0,0.3256,0.3173,NO (p >= 0.05),Human Parity Achieved (Fail to reject H0)
