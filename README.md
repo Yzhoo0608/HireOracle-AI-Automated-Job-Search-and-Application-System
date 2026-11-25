@@ -1,59 +1,75 @@
-# Final Year Project 1 Submission
+# HireOracle — Multi-Agent AI Automated Job Search and Application System
 
-**Project Title:** Development of a Multi-Agent AI System for Automated Job Search, Matching and Application  
-**Student:** Hoo Yen Zhi (`BAI_B2009F-2409014`)  
- 
+**Author:** Hoo Yen Zhi (`BAI_B2009F-2409014`)  
 
 ---
 
-## 1. Submission Deliverables
+## Overview
 
-- **Project Report:** Full FYP thesis covering background, literature review, system design, three benchmark experiments (120 candidate-job pairs), functional testing, and conclusion.
-- **Presentation Slides (PPT):** Slide deck summarizing the research gap, multi-agent architecture, six-factor dynamic LLM weighting, experimental results, and UI modules.
-- **Demonstration Video:** Recorded walkthrough demonstrating live CV parsing, JobStreet Malaysia scraping, six-factor matching, automated email application, IMAP reply tracking, mock interviews, and LinkedIn analysis.
-- **Source Code:** Complete full-stack Next.js/TypeScript implementation of the HireOracle system and the Python benchmark evaluation scripts.
+HireOracle is an autonomous, explainable Multi-Agent AI system for end-to-end job searching, six-factor candidate-job matching, automated email application, recruiter reply tracking, AI mock interview preparation, and LinkedIn profile analysis.
+
+This repository is organized into two main directories: **`Submission/`** (project deliverables) and **`Source Code/`** (system implementation and benchmark experiments).
 
 ---
 
-## 2. Project Folder Structure
+## Repository Structure
 
 ```text
-Submission_Folder/
-├── Report/                           # Final Year Project Report (PDF / DOCX)
-├── Presentation_Slides/              # FYP Presentation Slides (PPTX / PDF)
-├── Demonstration_Video/              # System Walkthrough & Demo Video (MP4)
-└── Source_Code/                      # HireOracle System & Benchmark Repository
-    ├── experiments/                  # Dataset preprocessing & Python benchmark scripts
-    │   ├── 01_domain_sampling.ipynb
-    │   ├── 02_ground_truth_annotation.ipynb
-    │   └── methods/                  # Experiments 1, 2, 3 + CSV results
-    ├── src/
-    │   ├── app/
-    │   │   ├── (frontend)/           # Web UI pages (Dashboard, CV, Matches, Applications, Interview, LinkedIn, Settings)
-    │   │   └── api/                  # Backend REST API route handlers
-    │   ├── backend/
-    │   │   ├── agents/               # Orchestrator + 8 specialized AI agents
-    │   │   ├── auth.ts               # JWT & password authentication
-    │   │   ├── db.ts                 # PostgreSQL connection & schema setup
-    │   │   └── groq.ts               # Groq LLM & Whisper STT integration
-    │   ├── frontend/components/      # Shared UI components
-    │   └── instrumentation.ts        # Background 5-min IMAP reply checker
-    ├── uploads/                      # Uploaded CVs (PDF/DOCX) & generated Cover Letters (PDF)
-    └── package.json
+HireOracle-AI-Automated-Job-Search-and-Application-System/
+├── Submission/                       # Complete FYP I submission deliverables
+│   ├── Report                        # Final Year Project Report
+│   ├── Presentation (PPT)            # Presentation slide deck
+│   └── Video                         # System demonstration & walkthrough video
+│
+├── Source Code/                      # HireOracle web prototype & benchmark scripts
+│   ├── experiments/                  # Dataset preprocessing & Python evaluation (120 pairs)
+│   │   ├── 01_domain_sampling.ipynb
+│   │   ├── 02_ground_truth_annotation.ipynb
+│   │   └── methods/                  # Experiments 1–3, paired t-test & CSV results
+│   ├── src/
+│   │   ├── app/(frontend)/           # UI pages (Dashboard, CV, Matches, Applications, Interview, LinkedIn, Settings)
+│   │   ├── app/api/                  # REST API route handlers
+│   │   ├── backend/agents/           # Orchestrator + 8 specialized AI agents
+│   │   ├── backend/                  # PostgreSQL (db.ts), Auth (auth.ts) & Groq AI (groq.ts)
+│   │   ├── frontend/components/      # Shared UI components
+│   │   └── instrumentation.ts        # Background 5-minute IMAP reply daemon
+│   ├── uploads/                      # Uploaded CVs (PDF/DOCX) & generated Cover Letters (PDF)
+│   └── package.json
+│
+└── README.md
 ```
 
 ---
 
-## 3. Quick Start (Source Code)
+## Directory Summary
 
-1. Install dependencies and browser scraper:
-   ```bash
-   pnpm install
-   npx playwright install chromium
-   ```
-2. Add environment variables in `.env.local` (`DATABASE_URL`, `GROQ_API_KEY`, `JWT_SECRET`, `EMAIL_USER`, `EMAIL_APP_PASSWORD`, `EMAIL_REDIRECT`).
-3. Start PostgreSQL and run the server:
-   ```bash
-   pnpm dev
-   ```
-   Open `http://localhost:3000`.
+- **`Submission/`:** Contains the Final Year Project Report, Presentation Slides (PPT), and Demonstration Video.
+- **`Source Code/`:** Contains the full-stack Next.js 16 (React 19, TypeScript, Tailwind CSS), PostgreSQL, Playwright, and Groq Cloud AI (`openai/gpt-oss-120b` & `whisper-large-v3-turbo`) web application alongside the Python experimental evaluation scripts.
+
+---
+
+## Running the System (`Source Code/`)
+
+### 1. Navigate & Install Dependencies
+```bash
+cd "Source Code"
+pnpm install
+npx playwright install chromium
+```
+
+### 2. Configure `.env.local` inside `Source Code/`
+```env
+DATABASE_URL=postgresql://postgres:password@localhost:5432/job_search_agent
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=openai/gpt-oss-120b
+JWT_SECRET=your_jwt_secret
+EMAIL_USER=your_email@gmail.com
+EMAIL_APP_PASSWORD=your_google_app_password
+EMAIL_REDIRECT=your_test_inbox@gmail.com
+```
+
+### 3. Start the Application
+```bash
+pnpm dev
+```
+Open `http://localhost:3000` in your browser.
