@@ -1,0 +1,1419 @@
+job_id_code,job_id,job_title,company,location,category,subcategory,role,job_type,salary_raw,salary_min,salary_max,is_salary_disclosed,descriptions,word_count
+J01,74354148,Java Microservices Developer,UST Global (M) Sdn Bhd,Petaling,Information & Communication Technology,Developers/Programmers,Java-Microservices-Developer,Full time,"RM 10,000 – RM 15,000 per month",10000.0,15000.0,True,"Minimum 5+ years of experience with a backend microservices, based on one of the following: Spring Boot (Spring MVC, Spring WebFlux), pure Spring Framework;
+Understanding and experience of multi-threaded concurrent environment, added caveats and challenges
+Multiyear experience in Java based RESTful web services development lifecycle, experience in event-driven architecture is an advantage.
+Experience with using SQL/NoSQL solutions: Postgres, DynamoDB, MongoDB, etc; ability to measure and optimized SQL queries; understanding of ACID;
+REST API design and development
+Exposed to microservice design and development best practices: understanding design and development patterns
+Experience with reactive java frameworks (Reactor, RxJava) is an advantage
+AWS native solutions experience: SQS, DynamoDB, S3, Aurora, SNS, etc is an advantage
+Knowledge of modern security mechanisms and authentication types is an advantage
+English language skills",126
+J02,74793840,IT Executive,Perodua Global Manufacturing Sdn Bhd,Gombak District,Information & Communication Technology,Management,information-technology-executive,Full time,"RM 3,000 – RM 3,500 per month",3000.0,3500.0,True,"Job Description(s) :
+Exploring new technology that suitable with Operation
+Perform user requirement study together with operation users.
+Perform system analysis and design.
+Perform application testing, integration test, conduct User Acceptance Test (UAT) and training with Operation users.
+Prepare standard documentations based on the System Development Life Cycle (SDLC) – i.e.: Fit gap analysis, technical specification, functional specification documentation system test script/test plan, user guide etc.
+Support, maintain and troubleshoot any problem or issues of existing and new systems.
+Monitor and manage vendor implementation for outsourcing project.
+Involve in any activities at division and company level.
+Requirement (s) :
+Candidate must possess at least a Bachelor's Degree, Professional Degree, Computer Science/Information Technology or equivalent.
+Required skill : Basic programming skill, database knowledge and SDLC methodology.
+Skill in PHP Programming, SQL & Oracle database will be added advantage.
+Self-motivated with strong interpersonal skill.
+Applicants must be willing to work at Perodua Automotive Center in Rawang.
+Full-Time position(s) available.
+Fresh Graduates are Welcome!",161
+J03,76570295,Application Developer,Avanade Malaysia Sdn Bhd,Kuala Lumpur,Information & Communication Technology,Developers/Programmers,applications-developer,Full time,"RM 7,000 – RM 10,000 per month",7000.0,10000.0,True,"Introduction:
+Join as a visionary Application Developer, leading transformative development with integrated solutions across front and back-end, bridging the technology-business gap and shaping the future with innovative user experiences.
+Come join us:
+Join as Application Developer and lead transformative development, crafting innovative solutions across front and back-end with integrated services and APIs. Embrace your leadership role, creating conceptual architecture to meet precise client needs, while bridging the technology-business gap with exceptional communication. Elevate your career in this dynamic journey of Application Development, shaping the future and making a lasting impact on clients.
+Together we do what matters.
+What you’ll do:
+Analyze, design, develop, implement and maintain application code in a variety of contexts
+Build scalable applications which power modern framework-driven web apps.
+Build and automate the features and services that model complex business problems, power enterprise-scale systems and drive innovative user experiences
+Implement APIs and Microservices through database design, data access and ORMs and consume said APIs to build feature-rich applications
+Develop scalable and cloud-based solutions, with consideration to security and performance
+Harness modern development and Azure DevOps practices including CI/CD, containerization, automated testing
+Skills and experiences:
+Advance front-end development experience: Angular Js, Node Js
+Programming language: .NET
+Database: SQL Server
+More than 2 years experience in Type Script, HTML, Javascript, Ionic 6, Java, SDKIOS Development, Tomcat would be preferred
+About you:
+Characteristics that can spell success for this role
+Embrace challenges with a keen intellect and a thirst for knowledge.
+Collaborate seamlessly, fostering open and effective communication.
+Embrace creativity and explore groundbreaking solutions.
+Stay ahead of the curve, anticipating what lies ahead and adapting to the latest advancements.
+Enjoy your career
+Some of the best things about working at Avanade
+Opportunity to work for Microsoft’s Global Alliance Partner of the Year (14 years in a row), with exceptional development and training (minimum 80 hours per year for training and paid certifications)
+Real-time access to technical and skilled resources globally
+Dedicated career advisor to encourage your growth
+Engaged and helpful coworkers genuinely interested in you
+Find out more about some of our benefits https://www.avanade.com/en-gb/career/benefits.
+A great place to work
+As you bring your skills and abilities to Avanade, you’ll get distinctive experiences, limitless learning, and ambitious growth in return. As we continue to build our diverse and inclusive culture, we become even more innovative and creative, helping us better serve our clients and communities. You’ll join a community of smart, supportive collaborators to lift, mentor, and guide you, and to lean on your expertise. You get a company purpose-built for business-critical, leading-edge technology solutions, committed to improving the way humans work, interact, and live. It’s all here, so take a closer look!
+We work hard to provide an inclusive, diverse culture with a deep sense of belonging for all our employees. Visit our https://www.avanade.com/en-us/about-avanade/inclusion-and-diversity page.
+Create a future for our people that focuses on
+• Expanding your thinking   • Experimenting courageously   • Learning and pivoting Inspire greatness in our people by
+• Empowering every voice   • Encouraging boldness   • Celebrating progress
+Accelerate the impact of our people by
+• Amazing the client   • Prioritizing what matters    • Acting as one
+Learn more
+To learn more about the types of projects our Application Development team works on check out these case studies:
+https://www.avanade.com/en/blogs/techs-and-specs/software-development/adobe-franklin
+https://www.avanade.com/en/blogs/techs-and-specs/software-development/chatgpt-aem-integration
+Interested in knowing what’s going on inside Avanade? Check out our blogs:
+https://www.avanade.com/en/blogs/avanade-insights
+https://www.avanade.com/en/blogs/inside-avanade",557
+J04,72346846,Document Controller,QUBE APPS SOLUTIONS SDN. BHD.,Kepong,Information & Communication Technology,Business/Systems Analysts,document-controller,Full time,,,,False,"Establish and maintain a centralized document management system for software development projects. This includes creating a structured repository for all project-related documents, such as requirements, design specifications, test plans, user manuals, and technical documentation.
+Implement version control mechanisms to manage changes in project documents systematically. Ensure that the latest versions of documents are readily available to team members, and maintain a historical record of document revisions.
+Facilitate document review processes by distributing documents to relevant stakeholders, tracking feedback, and coordinating document approval and sign-off.
+Set up access controls to ensure that sensitive or confidential documents are accessible only to authorized personnel.
+Collaborate with software development teams to manage the configuration of software components and ensure proper documentation of changes and releases.
+Ensure that all project documents adhere to established standards, guidelines, and compliance requirements. This may include regulatory standards and industry best practices.
+Develop and maintain standard document templates to facilitate consistent and professional-looking project documentation.
+Provide guidance and training to team members on document management procedures and best practices.
+Other ad hoc tasks that could be assigned from time to time.",182
+J05,74458885,.Net Core web developer,Gabkotech Innovations Sdn Bhd,Johor Bahru District,Information & Communication Technology,Developers/Programmers,web-developer,Full time,"RM 4,500 – RM 6,000 per month",4500.0,6000.0,True,"About our company
+----------------------------------------------------------------------------
+One of the leading IoT Smart Building Facility Management Solutions Provider.
+A going listed company, growing and expanding at a rapid pace.
+Expecting capable talents to join us.
+Join us if you're looking for a rewarding career.
+Come participate in our grand vision.
+About the job
+----------------------------------------------------------------------------
+The ideal candidate is a self-motivated, multi-tasker, and proven team-player.
+As an ASP.Net / .Net Core web developer, he/she will be the specialist in developing, maintaining and enhancing custom developed web-based system/ API.
+He/she should excel in working with large-scale applications and frameworks and have outstanding communication skills.
+Responsibilities
+----------------------------------------------------------------------------
+Build new and key feature for web-based system with clean, high-quality, high-performance and maintainable code.
+Upgrade existing system in accordance to organisation’s needs.
+Work closely with project managers and mobile development team.
+Analyse and optimize performance and reliability of the web-based system & API.
+Take ownership of tasks from design to implementation, to maintenance.
+Work with project manager and teammates to understanding the client requirements, identify solutions and determine feasibility & timelines.
+Coordinate cross-functionally to ensure project meets business objectives and compliance standards.
+Support test and deployment of new products and features
+Participate in code reviews.
+Build new web-based system with latest technology from existing web-based system.
+Skills & experience required
+----------------------------------------------------------------------------
+4+ years’ experience as an ASP.Net / .Net Core developer
+Proficient in ASP.NET / .Net Core C# and Microsoft SQL Server to create responsive web-based system.
+Strong computer science background with good understanding of ASP.NET / .Net Core frameworks and best practices.
+Good understanding of full web development cycle.
+Familiar with popular ASP.Net libraries / .Net Core and guidelines.
+Interacting with ASP.NET / .Net Core Web API and XML/Json Web Service.
+Proven ability to ship beautiful, stable and high-performance web-based system from start to finish.
+Ability to multi-task, organize, and prioritize work.
+Microsoft Azure service, Angular, Window form application (VB.Net) & WPF knowledge is a huge bonus.
+Please take note that the incumbent would be working in the Johor Bahru office.",334
+J06,76000433,Driver Developmnent,eTeam Workforce Sdn. Bhd. (Malaysia),Penang Island,Information & Communication Technology,Developers/Programmers,driver,Contract/Temp,"RM 7,000 – RM 10,000 per month",7000.0,10000.0,True,"Description:
+This is a hybrid mode job and we need the candidates to be able to support from onsite.
+It is mandatory to be onsite on every Monday and Wednesday as per sponsor's team schedule and to be onsite whenever required.
+Description of Job
+• You will be responsible to design, develop, analyse, debug, optimize, integrate, test, and/or validate existing (Ethernet MAC Controller and PHY) drivers software, including the design and implementation of platform level features that encompass interfacing with drivers to higher level frameworks.
+• Collaborates with other engineers and architects in the design, development, integration, and/or validation of device drivers on the target OS, such as but not limited to Linux.
+• You would also be expected to integrate and develop new test cases into existing CICT (continuous integration continuous testing) infrastructure and content as vehicle to improve outflow quality.
+• You will be expected to be able to share and collaborate with peers and leads, including during code review process. As we practise open and clear communication among peers, you are more than welcome to pitch in your views and ideas to improve the workplace.
+Requirements :
+• Fluent in English
+• Working hours : Normal shift, No OT required or expected. If required will handle on case by case basis.
+• Education : You must possess a Bachelor's or a Master's degree or a Ph.D. in Software Engineering, Computer Engineering, Computer Science or Electrical and Electronics Engineering.
+Additional qualifications include:
+• Knowledge in system software development environment, Linux kernel and user space.
+• Knowledge in network protocols [TCP, IPv4 and/or IPv6, Domain Name System (DNS), Dynamic Host Configuration Protocol (DHCP)]
+• Interest to work independently and interdependently effectively.
+• Passionate in technology and demonstrate proactive deep dive learning.
+• Willing to learn effective communication skills.
+• Willing to learn analytical, logical and strategic thinking skills.
+• Knowledge in C programming.
+• Phyton programming, schematics reading and driver development experience is a plus
+Shift Hours
+8am-5.30pm
+Shift Days
+Monday-Friday",332
+J07,74236802,Solution Architect,BerryPay (M) Sdn Bhd,Sepang,Information & Communication Technology,Architects,solutions-architect,Full time,,,,False,"Join us to lead collaborative efforts, shaping scalable, secure, and high-performance software solutions.
+Key Responsibilities:
+Collaborate with clients, business analysts, and development teams to understand business requirements and design effective technical solutions
+Create and present architectural design proposals, considering factors such as scalability, reliability, security, and performance
+Define system architecture, components, modules, and interfaces, ensuring alignment with business goals and technology strategy
+Evaluate and recommend appropriate technologies, frameworks, and tools to achieve project objectives
+Develop and maintain architecture documentation, including diagrams, specifications, and guidelines
+Provide technical leadership and guidance to development teams during the implementation phase
+Ensure that architectural best practices and standards are followed throughout the software development lifecycle
+Conduct regular reviews of existing systems to identify opportunities for improvement and optimization
+Collaborate with stakeholders to address and resolve technical challenges and ensure successful project delivery
+Stay abreast of industry trends, emerging technologies, and best practices to make informed recommendations
+Qualifications
+Possess 3-7 years of experience as a Solution Architect or in a similar role in software development
+In-depth knowledge of enterprise-level software architecture principles and practices
+Proficiency in designing and implementing solutions using a variety of technologies, platforms, and frameworks
+Strong understanding of cloud computing platforms (e.g., AWS, Azure, Google Cloud) and their services
+Experience with micro services architecture and containerization (e.g., Docker, Kubernetes)
+Excellent analytical and problem-solving skills, with the ability to balance technical and business considerations
+Effective communication skills to articulate complex technical concepts to both technical and non-technical stakeholders
+Leadership and mentoring skills to guide development teams and foster a collaborative work environment
+Familiarity with agile methodologies and DevOps practices
+Proactive approach to identifying and addressing technical challenges and risks
+Ready to elevate your career? Apply now at
+[email protected]
+!
+🚀
+Note: Only selected candidates will be contacted for interviews.",296
+J08,75230293,"Technician, Hardware Support",Daikin Malaysia Sdn Bhd,Selangor,Information & Communication Technology,Help Desk & IT Support,technician,Full time,,,,False,"Job Description
+Responsible for evaluate, propose, implement, test and maintain manufacturing and warehouse systems as business requirements.
+Responsible to plan and support relevant level of service standards and operating policies/procedures.
+Responsible to purchase and manage inventory of industrial PC, scanners, visual management systems, and machines data logging devices.
+Responsible to ensure system design with industrial best practices and ensure continuous improvement activities for the system.
+Create and maintain technical system documentation.
+Identify process improvement opportunities and drive the process improvement across multiple teams.
+Job Requirement
+Candidate must possess at least a Diploma in Computer Science / Information Technology, Engineering (Computer/Telecommunication) or equivalent.
+At least 1 year(s) of relevant working experience.
+Good in system automation hardware, computer trouble shooting and network, problem solving, and communication skills.
+Strong leadership in implement and guide users on computer hardware usage.
+Good knowledge on manufacturing and warehouse system management, network and IT security.
+Able to manage and support users on manufacturing and warehouse related systems.
+Able to work with stake holders on system implementation, security, and measures.
+Able to perform backup and restore SQL database for testing and trouble shooting purposes.
+Good communication, decision making and problem solving skills.",194
+J09,74166136,Project Manager (of Finance or HR System),VDATA CONSULTING SDN. BHD.,Kuala Lumpur City Centre,Information & Communication Technology,Programme & Project Management,finance-manager,Full time,,,,False,"Job Title
+Project Manager (of Finance or HR System)
+Position Level
+Senior Manager
+Job Specialization
+Technical & Helpdesk Support
+Qualification
+Diploma/Advanced/Higher/Graduate Diploma, Bachelor's Degree/Post Graduate Diploma/Professional Degree
+Employment Type
+Full-Time
+Responsibilities
+- Leading and managing the project
+- Basic understanding of Accounting/Human Resources knowledge or equivalent
+- Take part in the project implementation task
+- Work with clients to live the project in given timeline
+- Ensure project is implemented in the defined timeline
+- Ensure project documentations are in checked and complete, getting project sign off from clients.
+Job Location
+Kuala Lumpur, Negeri Sembilan
+Other Location
+-
+Years of Experience
+0
+Age Range of Candidate
+-
+Monthly Salary
+-
+Requirements
+-",112
+J10,75372588,Software Engineer (Backend Developer),UP Devlabs Sdn Bhd,Bangsar South,Information & Communication Technology,Developers/Programmers,backend-developer,Full time,"RM 4,500 – RM 6,500 per month",4500.0,6500.0,True,"Responsible for all aspects of the software life cycle including gathering requirements for the business, analysis of existing systems/functionality, design and implementation.
+Develop and maintain new and existing backend web applications with Go, PHP, and Python
+Data mining with libraries, e.g. beautiful soap, requests, scrappy
+Ability to work with multiple data structures (e.g. JSON, XML, CSV, HTML)
+Implementation of low-latency, high-availability, and performance REST APIs
+Collaborate with front-end developers and business team to integrate user-facing elements with server-side business logic
+Build and maintain in efficient, reusable, high-quality, and reliable code
+Integrate data storage solution with SQL, NoSQL stores
+Implement data queuing logic with RabbitMQ
+Optimize applications for maximum speed and scalability
+Handle ad-hoc tasks as assigned.
+Job Requirements
+Candidate must possess at least a Bachelor's Degree in IT / Computer Science / Computer Engineering or any equivalent
+Strong knowledge of Back-End Web Development
+4+ years of experience in Software development
+Experience in Web Services and Streaming is an added advantage
+Knowledge of Node.js is an added advantage
+Self-motivated, eager to learn, responsible, able to work in a team.
+Proficiency in Mysql.
+Proficiency in Linux OS and Shell Scripting
+With NoSQL knowledge, MongoDB, Redis, and any other NoSQL is a plus.
+With network inspecting knowledge is a strong plus.
+Good communication and analytical skills
+Abel to work in a fast-paced environment.
+Must be a Chinese Candidate -  fluent in Mandarin speaking and writing.
+What do we provide you to succeed in this role:
+Attractive remuneration and package will be commensurate with experience and qualification
+An attractive compensation packages
+Regular work hours - 5 working days.
+Opportunities for growth and advancement await the successful candidate.
+Your Medical Claims Are On Us
+Other Benefits
+Festival celebration & gift
+Afternoon tea, soft drinks & snacks
+so on and so forth",296
+J11,74076607,Pega Senior Software Engineer (Senior System Architect Certified),SWIFT SUPPORT SERVICES MALAYSIA SDN. BHD.,Bangsar South,Information & Communication Technology,Architects,systems-engineer,Full time,,,,False,"What to expect:
+Understand the business solution strategy, operate vision, business imperatives, and capabilities, and how they affect technology imperatives
+Design and define the specific solution processes, business and functional requirements
+Work with other architects to explore and define how the proposed capabilities will fit into the overall solution architecture
+Review deliverables within the scope of the initiatives to meet the business imperatives
+Manage the integration requirements across different systems in line with the defined tribe integration solution.
+Develop, test, install and support application systems in line with product requirements.
+Supervise and coach junior team members the development, the testing, the installation and the support of application systems in line with product requirements.
+Create, deploy and maintain end-to-end CI/CD pipelines ensuring the development and release of software is as seamless as possible.
+Apply automation, monitoring and visualization across the architecture.
+Work hand-in-hand with developers and testers to ensure code deploys and operates to the highest quality standards.
+Analyze problems, develop and propose solutions to more senior team members.
+Prepare and study the technical feasibility and estimates of the proposed systems solutions.
+Develop and maintain technical documentation, prepare and give presentations to other team members, management and customers.
+Provide timing/scheduling estimates to product owner and propose corrective actions to timelines when necessary.
+Demonstrate customer centricity by working closely together with the internal customer.
+Organize efficient handover through high quality documentation and training.
+Collaborate with other engineers to innovate and implement the components of the design system.
+What will make you successful:
+University degree in Computer Science, Electronics, Information Systems, Business Administration or related field, or equivalent work experience.
+5-7 years of IT development experience
+Pega SSA certification with strong exposure to on-premises implementation
+High and practical exposure to Pega 8.8 version and features is a must.
+Proficient in Java, experience in development of multi-tier applications using JAVA and Tomcat is an asset.
+Solid understanding of Web technologies including HTML, CSS, AJAX, Web Services, SOAP, REST, Apache Tomcat and Apache HTTP Server.
+Practical experience of Linux OS (RedHat Enterprise Linux)
+Oracle and database expertise including SQL and schema administration
+Strong Pega security exposure and security mindset.
+Knowledge in DevOps and experience in branching strategies, continuous integration, testing, deployment, and monitoring. In an Agile environment that require a high degree of scalability and reliability
+Team player, ability to collaborate with teams operating in other time-zones (Europe and APAC)
+Excellent written and verbal (English) communications, strong interpersonal skills and customer centric attitude.
+Analytical with very good troubleshooting skills in understanding very complex situations and dependencies.
+Eager to learn and to stay up to date with the latest technologies",434
+J12,74650531,Business System Analyst,A. CLOUET (MALAYSIA) SDN. BHD.,Shah Alam/Subang,Information & Communication Technology,Business/Systems Analysts,business-systems-analyst,Full time,"RM 3,500 – RM 5,000 per month",3500.0,5000.0,True,"Job Description:
+Maintain and support SAP B1, Mobilecom, BUA , SmartDMS, Analyzer, Pallet and BI reporting.
+Ensure high availability of systems.
+Tighten system control and information security.
+Analyze, enhance and implement systems that meet the business requirements within the time limit and budget.
+Keep proper documentation on all systems
+Qualifications:
+At least Bachelor in Computer Science or Information Technology, Certification on SAP B1/HANA, Certification on Microsoft Engineer/Professional.
+Experience:
+At least 3 solid years experience in using and supporting SAP B1 and HANA, Distributor Management System, Data warehousing. Preferably working in FMCG and MNC.
+Have some experience working with servers and network connectivity, understand the concept of firewall, http, https, backup and recovery.
+Benefits:
+Performance bonus.
+Yearly bonus.
+Health insurance.
+Working days: Monday to Friday
+Cell phone reimbursement.
+Opportunities for promotion.
+Professional development.",132
+J13,74593196,IT INTERNSHIP INTAKE APRIL/ JULY/ SEPT,Total Neutron Solution Sdn Bhd - KL,Kuala Lumpur,Information & Communication Technology,Help Desk & IT Support,,Full time,RM 600 – RM 900 per month,600.0,900.0,True,"Job Scope:
+Supporting walk-in customers, and day-to-day IT operations support. E.g. PC
+Imaging, software, and hardware installation troubleshooting all issues, and ensuring security procedures are followed and enforced.
+Assisting in the planning and execution of IT projects or activities as and when required
+Assist the team in providing bill of materials, proposal and sizing for IT solutions
+Assist in information gathering and fact finding for customer requirements
+Requirements:
+A Diploma, Advanced/Higher/Graduate Diploma, Bachelor's Degree, Post Graduate Diploma, Professional Degree, Information Technology or equivalent.
+Good in communication skills and able to work in a team.
+Creating and maintaining documentation of IT systems and processes
+Applicants must be willing to work in Bangsar
+Possess own transport and willing to travel within Klang Valley when required.",123
+J14,74377365,"Executive, System & Method (IT Governance & Compliance)",FGV Holdings Berhad,Kuala Lumpur,Information & Communication Technology,Management,Executive,Full time,,,,False,"Description
+Establishes, manages, leads, and coordinates the annual certification process for the Quality Management System (QMS) based on the ISO 9001: 2015, IT Service Management System (ITSMS) based on the ISO/IEC 20000-1:2018, Information Security Management System (ISMS) based on the ISO/IEC 27001:2013, Business Continuity Management System (BCMS) based on the ISO 22301:2019 and Anti-Bribery Management System based on the ISO 37001: 2016
+1. Analyze service performance through data aggregation from diverse sources and tailoring reports to align with the unique preferences of various business units regarding style, format, data, and frequency.
+2. Analyze the incidents, requests, complaints, and customer satisfaction to identify service breaches of SLA and monitor performance against established targets.
+3. Analyze issues related to problem resolution, changes, service delivery, demand (capacity and availability), supplier performance, and service continuity.
+4. Maintain and update policies and procedures effectively to ensure adherence to standards.
+5. Monitor and assess all identified risks continuously.
+6. Execute the Internal Audit program proficiently.
+7. Support the Lead Auditor in preparing comprehensive audit findings reports for management review.
+8. Conduct project audits to assess compliance with project management methodologies, standards, and procedures, and provide recommendations for improvement.
+9. Assist in internal investigations by gathering and analyzing relevant data, conducting interviews, and collaborating with relevant stakeholders to address identified issues and ensure adherence to organizational policies and regulations.
+Company
+FGV PRODATA Systems Sdn Bhd is an Information & Communication Technology (ICT) service provider specializing in bringing together end-to-end components of ICT into an efficient and cohesive system.
+We keep moving forward and continuously embarking on new and emerging technologies such as Big Data and Cloud Computing, PRODATA ensures the topmost result in developing, providing and problem-solving as it delves into major endeavours that require ICT related expertise and components from developing entire IT systems and infrastructure to building an IT lab or constructing telecommunications tower as well as providing the cyber-physical systems and systems that can connect the digital world with biological systems like humans through the internet.
+FGV PRODATA keeps moving forward and continuously step abroad to offer the new technologies of IR 4.0 starting with Big Data Analytics, Cloud Computing, and Internet of Things services.
+Next, we will offer more trending technologies like Robotic Process Automation, Artificial Intelligence and Virtual Reality services to enhance the expertise that we already have and help you to expand your business and together we will make humans as a part of technology.
+VISION
+To Be the Region's Preferred ICT Solutions Provider
+MISSION
+To Enhance Values to Our Customers' Business by Providing Innovative & Exclusive IT Solutions & Services",430
+J15,74056425,IT Security & Cybersecurity Executive,Generali Life Insurance Malaysia Berhad,Kuala Lumpur City Centre,Information & Communication Technology,Security,Cybersecurity-Executive,Full time,,,,False,"Job purpose
+The candidate is responsible for assessing information risk and facilitates remediation of identified vulnerabilities for IT & Cybersecurity   risk across the enterprise.   Management   of   IT   security infrastructures, perform    security   vulnerability   configuration   management   and   work   closely   with Business Units (BU) to ensure Information Security policies are integrated  with  business  processes.   Candidate with experience in Cybersecurity Operations, Incident Management & Response and Project would be an advantage.
+Key Accountabilities
+Oversee overall operation of Security Operation Centre (SOC) and Security BAU activities. Manage Security Incident Management Team to ensure proper co-ordination in the event of security threat outbreak, initiate remediation activities and work closely with INM CISO team on Security investigation/forensic analysis. Resolve potential security attempt and vulnerability issues timely.
+Assist the line manager to perform security risk assessment and technical reviews on projects that involves transfer of confidential data or third party access to infrastructure. Regular meetings with Business Units/Clients/stakeholders to ensure all concerns or road block in business activities projects related Information Security are addressed.
+Proactively assess potential exposures of cyber threats and ensure adequate safeguards.   Perform security vulnerability scan on network infrastructures to identify security weakness and work on the necessary remediation.
+Responsible for Cybersecurity incident response management and recovery process. Identifies   and resolves potential security breaches and vulnerability issues in a timely and accurate method.
+Manage Information Security projects to comply with the Group/INM and Regulatory requirements especially on work together with Risk Management on Crown Jewel and Compliance on the Bank Negara Malaysia (BNM) Risk Management in Technology (RMiT).
+Assess potential exposures to cyber threats arising from arrangements to ensure adequate safeguards and a defined process for reporting security incidents. Recommend improvements and upgrades to the security posture of the organization.
+Manage overall information security compliance including Threat Monitoring, Patch Management, Vulnerability Management, Antivirus Management, Hardening and identity management.
+Ensure risk control issues are updated in risk matrix & tracked. Ensure all audit findings are tracked, remediated & closed on timely manner. Coordinate with Security vendors/Group on management critical infrastructures: SOC, SIEM, WAF/firewall, proxy, etc. Conduct review on the configuration and rules settings for all security devices.
+Ensure that the Penetration Test being performed annually for critical systems and every 3 years for non-critical systems. Ensure System administration perform the annual recertification for all critical systems.
+Coordinate regular assessments of cloud infrastructure security posture and configurations to identify vulnerabilities and risks.",395
+J16,73949612,System Support Consultant,PRESOFT (M) SDN BHD,Petaling,Information & Communication Technology,Help Desk & IT Support,Systems-Support-Consultant,Full time,"RM 2,500 – RM 3,500 per month",2500.0,3500.0,True,"Job Description:
+To provide off-site and on-site customer service and technical support for system related issue
+To implement software solution, project deployment, product training, upgrades and troubleshooting issues
+Collaborate with stakeholders to understand business requirements and translate them into technical solutions.
+Collaborate with the development team to report and resolve software bugs
+Job Requirement:
+Bachelor’s degree in Computer Science, Information Technology, or related field
+Required language(s): Mandarin, English, Bahasa Malaysia
+Applicants must be willing to work in Bandar Puteri Puchong.
+Applicants must be willing travel and posses own transport
+Strong knowledge of IT infrastructure, including hardware, software, networks, and databases
+Good interpersonal and communication skills
+Good team player
+Good troubleshooting and Technical skills
+Self motivated and able to work independently
+Knowledge and experience in Accounting, Human Resource are a plus.
+10 Full-Time position(s) available.
+FRESH GRADUATE IS ENCOURAGED TO APPLY
+**Interested candidates, please click on the button “
+Apply Now
+” to submit your latest updated resumes together with your photo.
+Benefits :-
+EPF, Socso, SIP, PA
+Bonus
+Nearby public transport (LRT)
+Central location
+Company trips
+Personal development opportunities",179
+J17,74998814,Java Backend developer,Tentacle Tech,Kuala Lumpur,Information & Communication Technology,Developers/Programmers,back-end-java-developer,Full time,"RM 9,000 – RM 12,000 per month",9000.0,12000.0,True,"Position Title
+Java Fullstack Developer
+Exp level
+5+Yrs
+Work Location
+Malaysia, KL
+Job Description
+Develop and maintain highly reliable and scalable services and applications.
+Create automation that works on Windows, macOS and Linux servers.
+Build APIs and UIs that are simple and powerful.
+Understand product requirements, engage with team members and customers to define solutions, and estimate the scope of work required.
+Collaborate with, mentor, and influence members within your team and across other
+Deliver solutions that can keep up with a rapidly evolving product in a timely fashion.
+Solid Java/Spring Boot development experience.
+Experience with at least one other programming language (C#, Kotlin, Golang).
+Knowledge in Microservices, Functions, Event-driven/reactive programming or other Cloud Native architectures
+Experience designing, building, and maintaining RESTful APIs
+Experience with Cloud Native Platforms including Kubernetes, Open Shift, Docker Enterprise, or Cloud Foundry in the public cloud
+Experience with JavaScript and one or more front-end frameworks such as React or AngularJS
+Expertise in building highly available production services, including deployment automation, CI-CD, infrastructure-as-code, monitoring, and scaling.
+Good understanding of containers, build systems, and infrastructure automation.
+Experience with DevOps and Agile engineering practices.",186
+J18,72343047,IT Project Analyst,PUBLIC MUTUAL BERHAD,Kuala Lumpur City Centre,Information & Communication Technology,Programme & Project Management,project-analyst,Full time,,,,False,"Information Technology Division
+IT Project Analyst
+Responsibilities
+To work closely with relevant stakeholders to gather and analyse current business processes, resources 
+and System Change Request (SCR) requirements
+To identify and assess business requirements to recommend business priorities, options, risks and costing
+To prepare detailed project plans and schedules using project management tools such as Microsoft 
+Project and Microsoft Excel
+To assist in preparation of weekly and monthly project status reports based on Project Governance 
+processes and relevant reports for internal audit, compliance and regulatory submission
+To coordinate and ensure tasks for IT risk assessment and Penetration Test are carried out for critical 
+projects
+To ensure proper project closure including (but not limited to) lessons learnt, evaluations and conducting 
+face-to-face review with project team on project's performance and update Post Implementation Review 
+reports
+Requirements:
+Degree in Computer Science/ Information Technology or equivalent
+Minimum 2 years experience in IT project management/ software development/ application support
+Good working knowledge in Software Development Life-Cycle (SDLC), Project Management Body of 
+Knowledge (PMBOK) processes and system platforms, i.e. MS .Net, .Net framework, .NET Core, web, 
+application, SQL server and Oracle database would be an added advantage
+Familiar with System Documentation such as Business Requirement Document (BRD), Functional 
+Specification Document (FSD), Test Script/Plan, Data dictionary, ERD, Flowchart, etc.
+Possess good analytical and problem solving skills
+Good verbal and written English communication
+Any project management certification or Agile methodologies is an added advantage
+Fresh graduates or applicants without relevant experience but who have strong academic credentials will 
+also be considered
+Join Us!
+Email to us at
+[email protected]
+Only shortlisted candidates will be notified.",266
+J19,74145681,Software Developer (Mandarin Speaker),EPay Global Sdn Bhd,Bangsar,Information & Communication Technology,Developers/Programmers,software-developer,Full time,"RM 3,500 – RM 4,500 per month",3500.0,4500.0,True,"We're looking for developers that has the skills below:
+Required Skills and Experience :
+asp.net, MVC, C#
+MSSQL
+Entity framework, angular 6
+HTML &CSS, JS & TS
+Github
+Added advantage : Flutter
+Job Responsibilities:
+Develop new system and enhance existing system.
+Prepares reference for users by writing operating instructions.
+Confirms program operation by conducting tests; modifying program sequence and / or codes.
+Ability to focus on multiple projects at once and to troubleshoot problems quickly.
+Support for API integration.
+Requirements:
+Candidate must possess at least a Bachelor's Degree, Post Graduate Diploma, Professional Degree, Computer Science/Information Technology or equivalent.
+Required language(s): Fluency in English and Bahasa Malaysia. Proficiency in other languages such as
+Mandarin is an advantage.
+At least 3year(s) of working experience in the related field is required for this position.
+Preferably Senior Executives specializing in IT/Computer - Software or equivalent.
+Strong understanding of object-oriented programming.
+Work independently
+Full-Time position(s) available.",151
+J20,74277967,ESB Developer,Tentacle Tech,Kuala Lumpur,Information & Communication Technology,Architects,developer,Contract/Temp,,,,False,"Description
+Experience:
+4 -10 years of experience in Development in Integration environment.
+Certification:
+IBM IIB/ ACE12
+Job description:
+Strong Knowledge on Rest full services and Open API.
+Design and build strong knowledge on integration patterns
+Knowledge on message flows and ACE 12 nodes
+Strong understanding of SOA concepts, messaging practices, principles and standards
+Excellent communication skills (verbal and written) to liaise with various teams in the organization.
+Must have exceptional team attitude and the ability to work independently.
+Demonstrate the ability to work in a fast paced, team oriented, agile environment.
+High proficiency in designing, developing, integrating and deploying enterprise applications
+Develop Message Broker message flows, DFDL and message sets; configure SSL/adapters according to the requirements and deadlines and in line with established design principles and development standards.
+Excellent troubleshooting skills in resolving complex application, data and infrastructure issues
+In-depth knowledge of standards/technologies that enable messaging, including XML, WSDL, SOAP, REST, JSON, HTTP and SSL
+WTX type tree experience.
+Functional Skills:
+Banking domain knowledge
+Work with the project team (Development Lead, Project Manager and Support team)
+Escalating issues related to Solution, Configuration & Project Implementation
+Troubleshooting and resolving applications problems/issues
+SDLC Processes.
+Technical Skills:
+Building IIB/ACE12 message flows
+Create swagger files
+Rest full API
+Experience in implementing Message Broker solutions with WSDL, Web Services, XML, XSD, JSON
+Payment message transformation like MT101, MT103 and MX20022
+Strong working experience on CWF, TDS, ISO8583 format message transformations and routing
+Experience in messaging tools like RhfUtil, Soap UI.
+Good knowledge on MQ clustering
+Experience in creating and reviewing functional requirements (Use Cases)
+Proficiency with Message Broker Runtime on UNIX/Linux/Mainframe platforms
+Hands-on experience on JAVA compute, TCP adapters
+Having Knowledge on Data power is plus
+Having Knowledge on API Management is plus.
+Company
+Tentacle Tech .At Tentacle Tech, we provide quality; cost-effective IT services to clients from various verticals and are striving to achieve our goal in becoming one of the leading solution providers in Malaysia, Singapore and India.
+We are glad to discuss the areas where Tentacle can work as an extension of your team and bring visible value in some of following areas.
+1. Solutions space – RPA (we are implementation partner for Kofax), BPM, Assets Management, Services Management
+2. Business Intelligence and Analytics space
+3. Digital marketing and Mobility
+4. Software Development Services
+5. Testing and Assurance services
+6. Support and Maintenance services
+7. IT Outsourcing and Recruitment
+Leveraging our strong project management capabilities, we can help you in managing projects by bringing onsite, onshore and offshore models. Our Project managers and project leaders would work as one point contact for you, manage project team and take full responsibility for milestone based project outcome and deliverables. This would help your team to focus more on your main business and not to worry about project management and deliverables.",466
+J21,74181427,Web Developer,JCK Technology,Mont Kiara,Information & Communication Technology,Web Development & Production,web-developer,Full time,"RM 3,500 – RM 5,000 per month",3500.0,5000.0,True,"We are looking for a skilled programmer to join our IT team. You’ll be responsible for designing, coding and improving our company web pages, programs, mobile and website applications.
+As a programmer, you should write clean code to ensure our programs run properly and address our company needs. If you’re passionate about building software and perform well working in a team, along with developers, engineers and web designers, we would like to meet you.
+Ultimately, you should be able to convert our company needs in functional and user-friendly websites and programs.
+Familiarity with Wordpress
+Have at least minimum 2-3 years of working experience
+BSc degree in Computer Science or relevant field
+Familiarity working with WordPress environment
+Good understanding of WordPress front-end technology (e.g. HTML5, CSS3, JavaScript, Jquery, etc.) and back-end development (e.g. PHP, NodeJs, React etc)
+Experience developing mobile responsive websites
+Proven work experience as Web programmer or developer
+Hands on experience with various programming languages, like PHP, ASP.NET, JavaScript and Ruby on Rails
+Knowledge of Object Oriented Programming and web application development
+Attention to detail
+Project management skills within a fast-paced work environment
+An ability to communicate and work in a team
+Proficiency in either Kotlin/Java/Swift/Objective-C/JavaScript/C#, depending on which technology we used
+Job Requirements
+Responsibility
+Produce fully functional programs writing clean, testable code
+Collaborate with internal teams to identify system requirements
+Integrate back-end data
+Design user interface and web layout using HTML/CSS practices
+Upgrade and repair existing programs
+Perform periodical tests and debugging to maximize program efficiency
+Create technical documentation for user support
+Suggest new features to improve program navigation and operation
+Follow security principles
+Stay up-to-date with industry developments
+Required language(s): Cantonese, Chinese, English
+Candidates fluent in Cantonese preferred as role requires candidate to deal with Cantonese speaking clients.",291
+J22,75022588,Software Engineer,TALENTBANK SDN BHD,Penang,Information & Communication Technology,Engineering - Software,software-engineer,Full time,"RM 5,400 – RM 8,000 per month",5400.0,8000.0,True,"Responsibilities:
+Execute full software development life cycle (SDLC)
+Develop flowcharts, layouts and documentation to identify requirements and solutions
+Write well-designed, testable code
+Produce specifications and determine operational feasibility
+Integrate software components into a fully functional software system
+Develop software verification plans and quality assurance procedures
+Document and maintain software functionality
+Troubleshoot, debug and upgrade existing systems
+Deploy programs and evaluate user feedback
+Comply with project plans and industry standards
+Ensure software is updated with latest features
+To be successful in this role, you will need to have:
+At least 2 Year(s) of working experience in the related field is required for this position.
+Bachelor Degree in Computer Science or Information Technology or Equivalent.
+Knowledge of several computer programming languages, such as Java, Python, C#, C++
+Experience with relational databases, and familiarity with non-relational databases
+Understanding of DevOps
+Experience with containerized applications (Docker, Kubernetes, etc.)
+Preferable understanding of machine communications protocols
+Familiarity with serverless (Cloud) programming
+Why Join Us:
+Work directly on exciting projects for our prestigious client, making a tangible impact on their success.
+Collaborate with a talented team of professionals in a dynamic and supportive work environment.
+Competitive compensation package and comprehensive benefits.
+Opportunity for career growth and advancement within the organization.",203
+J23,75472447,Process Manager (Project Management) - Metal Industry - Based Banting,AGENSI PEKERJAAN JS STAFFING SERVICES SDN BHD,Selangor,Information & Communication Technology,Programme & Project Management,Project-Management-Manager,Full time,"RM 8,000 – RM 12,000 per month",8000.0,12000.0,True,"Process Manager Responsibilities:
+Meeting with business managers to discuss business objectives.
+Analyzing the efficiency and costs of existing business processes.
+Identifying areas of improvement.
+Creating and presenting process improvement reports.
+Overseeing the implementation of new business processes.
+Managing improvement teams and external contractors.
+Troubleshooting and improving new processes.
+Updating process and procedure policies.
+Conducting ongoing analysis of processes in line with industry regulations.
+Stating up to date with the latest technology and improvement strategies.
+Process Manager Requirements:
+Bachelor's degree in business management, process control management, or similar.
+4+ years' experience as a process manager.
+In-depth knowlege of relevant industry processes.
+Ability to identify cost-saving measures and improvement strategies.
+Advanced knowlege of business management software.
+Excellent analytical and troubleshooting skills.
+Ability to coordinate projects and lead multiple teams.
+Exceptional written and verbal communication skills.
+Report and procedure writing skills.
+Available to work after hours and weekends when required.",147
+J24,73182376,Software Engineer,DHL Asia Pacific Shared Services Sdn Bhd,Sepang,Information & Communication Technology,Developers/Programmers,software-engineer,Full time,,,,False,"Your IT Future, Delivered
+SOFTWARE ENGINEER
+With a global team of 6000+ IT professionals, DHL IT Services connects people and keeps the global economy running by continuously innovating and creating sustainable digital solutions. We work beyond global borders and push boundaries across all dimensions of logistics. You can leave your mark shaping the technology backbone of the biggest logistics company of the world. Our offices in Cyberjaya, Prague, and Chennai have earned #GreatPlaceToWork certification, reflecting our commitment to exceptional employee experiences.
+Digitalization. Simply delivered.
+At IT Services, we are passionate about automating processes. Our team is continuously expanding. No matter your level of Senior Software Engineer proficiency, you can always grow within our diverse environment.
+#DHL #DHLITServices #GreatPlace
+Grow together
+You are required to Design, Develop and test solutions to automate processes, activities and task through RPA and Power Platform. You will also lead a team of high-performing software engineers ensuring they are well engaged, motivated, and contented while achieving their objectives. Apart from that, you will be responsible for being the liaison between the CoE and Business to provide project updates, answer questions and coordinate required testing/deployment activities
+You have to create document libraries, custom lists, and their corresponding features other than designing, implementing and provide Backend and Frontend solutions. Responsible for enhancements and new development, expected to maintain and enhance engagement with business, continuous improvement, and IT partners.
+Last but not least, you will also be promoting, enhancing, and maintaining technical knowledge via benchmarking, seminars, webinars etc. while mentoring & retaining a high-performance team of junior developers.
+Ready to embark on the journey? Here’s what we are looking for:
+As a Senior Software Engineer, having backend developer language is a huge plus. Very good knowledge of C#, .Net Core, MVC, Angular 13 will also be an integral part of this role.
+You are a technology aficionado, therefore you have a good understanding of React JS and React Native. You are able to work independently, prioritize and organize your tasks under time and workload pressure. Working in a multinational environment, you can expect cross-region collaboration with teams around the globe, thus being advanced in spoken and written English will be certainly useful.
+An array of benefits for you:
+Unlimited Outpatient Medical for employees
+Flexi Benefit Plan – Customized per individual needs
+Choose any day for your Vacation from Earned Public Holiday (Saturday and Ad Hoc)
+Modern offices with free parking",401
+J25,72345519,QA Project Manager,PTW,Kuala Lumpur,Information & Communication Technology,Programme & Project Management,project-manager,Full time,,,,False,"Summary
+The Project Manager manages key client projects. Project management responsibilities include the following:
+- Coordination and completion of projects on time within budget and within scope.
+- Oversee all aspects of projects.
+- Set deadlines, assign responsibilities and monitor and summarize progress of project.
+- Prepare reports for upper management regarding status of project.
+RESPONSIBILITIES
+Ensure that all clients’ projects are delivered on-time, within scope and within budget.
+Take full ownership and excellent care of clients’ testing projects by establishing and maintaining healthy relationships with clients.
+Analyze customers’ testing needs, obtain agreement on the criteria and timeline, and build out testing strategies and project plan, including performing risk management.
+Assist in the definition of project scope and objectives, involving all relevant stakeholders and ensuring technical feasibility.
+Determine resource requirements to support current and forecast future QA needs.
+Evaluate milestones and ensure that testing is carried out at the scheduled time and duration for each title.
+Coordinate internal resources and third parties/vendors for the successful execution of clients’ projects while ensuring resource availability and allocation.
+Coordinate with test team and administer all processes and procedures and ensure compliance to all project objectives and requirements.
+Design test methodologies / plans and perform regular regression tests on all processes.
+Develop test plans and perform troubleshooting on systems to resolve issues.
+Measure and track project progress and performance.
+Manage the review of comprehensive test plans and evaluate bug write-ups and reports
+Create and maintain comprehensive project documentation.
+Evaluate all customer complaints for quality and escalate issues if required and provide training to all project teams and perform required audits and perform root cause analysis and recommend preventive and corrective actions.
+Manage (and escalate where necessary) communication with business partners and senior management to achieve all project objectives and perform tests on same and manage multiple functional areas.
+Analyze and prepare reports for all resource utilization statistics and develop all project estimates and schedules, including to coordinate with all stakeholders and participate in various meetings.
+Provide constant feedback to your team which includes appraisals and discipline.
+Maintain process standards and provide training to staff to ensure adherence to all guidelines.
+Proactively search for areas to improve and seek to increase client satisfaction.
+Requirements
+Candidate must possess at least Diploma/Advanced/Higher/Graduate Diploma in Computer Science/Information Technology or equivalent & professional certifications in related fields of Computer Science, Technology, Quality Assurance, Testing.
+Preferably QA Tester with minimum 4-5 years experience and preferable with CTFL, CPRE and CSTE certification.
+Project Management Professional (PMP) / ISTQB certification is advantageous
+.
+Hands-on technical experience which would include the likes of basic testing principles, mobile apps (Android and iOS), software or games testing, and streaming media technologies.
+Solid understanding of software testing patterns, frameworks and methodologies.
+Previous experience within the games and/or media industry and managed a team of at least 20-30 employees
+.
+Possess good client management, communication, and interpersonal skills in English where proficiency in other Asian languages will be advantageous.
+Attention to detail and clarity of thought.
+Possess customer-focused and commercial mindset.
+Good time and project management skills.
+Meticulous team player with a results-driven personality.
+Equipped with appropriate urgency to suit operational demands.
+Self-motivated, responsible and versatile.
+Benefits
+Opportunities for promotion
+Casual (e.g. T-shirts)
+Medical
+Regular hours, Mondays - Fridays",542
+J26,74314506,IT Executive,DUNLOP SRIXON SPORTS ASIA SDN. BHD.,Shah Alam/Subang,Information & Communication Technology,Help Desk & IT Support,information-technology-executive,Full time,"RM 3,000 – RM 3,800 per month",3000.0,3800.0,True,"Full-Time Employment (with probation of 6 months)
+JOB RESPONSIBILITIES
+User Management
+Main liaison personnel to coordinate project/troubleshooting issues with users and vendor, in order to resolve issues and meet project deadlines.
+Provide orientation and guidance to users on how to operate new software and devices.
+To plan, implement, monitor and upgrade security measures for company users.
+Ensure compliance with company policies and procedures
+- network hardware and software, user support, security, and backup.
+IT Support
+Act as 1st & 2nd level support in resolving hardware and software/application issues.
+Ensure timely deployment of various IT security patches, and firmware for network devices, servers, and other devices.
+Establish an effective monitoring mechanism to monitor the health status of servers and network devices.
+To manage and coordinate with outsourcing vendors to ensure services provided are in accordance with SLA for Infrastructure services and end-user support. Review & ensure issues case logs are resolved.
+Others
+Ability to provide recommendations to improve the overall operations and efficiencies of the applications in order to support current and meet new business requirements.
+Maintain and manage IT assets to ensure up-to-date asset listing.
+Perform IT ad hoc tasks assign by Manager from time to time.
+Job Requirement
+Candidate must possess at least a Diploma / Degree in IT or any related field.
+1 year working experience in related field
+Fresh graduates are encourage to apply
+Candidates must possess own transport to work
+Proficiency in the use of desktop applications and window-based programs
+Knowledge on SAP will be an added advantage
+Ability to multi-task and work independently with minimal supervision
+Responsible, good negotiation and communication skills
+Responsible and good communication skills
+Staff Benefits
+SOCSO and EPF
+Outpatient Medical Fees Provided
+Annual Leave & MC Leave Provided",287
+J27,73985820,Infrastructure Specialist,Ambition Group Malaysia Sdn Bhd,Kuala Lumpur,Information & Communication Technology,Other,infrastructure-specialist,Contract/Temp,$12000.00 - $14k p.m.,,,False,"Job Description:
+Execute various IT Infra Projects and operational tasks with a focus on Cloud, Virtualization (OpenStack, VMware, RHV), Container Platforms, OS, DB, Storages, and Backup technologies.
+Collaborate in planning, managing, and operating IT infrastructure processes and technologies, working closely with Information Security, Operation, Application, and other Infrastructure architects.
+Engage with product principals/OEM partners for technical advice and best practices.
+Provide support to peers in operational activities, conduct knowledge transfer, and take on assigned tasks from superiors.
+Accountable for ensuring compliance with IT and Security Policies for all Platform assets and configurations.
+Lead troubleshooting of complex issues, collaborate on incident and problem management, and work with partners for RCA and improvement plans.
+Collaborate with automation teams to enhance operation efficiency.
+Oversee Inventory Management for the overall Infrastructure, maintaining accurate and up-to-date information.
+Qualifications:
+Degree or professional qualification in Computer Science, Computer Engineering, Information Technology, or equivalent.
+Strong technical expertise in Complex IT infrastructure, including different Hypervisor and containerization platforms, Windows, Linux, Ansible, SAN & Ceph storage, Backup, and System Monitoring Tools.
+Good knowledge of various IT domains such as ITIL processes, Network, Data Center, Database, Middleware, Security, and Asset Management.
+1-2 years of experience in Infrastructure Planning, Infrastructure Architecture, or similar roles.
+2-4 years of operational experience and implementation of global data center solutions with a focus on trust and security.
+Solid business knowledge with a deep understanding of domain architecture (business, information, application, technology).
+To apply, please click ""APPLY NOW"" or email Rebekah Kok at
+[email protected]
+. Data provided is for recruitment purposes only *LI-IT
+Due to the volume of applications received, we regret to inform you that only shortlisted candidates will be notified.
+JTK Number: JTKSM 995 | Company Registration Number: 201301019088 (1048918-T)
+If this job isn't quite right for you, but you know someone who would be great at this role, why not take advantage of our referral scheme? We offer MYR500 in shopping vouchers for every referred candidate who we place in a role. Terms & Conditions Apply. https://www.ambition.com.my/refer-a-friend",334
+J28,74339662,Business Analyst/Project Manager (Work from Home),James Law Realty Sdn. Bhd.,Kuala Lumpur,Information & Communication Technology,Programme & Project Management,project-analyst,Contract/Temp,,,,False,"Description
+We are looking for an experienced and versatile technical Business Analyst or Project Manager to improve our information technology systems and business operations. You may also be required to provide training and work closely with our system developers from different countries via online platforms.
+Key Responsibilities:
+System Analysis & Improvement:
+-Perform detailed analysis of the current systems to identify bugs, inefficiencies, and areas needing improvement.
+-Strategically fix all identified bugs and enhance system functionalities, focusing on both the short-term fixes and long-term improvements.
+-Collaborate with the development team to ensure timely implementation of improvements and updates.
+Workflow & Process Optimization:
+-Map out current workflows, modules, and features in detail, identifying bottlenecks and inefficiencies.
+-Redesign and optimize workflows and processes for increased speed and efficiency, ensuring seamless operation and an enhanced user experience.
+-Implement new features or modules to improve system capabilities and meet evolving business needs.
+UI/UX Design and Enhancement:
+-Design intuitive and user-friendly interfaces, continuously seeking ways to improve user interaction and satisfaction.
+-Utilize feedback from user testing and analytics to refine and enhance the UI/UX design, focusing on usability and performance.
+Quality Assurance & Testing:
+-Establish a rigorous testing framework to consistently identify and address system vulnerabilities or errors.
+-Conduct comprehensive testing of all system improvements, new features, and workflow changes to ensure they meet quality standards.
+-Document testing procedures and outcomes, facilitating ongoing improvement and ensuring system reliability.
+Project Management & Communication:
+-Lead projects from planning through to successful execution, adhering to timelines, budget constraints, and quality expectations.
+-Maintain clear and effective communication with stakeholders and team members, providing regular updates on progress, challenges, and solutions.
+-Manage project documentation meticulously, ensuring all project details are accurately recorded and easily accessible.
+Qualifications:
+-Extensive experience as a Business Analyst, with a proven track record in systems improvement, project management, and UI/UX design.
+-Demonstrated ability to identify, troubleshoot, and resolve system bugs and inefficiencies.
+-Strong knowledge of workflow diagramming, process optimization, and quality assurance methodologies.
+-Excellent analytical, problem-solving, and decision-making skills.
+-Proficient in using project management and design software tools.
+-Outstanding communication and interpersonal abilities.
+-Proficient in Microsoft Office, Google Apps Suite, and Mac.
+-Punctual, reliable and long-term commitment.
+-Good time management and flexibility in your priorities.
+-Very adaptable, reliable, honest, and trustworthy.
+-Able to multitask and support the team remotely.
+-Ability to be independent with minimal supervision and guidance.
+-CAN START IMMEDIATELY!
+Further information:
+-This position is on a ‘work from home’ basis from Monday to Friday, 8am-5pm (Malaysia time). However, must be able to work during New Zealand timezone/business hours when required.
+-Possesses own computer or laptop with high-speed internet.
+-This is a 6-month contract position. Will discuss possible permanent positions based on performance.
+We welcome a serious candidate who is willing to learn and grow with our company.
+Company
+We are a team of highly-skilled admins providing high-level ‘back-office’ support to our HQ office since 2018. Our main office has grown to become the leading real estate marketing firm in Auckland. It has helped thousands of people realize their housing dreams and financial goals. Resulting in over $600 million worth of real estate transactions, we represent the perfect marriage of world-class marketing and cutting-edge technologies. We are fully operating online and we offer a work-from-home basis to our staff as well as flexible hours.",548
+J29,74266324,Senior Software Engineer,OneClickSolutions,Penang Island,Information & Communication Technology,Developers/Programmers,software-engineer,Full time,"RM 6,000 – RM 8,000 per month",6000.0,8000.0,True,"Design, develop, new module for existing system.
+Perform testing for the new and existing system.
+Maintain existing web application and back-end application.
+Work progressively with other team to solve and understand issue and propose new solution if required.
+Identify and solve complex problems.
+Work closely with different teams on system integration.
+Handle other ad-hoc tasks as assigned.
+Job Requirements:
+Experienced in web technologies such as C#, Java, Java EE, JSP, Servlets, XML, SQL, Javascript, Spring MVC, HTML and CSS.
+Required language(s): English, Bahasa Malaysia, M#ndarin
+Candidate must possess at least a Diploma, Advanced/Higher/Graduate Diploma, Bachelors Degree, Post Graduate Diploma, Professional Degree, Computer Science/Information Technology, Engineering (Computer/Telecommunication) or equivalent.
+Personality: Positive Working Attitude, Creative Innovative, Responsible and Dedicated.
+Familiar with Eclipse IDE, MySql.",122
+J30,74025170,IT Executive (SAP),American Air Filter Manufacturing Sdn. Bhd.,Selangor,Information & Communication Technology,Management,information-technology-executive,Full time,,,,False,"Position Summary
+The ideal candidate will be responsible to manage system development for SAP. Also, the candidate will be tasked to analyze, design, integrate and enhance modules to improve the ERP experience.
+A day in the life of...
+Interact with business users at all levels of the Organization.
+Design & document TO-BE business process aligned to standard SAP application functionality.
+Design & document functional application configurations.
+Design & document functional enhancement to SAP, inclusive of Screens, Interfaces & Reports.
+Interact with development resources to ensure compliance with functional designs.
+Prepare test scenario’s & scripts to be used through the application testing cycle.
+Support application, integration & user acceptance testing.
+Support incident management & Change request.
+Maintain administrates user security & authorizations and transports TR.
+Provide training, technical support to business users on matters related to ERP system.
+Other assigned duties by superior / management from time to time.
+What will make you successful
+Candidate must possess at least a Bachelor's Degree, Post Graduate Diploma, Professional Degree or Master's Degree in Engineering (Computer/Telecommunication), Computer Science/Information Technology or equivalent.
+At least 2-3 years’ working experience in SAP ERP, with exposure to the following SAP Modules: Material Management [MM]; Sales and Distribution [SD]; Production Planning [PP]; Finance & Controlling [FICO].
+Possess knowledge in SAP ABAP would be an added advantage.
+Strong analysis, planning, Initiative & able to work independently.
+Systematic & positive problem-solving approach.
+Good interpersonal & communication skills.
+Why join us?
+Do you believe in working in a company that is driven by a greater and meaningful purpose?
+At AAF, work is more than just a job. We understand the vital importance of clean air. We are committed to providing clean air solutions around the globe for over a century to help improve our quality of life, increase productivity, protect critical processes and equipment, and create products that advance the human condition.
+Join us now on our lifelong mission “bringing clean air to life”!",322
+J31,74653306,Account Assistant - Female Only,SM SEALAND MARINE ENGINEERING SDN BHD,Johor Bahru District,Information & Communication Technology,Management,account-assistant,Full time,,,,False,"Description
+• Maintaining bookkeeping and office accounting needs
+• Managing basic office administrative tasks including filing, printing, reporting and emailing
+• Strong organizational and time management skills
+• Working knowledge of accounting and financial processes
+• Keen attention to detail
+• Must compulsory have knowledge on Quickbook
+• Possess knowledge on basic accounting treatments and practices
+Company
+SM Sealand Marine Engineering Sdn Bhd is a company registered in the year 02-10-2014. Our core business activities are business in Marine Repair, Engineering, oil and gas, Conversion work majoring in Electrical.
+Our main office is located at No.107B Jalan Mutiara 1/9, Taman Mutiara Mas, 81300 Skudai Johor. Our business site is in the MMHE Pasir Gudang, Johor.
+Since we are specialized Electrical work we moved into New Building and Conversion Work. As time passed by we are involved in Engineering and Oil & Gas Industry in the yard.
+SM Sealand Marine Engineering Sdn Bhd is managed by a board of directors who are consist of Project Director, Project Manager, Project Engineers and Field Supervisors. Our track record has proven quality of work and customer’s satisfaction. Now this company has a work force of 50 workers. We are committed to deliver our products in time with the fullest satisfaction from our customers.",209
+J32,76450243,ERP Technical Consultant,iDimension MSC Sdn Bhd,Petaling,Information & Communication Technology,Consultants,technical-consultant,Full time,,,,False,"Software Technical Developer
+Responsibilities:
+To provide technical analysis, design, development work and technical documentation
+To be responsible to involve in customization work related to application, reports and Power BI dashboard
+To involve in project technical training
+Requirements:
+Hands-on experience working with C# and .NET technologies throughout the design, development and release phases of software development.
+2-4 years of working experience in the similar or related IT industry
+Candidate from technical programmer background who wish to switch into ERP technical consultancy are welcomed to apply.
+Candidate from end user environment who experienced of maintaining company ERP system development (system enhancements / report customization are encouraged to apply
+Added advantage if the candidate possesses working experience with X++ (Dynamics AX) programming language
+Working knowledge with MS Dynamics AX, Microsoft Dynamics 365 for Finance and Operations or any other ERP application is an added advantage
+Degree/Diploma in Computer Science, IT and related studies
+Fresh Graduate who are eager to expand knowledge in the area of ERP Technical Development are welcome to apply.",169
+J33,76169063,Senior Software Engineer (Backend),REDFIN TECHNOLOGIES SDN. BHD.,Kuala Lumpur,Information & Communication Technology,Engineering - Software,software-engineer,Full time,"RM 9,500 – RM 14,000 per month",9500.0,14000.0,True,"Position: Senior Software Engineer (Backend)
+Seeking Senior Backend Software Engineer with 5+ years' experience. Lead cross-functional teams, design scalable systems, optimize performance, mentor juniors, and ensure code quality. Proficient in Java, Go, or similar languages, and modern databases. Preferred experience with high-traffic applications, cloud deployments, and DevOps practices. Strong communication and leadership skills required.
+Duties/Responsibilities:
+Collaborate Across Teams:
+Lead and work with cross-functional teams including product, data science, sales, and finance to align backend development with business objectives.
+Develop Robust Code:
+Design, build, and maintain scalable, flexible, and maintainable backend systems.
+Rapid Product Development:
+Spearhead the rapid and incremental development and deployment of backend products and features.
+Mentorship:
+Provide guidance and mentorship to junior engineers to foster a high-performance development team.
+Architecture & Design:
+Architect and design backend solutions that are robust, reliable, and highly available.
+Performance Optimization:
+Identify performance bottlenecks, troubleshoot complex issues, and optimize backend processes for maximum efficiency.
+Ensure Code Quality:
+Ensure the backend codebase is well-tested, easy to extend, and adheres to industry best practices.
+Data Integration:
+Develop and integrate with modern databases and storage solutions, ensuring data integrity and optimal performance.
+Minimum Qualifications:
+Extensive Coding Experience:
+5+ years of software development proficiency, with strong expertise in at least one of the following languages: Java, Go, Kotlin, PHP, Python, Scala, C#, etc.
+Advanced Database Knowledge:
+In-depth knowledge of modern database and storage technologies such as MySQL, PostgreSQL, MongoDB, MS SQL, Oracle, etc., and experience in optimizing databases for high performance.
+Educational Background:
+BS or MS in Computer Science or a related field.
+Communication Skills:
+Excellent verbal and written communication skills, with the ability to present complex technical concepts to non-technical stakeholders.
+Preferred Qualifications:
+High Traffic Applications:
+Proven experience in designing and managing applications that handle high traffic volumes and concurrency.
+Cloud Deployments:
+Strong familiarity with production deployments in cloud environments such as AWS, GCP, or Ali Cloud.
+DevOps & CI/CD:
+Deep understanding of DevOps practices and CI/CD processes, including the use of technologies for application deployment in the cloud such as Kubernetes.
+Leadership & Problem Solving:
+Demonstrated leadership skills with a proactive approach to solving complex technical problems and driving continuous improvement in backend development.",359
+J34,74679458,Software Engineer (ReactJS/.NET),IFCA MSC Berhad,Petaling,Information & Communication Technology,Engineering - Software,software-engineer,Full time,,,,False,"Responsibilities:
+Lead a team to develop and maintain software product.
+Collaborating on planning, development, and testing.
+Involving in software Designing, developing & reviewing.
+Team building & management.
+Able to exercise independent judgment, and take the lead role on the project with minimal supervision.
+Responsible for translating the client's business requirements into specific system, application, or process designs
+Qualifications required
+Degree/Diploma in Computer Science.
+Minimum 2 years of hands-on software development experiences in ReactJS, TypeScript, C++ or Java/C#/.Net
+Experience in Human Resource Management, Hotel Management, Accounting or Construction system is an added advantage.
+We offer attractive remuneration package plus profit sharing and management trainings to suitable candidates.",106
+J35,76474717,Software Engineer,BRUNSFIELD COMPUTER SYSTEMS SDN BHD,Taman Tun Dr Ismail,Information & Communication Technology,Developers/Programmers,software-engineer,Full time,"RM 2,600 – RM 3,900 per month",2600.0,3900.0,True,"Brunsfield Computer Systems Sdn Bhd (BCS), a member of the Brunsfield International Group (BIG), was founded in 1990. Since our incorporation, we have specialised in developing software solutions for the property development, construction, and real-estate management industry with a focus on integrated Design, Build and Manage (DBM) systems.
+In year 2000, BCS began to lead Brunsfield International Group's Digital Transformation Initiative — driving the digitisation of the DBM value chain through embracing the Building Information Modelling (BIM) framework. After two decades in the journey of digitisation across the integrated project delivery value chain, Brunsfield International Group is recognised today in the Malaysian construction industry as the leader in BIM adoption and digitisation.
+In our quest to contribute to the development of the digital built environment, BCS has maintained our software development philosophy since the inception of our digital journey — ""We develop solutions that capture data once and at source. We deliver information on-time - anywhere, anytime and with any devices.""
+Since 2020, our top IT priorities are focused on driving the group's digitization of Design, Assembly and Manage (DAM) value chain or the group's IR4.0 transformation initiative.
+Job Description:
+Analyze user needs and propose feasible/improved solution
+Enhance the existing application system to meet new requirements & features
+Optimize the application system
+Troubleshooting, debugging, and resolving technical issues
+Participating in code reviews and providing constructive feedback
+Document the specification of the program
+Contributing to the improvement of existing processes and workflows
+Manage product delivery within the schedule
+Provide training to user during implementation
+Job Requirement & Experience
+Degree in Computer Science (Software Engineering) / Software Engineering / Information Technology or equivalent
+Fresh graduate - 2 years experience
+Experienced in developing web applications (MVC)
+Experienced in programming languages: Java, JavaScript, HTML, CSS
+Familiar with relational database (SQL)
+Familiar with version control system (Git)
+Team player, resourceful, self-discipline, self-drive
+Excellent problem-solving and analytical skills
+Ability to work effectively in a fast-paced environment and manage multiple tasks concurrently
+Good communication and collaboration skills
+Benefits :
+Opportunities for professional development and training
+Friendly and inclusive work environment
+Festive celebrations",345
+J36,74323555,Software Support Specialist (Fresh Graduate),AGENSI PEKERJAAN JS STAFFING SERVICES SDN BHD,Kuala Lumpur,Information & Communication Technology,Developers/Programmers,software-support-specialist,Full time,,,,False,"Client Background
+The company, headquartered in Hong Kong since 2015, specialize in offering a cloud-based payroll and HR management system that helps businesses achieve digital transformation. It is compliant in Australia, Hong Kong, Taiwan, and Macau, making it a versatile solution for businesses operating in these regions. The platform offers full-covered HR management modules, has assisted over 400 firms in achieving digital transformation, and can be seamlessly integrated with other systems.
+Working Mode
+Fully work from home
+Tenure
+Permanent
+Job Description
+To understand and analyze customer’s HR Payroll business workflow, payroll policy, payroll requirements etc.
+Maintain, support, and make necessary adjustment of the HR Payroll system to align with customer’s payroll policy and requirements, to ensure accuracy of payroll outcome.
+Actively identifies and investigates system issue, provide resolution and follow-up to customers.
+Resolves problems by clarifying the customer’s question/issue, determining the cause of the issue, selecting and explaining the best solution to solve the issue, expediting correction or adjustment and following up to ensure resolution.
+Work closely with the internal Business Development and Product teams to ensure customer satisfaction.
+Job Requirements
+Candidate must possess at least a Diploma or Degree in Computer Science/Information Technology or equivalent.
+At least 1 year of working experience in coding or programming in any programming languages.
+Fresh graduate is highly encourage to apply.
+Required language(s): English, Mandarin and/or Cantonese.",224
+J37,75431368,Junior .NET Developer,WEPIN DIGITAL SDN. BHD.,Petaling,Information & Communication Technology,Engineering - Software,.net-software-developer,Full time,"RM 4,000 – RM 6,000 per month",4000.0,6000.0,True,"We are looking for a dynamic and driven individual to join our team as a ASP.NET and Angular Junior Developer. If you are passionate about web development, have experience with ASP.NET and Angular, eager to learn and grow your skills, we welcome you to apply.
+Responsibilities:
+Develop and maintain web applications using ASP.NET and Angular frameworks.
+Collaborate with cross-functional teams to define, design and ship new features.
+Write clean, reusable and efficient code.
+Troubleshoot and debug issues in a timely manner.
+Stay up-to-date with new technology trends and advancements in web development.
+Requirements:
+Bachelor's degree in Computer Science or any related field.
+Minimum 1 year hand on experience and Software Engineering work/skill related experience.
+Experience with ASP.NET and Angular development (personal or professional).
+Experience on MS SQL Server, Database design, Optimization and Performance.
+Worked in Agile software development methodology, test driven development process and with focus on clean code, performance, and optimization.
+Understanding of OOP concepts and programming patterns.
+Familiarity with RESTful APIs and JSON data format.
+Excellent problem-solving skills and attention to detail.
+Knowledge of Git version control system (GitHub, BitBucket).
+Ability to work collaboratively in a team environment.
+Experience in Azure or AWS cloud-infrastructure is an added advantage.",200
+J38,76170193,Senior AI Software Engineer,REDFIN TECHNOLOGIES SDN. BHD.,Kuala Lumpur,Information & Communication Technology,Developers/Programmers,software-engineer,Full time,"RM 11,000 – RM 16,000 per month",11000.0,16000.0,True,"Position: Senior AI Software Engineer
+Seeking a passionate individual in AI chatbot development, ensure code quality, optimize performance, and collaborate cross-functionally. 5+ years' experience in Java, Go, etc.
+Duties/Responsibilities:
+Cross-Functional Collaboration:
+Lead and work with cross-functional teams in product, data science, sales, and finance to achieve business goals.
+Code Development:
+Design, develop, and maintain flexible, maintainable server-side code for AI chatbot applications.
+Code Quality Assurance:
+Ensure code quality by reviewing team members' code, focusing on performance and maintainability.
+Product Launch:
+Spearhead the rapid and incremental development and deployment of AI chatbot products.
+Technology Direction:
+Strongly influence the direction of technology and infrastructure within the team.
+Business Logic Implementation:
+Implement business logic and algorithms to handle user requests and generate intelligent responses.
+Data Management:
+Manage data storage and integration with external APIs or systems.
+Performance Optimization:
+Optimize performance and scalability of the chatbot system.
+Team Collaboration:
+Collaborate with frontend developers, AI engineers, and UX/UI designers to ensure seamless integration.
+Testing and Debugging:
+Conduct thorough testing and debugging to ensure the chatbot functions correctly.
+Maintenance and Support:
+Provide ongoing maintenance and support for the chatbot application.
+Minimum Qualifications:
+Educational Background:
+BS or MS in Computer Science or a related field.
+Extensive Experience:
+5+ years of software development proficiency in at least one of the following languages: Java (preferred), Kotlin, PHP, Python, Scala, C#, Go.
+Design and Architecture Knowledge:
+1+ years of experience in design and architecture, familiar with object-oriented analysis and design patterns (OOA/OOD).
+Database Expertise:
+Good working knowledge of modern database and storage technologies, with hands-on experience in at least one of these database systems: MySQL, MongoDB, PostgreDB, MS SQL, Oracle.
+Performance Understanding:
+Understanding of performance tradeoffs, load balancing, and operational issues.
+Best Practices Knowledge:
+Strong knowledge of design patterns and engineering best practices.
+Communication Skills:
+Excellent communication, writing, and presentation skills.
+Preferred Qualifications:
+Payment Systems Experience:
+Hands-on experience with payment-related systems and services.
+Cryptocurrency Experience:
+Hands-on experience with cryptocurrencies, preferred USDT.
+Distributed Systems:
+Hands-on experience in building distributed systems.
+Streaming Apps:
+Hands-on experience in building streaming applications.
+ChatGPT Expertise:
+Hands-on experience with ChatGPT.
+Big Data Technologies:
+Experience with big data technologies such as Apache Spark, Flink, Hadoop, etc.
+Cloud Deployments:
+Familiarity with production deployments in AWS, Azure, or similar public clouds.
+DevOps & CI/CD:
+Strong understanding of DevOps and CI/CD processes, including the use of technologies for application deployment in the cloud such as Kubernetes.",395
+J39,74953143,Data Analyst,Private Advertiser,Selangor,Information & Communication Technology,Database Development & Administration,data-analyst,Full time,,,,False,"As a Business Operations & Data Analyst, you will play a crucial role in analyzing business operations and leveraging data to drive strategic decision-making within the organization. Your responsibilities will include but are not limited to:
+Data Analysis: Collect, organize, and analyze large sets of data to identify trends, patterns, and insights that can inform business strategies and operational improvements.
+Reporting: Develop and maintain reports and dashboards to track key performance indicators (KPIs) and provide regular updates to stakeholders on business performance.
+Forecasting and Modeling: Utilize statistical techniques and forecasting methods to predict future trends and outcomes, helping the organization to proactively plan and allocate resources.
+Process Improvement: Collaborate with cross-functional teams to identify inefficiencies in business processes and develop recommendations for optimization and improvement.
+Business Strategy Support: Assist in the development and implementation of strategic initiatives by providing data-driven insights and recommendations to support decision-making.
+Data Quality Assurance: Ensure the accuracy, completeness, and reliability of data by implementing data quality assurance processes and conducting regular audits.
+Stakeholder Engagement: Work closely with internal stakeholders, including senior management, to understand business requirements, gather feedback, and communicate insights effectively.
+Tools and Technologies: Utilize various data analysis tools and technologies, such as SQL, Excel, Python, R, Tableau, or Power BI, to manipulate data, conduct analyses, and create visualizations.
+Continuous Learning: Stay updated on industry trends, best practices, and emerging technologies in data analysis and business operations to enhance skills and contribute to ongoing improvements.
+Qualifications:
+Bachelor's degree in Business Administration, Economics, Statistics, Computer Science, or a related field. A Master's degree or relevant certifications (e.g., Certified Business Analysis Professional) is a plus.
+Proven experience in data analysis, preferably in a business operations or analytics role.
+Strong analytical skills with the ability to interpret complex data sets and extract actionable insights.
+Excellent communication and presentation skills, with the ability to convey technical information to non-technical stakeholders.
+Detail-oriented with a commitment to data accuracy and quality.
+Experience with data visualization tools (e.g., Tableau, Power BI).
+Ability to work independently as well as collaboratively in a fast-paced environment.
+This job description is intended to convey information essential to understanding the scope of the position and is not exhaustive. Duties and responsibilities may be amended from time to time to support business needs.",376
+J40,74370702,Product Manager,STOREHUB SDN BHD,Kuala Lumpur City Centre,Information & Communication Technology,Product Management & Development,product-manager,Full time,,,,False,"Are you driven, results-oriented and a team player?
+With 15,000 customers in over 15 countries, StoreHub's mission is to make business awesome for everyone by providing retail and restaurant businesses the technology and services they need to succeed.
+At StoreHub, we believe that technology is essential for businesses to survive and thrive in today's fast-changing world. We also believe that equal access to technology is a fundamental right. That's why we’re committed to bridging this gap and making technology accessible to all, regardless of their background. By focusing on serving needs, not just profit, we level the playing field for those who have been marginalized. Our customers trust us with the success of their businesses, and we play to win by enabling everyone to build successful businesses.
+At StoreHub we model ourselves on a
+pro-sports team
+whereby all of your colleagues are extraordinary at what they do and are highly effective collaborators.
+On a team like this, you learn the most, perform your best work, improve the fastest, and feel most fulfilled professionally.
+If this is a journey you’d like to embark on, keep reading!
+As a
+Product Manager
+, you will use your unique blend of business and technical savvy to create product strategies that solve user challenges and drive revenue growth. You will be responsible for the product lifecycle from planning to execution to ongoing optimization and growth.
+You don’t need to be an expert or know everything about our industry (even we don’t!). But the work is challenging, fast paced, and always on the bleeding edge. So, we’re looking for someone with a curious mind, a strong drive to make things happen, and a passion to keep improving yourself.
+What you will do:
+Create and drive product roadmap’s execution for new features/products.
+Work closely with a team of engineers, designers, and testers to define features, write specs, user stories, create wireframes and prototypes.
+Use data, research and market analysis to communicate product strategies effectively to relevant stakeholders.
+Collaborate with customer-facing teams and integrate customer feedback into product requirements.
+Analyze data to identify gaps and opportunities to improve products, features, and offerings.
+What you will need:
+Minimum of 3 years working as a product manager in a startup or similar style environment.
+An obsessive attention to detail and a big-picture vision.
+Strong communication and influencing skills to collaborate well with other teams.
+Ability to use data-driven approaches to solve problems.
+Genuine empathy and a commitment to dive into improving user’s experience
+Experience going through a full product lifecycle and having successful product outcomes.
+Experience managing projects with lots of moving pieces.
+Proficiency using tools to manage the software development lifecycle(e.g. Jira in an AGILE environment).
+Excellent command of written and spoken English
+What makes working at StoreHub awesome (and refreshing!):
+Our people - for real!
+Our culture is unlike anywhere else, as we model ourselves on a pro-sports team where all of your colleagues are extraordinary at what they do, constantly challenging you to improve yourself and your team. Expect to work with some of the smartest and most interesting StoreHubbers who are highly effective collaborators
+Culture of Candour.
+We embrace directness, hate bureaucracy, and move fast. If you’re tired of ‘corporate nonsense’ you’ll feel right at home
+Data availability.
+The biggest benefit of using a lot of tools is that we have a LOT of data and easy access to analytics. We are problem solvers at heart, and we strive to fix issues at their root cause. With a focus on facts and data, we make informed decisions and consider multiple perspectives to find the best solutions
+Embracing Feedback: Courage and Growth.
+At StoreHub, we highly value the courage to give and receive feedback as an integral part of personal and professional growth. We believe in correcting, teaching, and embracing new ideas fearlessly, holding ourselves and our teammates to high standards to achieve our full potential. Failure is not a setback but an opportunity to learn and grow, and we never shy away from pushing ourselves to be our best
+It’s the Impact that counts.
+We recognise that results are not tied to the number of hours put in to achieve them. There’s no reward for long hours with poor results and there’s no penalty for going home on time when you’re producing excellent work. Of course, to be great, most of us have to put in considerable effort, but hard work alone and long hours are not how we measure or talk about a person’s contribution. Instead, our model works best for people who highly value teammates who deliver consistent excellence
+CADCHI.
+Co-created values, a compass to achieve our mission: Communication, Authenticity, Discernment, Courage, Hunger, Impact
+At StoreHub, we don't just offer a job, we offer an experience. In addition to our unique culture, we provide a wide range of perks and benefits to help you thrive:
+Cutting edge tools.
+If something can be automated, we’ll make it happen. You will be introduced to over 20 different tools we use that support basic tasks, so that we can focus our minds on the kind of work that matters
+Sports events
+sponsored by the company, including football, bouldering, basketball, squash, and more
+Team building activities
+to help you bond and collaborate with your teammates
+Robust employee engagement framework
+with different activities every month to help you connect and build relationships with amazing Hubbers from other departments
+Reflection and feedback culture
+, with monthly one-on-ones with your coach to help you grow and receive in-depth individual feedback
+Career progression map
+to help you build your own path within your team, with both expert and coach tracks, as well as internal movement opportunities to other departments
+We do have all the other cool perks too:
+Free Nespresso coffee to fuel your productivity
+Fully stocked fridge and pantry - ice-cream, snacks, and other yummy treats
+Free Season Parking - no more roadside headaches
+Medical and Dental Outpatient Visits + Medical Insurance
+Apple MacBooks for everyone to help you do your best work
+Learning Budget - for courses, books, and leveling up
+We are an equal opportunity employer and value diversity at StoreHub. We do not discriminate on the basis of race, religion, colour, national origin, gender, sexual orientation, age, marital status, veteran status, or disability status.",1046
+J41,76687312,Accounts Assistant,QIMONDA CONSULTANCY,Cheras,Accounting,Bookkeeping & Small Practice Accounting,accounts-assistant,Full time,"RM 2,500 – RM 3,500 per month",2500.0,3500.0,True,"Responsibilities
+Provide outsourcing services to clients, such as general accounting advisory, review of monthly accounting record, monthly/quarterly/yearly accounting servicing (including SST returns) and payroll services.
+Participate in the end-to-end process of servicing clients.
+Assist client’s external auditors or tax agents through provision of required/relevant client’s accounting data and/or assist in the verification of audit or tax queries.
+Report to Manager and Partner.
+Requirements
+Able to handle full spectrum of accounting functions for a portfolio of clients.
+Knowledge in SQL, Autocount accounting software inclusive of payroll is an added advantage.
+Proficiency in Microsoft software such as MS Word and Excel.
+Familiar with financial reporting work processes and requirements in compliance with current Malaysian accounting standards.
+Good interpersonal skill and proactive approach are essential.
+Able to work independently.
+Posses own transport and willing to travel.",133
+J42,74536708,Account Payable Assistant,GAMER2GAMER SDN. BHD.,Bangsar South,Accounting,Accounts Payable,accounts-payable-assistant,Full time,,,,False,"G2G
+is a world-leading digital marketplace, founded by serious technopreneurs. We currently have offices in Malaysia, Singapore, and Indonesia–with ongoing expansions into Thailand, Vietnam, US, and UAE.
+With the spirit of being ""designed by gamers, for gamers"", G2G was incorporated in 2013 and incepted in 2016. Since then, our platform has seen exponential year-on-year growth and become a prominent force in the gaming space.
+Join our internship program to get exposure and experience working for a multinational corporation (MNC)!
+Job Role
+Liaise and Maintain strong relationships with banking partners to ensure seamless communication and collaboration.
+Coordinate the setup and maintenance of company Bank Accounts & Payment Gateway (PG) Accounts
+Liaise with users and partners to address and resolve issues related to order payables and receivables
+Handle and maintain accurate company bank books, bank balance and bank reconciliation
+Work closely with the finance team to prepare and process daily payments, including payroll, vendor payments, and other financial obligations
+Assist and support the finance team in analysing cash flow trends and foreign exchange market conditions to optimise financial strategies
+Collaborate with the finance team to evaluate and potentially invest in financial products or instruments that align with the company's financial goals and risk tolerance.
+Assist superior on various ad-hoc matters
+Job Requirements
+A degree/Diploma/ Professional Certificate in Accounting or of relevant disciplines.
+Fresh graduate are encouraged to apply
+Able to communicate and write in Chinese as this role required candidates to deal mostly with Chinese speaking clients.
+Willing to be based at Bangsar South, Kuala Lumpur (accessible by LRT)",257
+J43,76226814,Commercial FP&A Manager (FMCG Industry),Private Advertiser,Kuala Lumpur,Accounting,Analysis & Reporting,financial-planning-and-analysis-manager,Full time,,,,False,"Responsible for developing operating and financial planning required for the budget and periodic forecasting to aid management to achieve strategic business plans and in decision making.
+Responsibilities:
+1.Provide analysis insight in driving sales volume growth from multiple angles that include SKU, Customers, Product Category, Channel and Region in alignment with strategic business goals.
+2.Perform contribution margin analysis by SKU, Customers, Product Category, Channel and Region that includes gross selling price, rebates, various form of discounts and sales mix.
+3.Provide value add analysis on delivery costs by Customers, Region and Channel.
+4.Provide value add analysis on packaging costs by SKU, Product Category, Customers and Channel.
+5.Prepare product costing and recommend selling price for New Product Development (NPD) or existing products to new customers by taking into account of competitors pricing benchmark and marketing strategy.
+6.Review and monitor annual Advertising & Promotion (A&P) budget against actual spent to ensure budgeted amount is not breached and targeted ROIs are met.
+7.Provide analysis to support ad hoc selling and promotional activities such as clearance of ageing inventory or excessive imbalance parts.
+8.Lead and support the sales and marketing team in preparation of annual budget which is aligned and support the strategic business goals.
+9.Prepare monthly financial forecast, LE (Latest Estimates P&L for the remaining period of the year) and evolve action plans in collaboration with production and sales team to close performance gaps.
+10.Provide analysis and support sales team in demand planning to achieve targeted orders fulfilment and minimise forecast variance (WMAPE).
+11.Drive and achieve monthly KPIs for the business and team, constantly finetune and monitor business KPIs to ensure business objectives are met.
+12.Identify and implement areas for improvement in internal controls thus ensuring company’s assets and interest are adequately safeguarded.
+13.Drive process improvement to enhance business operations efficiency and effectiveness
+14.Perform feasibility study on new capex or projects.
+15.To perform any other task and assignments as directed by the Management from time to time.
+Requirements:
+Candidates with CIMA, ACCA, Degree in Finance/ Accounting or similar professional qualifications preferred.
+Candidates with at least 7 to 8 years of finance and accounting working experience or related field.",353
+J44,73979378,Assistant Company Secretary,AMPRO MANAGEMENT SERVICES,Bukit Jalil,Accounting,Company Secretaries,assistant-secretary,Full time,"RM 3,000 – RM 4,500 per month",3000.0,4500.0,True,"Qualification
+Candidate possess a Diploma or Bachelor's Degree in Corporate Administration / Secretarial / Management or ICSA equivalent.
+Prefer 1-2 years relevant experience.
+Fresh Graduates are also encouraged to apply.
+Able to work independent.
+Job Scope
+Preparation of minutes of meeting, resolutions and other company secretarial documents
+Responsible for the submission of annual return, audited accounts and statutory forms to SSM within stipulated deadline
+Ensure the Compliance with the Companies Act, 2016 and other relevant legislations
+Maintain a proper filing system and assuring accurate document filing of Company’s statutory documents for ease of access and retrieval
+To liaise with the authorities and clients in corporate secretarial matters and enquiries
+Other duties and responsibilities as assign from time to time by the management",122
+J45,74762436,Assistant  Accounts Manager,Nippon Pigment (M) Sdn. Bhd.,Seberang Perai,Accounting,Financial Accounting & Reporting,assistant-accounts-manager,Full time,"RM 5,000 – RM 6,000 per month",5000.0,6000.0,True,"Job Brief
+We are looking for an experienced and well-organized Accounts Executive to provide the necessary support to the Accounts team.
+The successful candidate will become the point of reference for colleagues and affiliates by keeping schedules and providing feedback, complete & precise documentation and information.
+Responsibilities :
+Independently handle a full set of Accounts inclusive of cash flow planning, fixed assets register, inter-company transactions
+Perform withholding tax submission, prepare for Annual budgeting,
+Supervise overall accounting tasks
+Monthly Management Accounts with its supporting schedules
+Handle insurance renewal on Yearly basis
+Provide accounting info to Head office on monthly basis
+Prepare various monthly reports as require by Management
+Verify accuracy and proper recording of all vouchers and journal vouchers are executed by accounts personnel
+Inventory Management
+Liaison with company secretary
+Liaison with auditors and tax agent
+Liaison with government authorities inclusive of -
+Treasury :- liaison with banker, forex dealer and money market
+Requirements
+Familiar and updated with latest MASB standards
+Good computer skills – Excel is a must. Able to fit the system.
+Well-organized and responsible with an aptitude in problem-solving
+Excellent verbal and written communication skills
+A team player with high level of dedication and cooperative
+Bachelor degree in business Accounting and Finance. Diploma in Business Studies (Accounting) will also be considered.",213
+J46,74104970,Junior Tax Accountant,Private Advertiser,Selangor,Accounting,Taxation,taxation-accountant,Contract/Temp,"RM 3,500 – RM 4,000 per month",3500.0,4000.0,True,"This is a contractor role working from home Mon - Fri 42.5hours/week for an Australian accounting firm. You will be someone -
+graduated with an Accounting Degree from university
+advanced level of English both verbal and written
+with at least two years work experience in an accounting public practice
+sound understanding of Profit and Loss, & Balance Sheet, able to prepare detailed Transaction Ledger reconciliation and analysis. (Exposure to Australian Tax system is not a must but will be a bonus in winning the contract.)
+intermediate to advanced level of Microsoft Office applications such as Outlook, Word, Excel and Powerpoint
+be able to work Australian hours, i.e during 5:45am - 3pm your local time during Mon to Fri.
+Is a friendly self-starter and is able to communicate clearly both written and verbal.
+be able to handle busy working days and high volume of work meeting deadlines
+There will be accounting technical knowledge test as part of the selection process. Please only apply if the above criteria are met.
+We'll require the successful applicant to have a high speed home internet, a computer with dual monitor.
+Annual bonus in addition to salary will be rewarded to exceptional candidate post probation.
+Excellent on-job training will be provided so you'll be able to do Australian accounting, bookkeeping and tax as a professional accountant.",220
+J47,72342995,Manufacturing Assistant (Plastic Division),New Hoong Fatt Auto Supplies Sdn Bhd,Selangor,Accounting,Bookkeeping & Small Practice Accounting,manufacturing-assistant,Full time,,,,False,"We look for dynamic individuals who are set for challenges and eager to learn. And most importantly, we look for adaptable individuals who fit with the corporate culture, core values and have a common work ethics to work in a collaborative environment towards a common vision.
+Interested applicants, please visit our website for more details about this position.",58
+J48,74891401,Account Executive,Webuy,Bangsar,Accounting,Bookkeeping & Small Practice Accounting,account-executive,Full time,"RM 3,500 – RM 4,000 per month",3500.0,4000.0,True,"Requirements:
+Process SPM/STPM/Diploma in Finance or related field.
+Self-driven, ability to interact with staffs across different departments.
+Ability of work prioritization and effective communication.
+Ability to converse in Mandarin
+Job Description:
+Handle daily accounting and finance operation.
+Ensure daily reconciliation of collection to cash are done daily and unreconciles itemsare cleared on timely basis.
+Coordinate and work closely with Sales Team on sales collection matters.
+Handle supplier invoices posting collaborate with suppliers to reconcile discrepancies,resolve payment issues, and ensure timely resolution of oustanding balances.
+Prepare payment to suppliers and customer refund through bank portal and otherfinancial payment platforms.
+Handle office Petty Cash.
+Maintain proper administration filing and keep sufficient accounting records.
+Prepare tour leader allowance summary and submit payment request
+Working hours Schema:
+8 Hours (10 AM – 7 PM)
+1 Hour (Break)
+5 Days / Week
+Compensation and Benefits:
+Salary Range 3500 - 4000 RM Depend on Experience
+EPF/SOCSO/EIS/PCB
+Medical claim
+Annual and medical leave shall be in accordance with the prevailing Labour Law
+Performace Bonus
+Training provided
+Medical and Hospitalization Leave
+Annual leave",175
+J49,74193062,Senior Executive - Tax,Sunway Berhad,Selangor,Accounting,Taxation,tax-executive,Full time,,,,False,"Job Purpose:
+Assist to propose and implement various tax strategies and planning to ensure optimal tax savings, through identifying tax inefficiency/opportunity, performing tax analysis and providing recommendations.
+Assist to provide tax advisory services and support to Business Unit on tax related matters such as corporate tax, sales and services tax, transfer pricing etc.
+Provide tax compliance services for Sunway Group of companies – including preparation/review/submission of tax returns and tax estimates.
+Oversee and expedite tax credit set off and tax refunds from IRB, where necessary.
+Keep abreast with the latest tax development and identify potential tax implications to the Group.
+Establish and maintain productive and cooperative relationship with peers who are responsible for Finance and Accounting functions within the Group and external parties.
+Liaison with external tax consultant and tax authority
+Minimum Qualifications:
+Degree in Accounting and Finance or ACCA
+Minimum 3-4 years of relevant experience in a tax/accounting firm and/or corporate tax department of large corporations.
+High problem-solving skill with critical thinking mindset.
+Highly-motivated individual who is passionate in providing value-added services to the group companies
+Able to work independently with minimal supervision
+Able to work in a fast-paced environment.",191
+J50,74610122,PEGAWAI TADBIR (PEREKA),JABATAN AUDIT NEGARA,Putrajaya,Accounting,Audit - External,officer,Contract/Temp,,,,False,"Description
+1. MEYEDIAKAN INFOGRAFIK LAPORAN KETUA AUDIT NEGARA (LKAN), PENYATA KEWANGAN KERAJAAN DAN AGENSI PERSEKUTUAN.
+2.MEMBANTU MENYEDIAKAN SALID LKAN BAGI TAKLIMAT LKAN OLEH KETUA AUDIT NEGARA KEPADA JAWATANKUASA KIRA-KIRA WANG NEGARA (PAC)
+3. MENGANALISI DATA, MENGUNCI MASUK DATA KE SISTEM BERKENAAN LKAN
+4.MENYEDIAKAN INFOGRAFIK FARIS PANDUAN HANDBOOK PENGAUDITAN YANG DIKELUARKAN OLEH SEKTOR AUDIT KEWANGAN.
+5.MEYEDIAKAN MONTAJ DALAM PROGRAM PERASMIAN, PERSIDANGAN, PELANCARAN GARIS PANDUAN SERTA PENYEDIAAN HANDBOOK DI SEKTOR AUDIT KEWANGAN.
+6.MERUPAKAN JURUKAMERA BAGI MAJLIS-MAJLIS DI SEKTOR AUDIT KEWANGAN
+7.MEMBANTU MENGURUSA DALAM KERJA-KERJA PENYELARASAN LKAN, SIJIL KETUA AUDIT NEGARA DAN PENTADBIRAN DI SEKTOR AUDIT KEWANGAN
+8.MEMBUAT DAN MENGEMASKINI DATABASE MENGGUNAKAN EXCEL BAGI PENGAUDITAN TERUS, PENGAUDITAN FAS DAN PROSES PELANTIKAN FAS.
+Company
+Jabatan Audit Negara (JAN) merupakan institusi awam yang bertanggungjawab melaksanakan pengauditan bagi memastikan pentadbiran Kerajaan dilaksanakan selaras dengan undang-undang dan peraturan sedia ada. Tugasan pengauditan meliputi pengesahan terhadap penyata kewangan, memastikan pengurusan kewangan mematuhi undang-undang, menilai kecekapan dan keberkesanan pelaksanaan program dan aktiviti Kerajaan serta pengurusan syarikat Kerajaan",158
+J51,74592035,ACCOUNTANT,ESAWIN RESOURCES SDN. BHD.,Sarawak,Accounting,Financial Accounting & Reporting,accountant,Contract/Temp,,,,False,"Job Description:
+Oversee and supervise day-to-day accounting operations.
+Preparing and monitoring budget & financial projection, managing cashflow and funding requirement.
+Review all journal entries and billings
+Maintain accurate and up-to-date cost-related records and databases.
+Liaising with Tax Agent, Auditors, Company Secretary in relation to tax, accounting, and secretarial matters.
+Perform other ad-hoc duties as assigned.
+Requirement:
+At least a Bachelor’s Degree in Accounting OR having professional qualification such as ACCA / CPA / MIA or related field.
+Minimum 5 years working experience in manufacturing accounting
+Possess a strong level of analytical skills, numeracy, and strong financial and accounting understanding.
+Ability to work independently under fast-paced environment with minimal supervision.
+Excellent leadership, time management and communication skills",116
+J52,73968115,Account Executive,Filken Sdn Bhd,Johor Bahru District,Accounting,Bookkeeping & Small Practice Accounting,account-executive,Full time,"RM 3,500 – RM 5,000 per month",3500.0,5000.0,True,"Requirements:
+Bachelor's degree in accounting, finance, or a related field is preferred.
+Proven experience in accounts payable or a similar finance role.
+Proficiency in using accounting software and MS Office Suite, particularly Excel.
+Strong organizational and time management skills.
+Effective communication and interpersonal skills.
+Ability to work independently and collaboratively in a team environment.
+Strong problem-solving skills and ability to resolve payment-related issues.
+Able to start work immediately would be an added advantage.
+Responsibilities:
+Process and manage all aspects of supplier payments, ensuring accuracy and timeliness.
+Reconcile supplier statements, resolve discrepancies, and maintain positive relationships with vendors.
+Handle the end-to-end processing of staff claims, verifying receipts and supporting documentation.
+Assist in the month-end closing process, ensuring all accounts payable entries are accurately recorded.
+Assist in the implementation and improvement of accounts payable processes and procedures.
+Maintain organized and up-to-date records for all accounts payable transactions.
+Performs other related duties as assigned.
+Benefits
+Annual leave
+Medical and hospitalization leave
+Statutory deductions (EPF, SOCSO & PCB)
+Annual bonus
+Company Trip
+Team Building
+Annual Dinner
+Training
+Birthday Leave",175
+J53,74172895,Accounting/ Statutory Compliance Technical and Training Manager,PA Corporate Support Sdn. Bhd.,Petaling,Accounting,Audit - External,training-manager,Full time,"RM 10,000 – RM 15,000 per month",10000.0,15000.0,True,"Overview:
+This role involves management responsibilities, leading a team of Accounts/ Statutory Compliance Associates (fresh grad to Seniors), and overseeing their statutory compliance engagements. Additionally, it entails performing statutory compliance work in accordance with the International Financial Reporting Standards (IFRS) and etc. The ideal candidate will play a key role in overseeing our KL office’s statutory compliance operations, ensuring efficient and effective support to our Singapore operations, handling a diverse clientele, and supporting overall firm technical and training activities.
+Job Responsibilities:
+To work with the Technical and Training Partner to keep the firm up-to-date with the latest accountancy related technical updates on International Financial Reporting Standards (IFRS) and etc.
+Assist in creating internal training materials for structured training sessions during off-peak periods which includes planning and conducting internal and external training for statutory compliance and other departments on IFRS and etc.
+Manage a small portfolio of accounting clients (Min. estimated S$600,000) and act as a manager to the respective partners’ engagements, assist to review Financial Statements where assigned.
+Responding and attending to internal technical consultations & clients’ queries, where applicable.
+Conduct weekly team meetings to monitor job progress and coordinate deadlines with the team
+Coach, supervise, and support the team's technical and soft skill development.
+Effectively communicate any issues to the respective partners in a timely and organized manner.
+Identify and assess statutory compliance engagement risks and develop effective risk mitigation strategies.
+Provide counsel to our clients on corporate secretary matters, financial operations, accounting systems, accounting treatment, and reporting when necessary.
+Devote time and attention to the work assigned by the Firm only; alias no part-time or freelance work as long as under the Firm’s Employment, and
+Undertake ad-hoc assignment assigned from time to time.
+Job Requirements:
+Minimum bachelor's degree in accounting, finance, or a related field.
+Professional qualifications such as MICPA, ACCA, ICAEW, ICA, ICAA, or CPA Australia are advantageous.
+At least 6 years of relevant work experience, with a preference for at least 2 years in a mid-tier/Big 4 statutory compliance environment and at least 2 years in a supervisory role.
+Familiarity with CaseWare or other accounting software is a plus.
+Profound knowledge of statutory compliances, accounting methodologies, and accounting-related applications.
+Strong leadership skills, including the ability to provide guidance to junior associates.
+Exceptional leadership, communication, and client relationship management skills.
+Excellent communication skills to collaborate effectively across all levels.
+Prior work experience in Singapore in the accounts and/or statutory compliance field is advantageous.",406
+J54,74094627,Assistant Manager - Finance (Hospitality),Genting Malaysia Berhad,Kuala Lumpur City Centre,Accounting,Financial Accounting & Reporting,assistant-finance-manager,Full time,,,,False,"Genting Malaysia Berhad
+Genting Malaysia is a leading multinational conglomerate that is principally involved in the leisure and hospitality business, covering theme parks, casinos, hotels, seaside resorts and entertainment venues in Malaysia, the UK, and the US. It is one of the largest listed companies in Malaysia.
+With over 50 years of experience and milestones, Genting Malaysia is currently expanding and transforming Resorts World Genting into the leading tourism and entertainment hub via the Genting Integrated Resort Transformation Plan. Under this plan, flagship projects include Skytropolis Indoor Theme Park, the outdoor theme park - Genting SkyWorlds - and the adjacent shopping complex - SkyAvenue, which houses some of the most prestigious lifestyle brands from around the world.  The plaza also features a state-of-the-art cable car system, which connects SkyAvenue to the mid-hill Genting Highlands Premium Outlets, carrying up to 3,600 passengers per hour per way.
+If you are searching for a dynamic career full of exciting growth opportunities; look no further and join us today!
+JOB DESCRIPTION
+Responsible to monitor and ensure the smooth operations of the finance hospitality section.
+Perform income audit
+Prompt submission of financial statements, inter-company reconciliation, balance sheet analysis and bank reconciliation.
+Analysing trend and prepare analysis of the monthly performance of the business
+Prompt submission of standard tax schedule, statutory returns and statutory payments.
+Ensure that all financial transactions, systems and procedures comply with regulations and accounting standards
+Compilation and review of annual budget
+Evaluate current process and propose improvements on policy and procedures
+Updating Department Operations Manual (the department is ISO certified)
+Support the department projects such as eInvoicing implementation and other POS system improvements.
+JOB REQUIREMENT
+Degree in Accounting and/or related accounting professional qualifications (E.g. MIA, ICAEW, ACCA, MICPA,CPA, CIMA).
+Minimum 4 years audit and/or accounting experience.
+Good command in English.
+Meticulous and highly organized
+Knowledge in SAP accounting software will be an added advantage.
+Able to lead a team of 5 to 10 pax
+Be part of an exciting history-in-the-making, help shape the future with us. This is a golden opportunity for you to establish a strong foundation for a great career within the company. Apply now!
+Job Segment: 
+ Assistant Manager, ERP, SAP, Manager, Management, Technology",364
+J55,75558032,Finance Executive,Premier Integrated Labs Sdn. Bhd.,Ampang,Accounting,Accounts Payable,finance-executive,Full time,"RM 3,000 – RM 3,700 per month",3000.0,3700.0,True,"Job Requirements:
+Bachelors’ Degree in Accounting/ Finance or equivalent.
+Knowledge of Microsoft Word, Microsoft Excel, Power Point and any relevant accounting software is an advantage.
+Finance & Accounting background
+Able to do full set of Accounting
+Good command of English and strong communication skills
+Smart, intelligent, fast learner, result oriented and pleasant personality
+Ability to work under pressure
+At least 2 to 3 years of working experience in the related field.
+Familiar with Malaysia financial policies and accounting regulations
+Responsibilities
+Responsible for day-to-day accounting and month-end closing to ensure timely and accurate completion of all management reports
+Maintain total check & control of income statement & balance sheet
+Prepare documentation for vendor payments and bills/utilities payment
+Attend to vendor’s queries in relation to payments
+Perform periodic reconciliation of selected ledger accounts on a monthly basis
+Responsible for all documents filing
+Supporting any other ad-hoc tasks as required from time to time.",151
+J56,74430652,"Audit Assistant , Semi senior , Senior and Audit Supervisor",KL Associates,Petaling,Accounting,Audit - External,audit-supervisor,Full time,,,,False,"Description
+Audit firm in Puchong seeking individuals with positive attitudes, dedicated and willing to learn. Accounting Graduates/undertaking ACCA/CIMA/MICPA/LCCI Diploma/CAT or equiv. Knowledge of AXP Audit Express will be advantage but not essential, training will be provided. Please contact Mr Lim at
+019-3503386
+or send your resume to
+[email protected]
+Company
+KL Associates together with its associates, provides a full range of Financial Services to a broad range of clients, ranging from sole proprietorships and growing enterprises to small and medium sized corporations. KL Associates also provides a host of Corporate Consulting Services to Corporations.",94
+J57,74682961,Account cum Admin Assistant,Company Confidential,Cheras,Accounting,Bookkeeping & Small Practice Accounting,accounts-and-admin-assistant,Full time,"RM 3,000 – RM 3,500 per month",3000.0,3500.0,True,"As Account cum Admin Assistant, your responsibilities are as follow:
+Prepare monthly P&L, income statements and balance sheets
+Monitor cash flow and maintain cash controls.
+Ensure transactions are processed and properly recorded
+Prepare and reconcile bank statements
+Process and record monthly invoices
+Prepare monthly payments & staff reimbursement
+Maintain proper accounting record and filing
+Filing of all financial files, records and relevant documents
+Process monthly payroll and prepare EPF/SOCSO/PCB submissions
+Assist in liaising with external stakeholders e.g. auditors, tax agent, company secretary, etc.
+Manage office maintenance, servicing and supplies
+Provide administrative assistance to management & consultants.
+Perform ad-hoc projects and assignments as required.
+Job requirements
+Experienced in general account, finance and relevant areas
+Knowledge in GST,SST & E Invoicing are preferred
+Resourceful, with a positive and problem-solving attitude
+Initiative, drive and enthusiasm
+Good organisational and coordination skills
+Responsible, efficient and structured with attention to detail
+Able to work independently with minimal supervision and under pressure
+Proficient with Microsoft Office and Google office suite, especially Excel and Sheets
+A Diploma or Degree in Accounting and/or Finance is preferred
+1-2 years relevant experience
+Positive attitude, responsible, accountable and flexible",187
+J58,74133029,Finance & Controls Team Lead,Menicon Malaysia Sdn Bhd,Kulim District,Accounting,Audit - Internal,team-leader,Full time,,,,False,"Description
+Financial analysts conduct economic research and elicit valuable analyses on financial matters such as profitability, liquidity, solvency, and asset management. They provide recommendations on financial matters for decision-making processes. Financial analysts work in both the public and the private sector.
+Company
+One of the largest Contact Lens Manufacturer in the world",52
+J59,74444721,ACCOUNT EXECUTIVE,ASMO Olympic Edu Sdn Bhd,Petaling,Accounting,Financial Accounting & Reporting,account-executive,Full time,,,,False,"Description
+RESPONSIBILITIES
+Handle full set of accounts and daily accounting functions, ensuring accuracy and proper supporting documentation and recording.
+Responsible for month-end and year-end closing of accounts including AR, AP, prepayments, accruals, fixed assets, trial balance, P&L, and balance sheet.
+Ensure all the accounting records are properly updated and reconciled in the accounting system.
+Prepare internal reports for the company through compiling information, i.e. Accounts Receivable (AR), Accounts Payable (AP), and General Ledger (GL)
+Provide information and monitor Internal Departments budget and expenses.
+Responsible for the creditors’ aging, payment and claims. Ensure effective accounting procedures including credit control.
+AR monitoring and handling client’s account by preparing quotation, follow up on timing of receiving PO, timely billing to and collections from customer, and update in system.
+AP monitoring on verify invoice, liaise with, review and prepare payments to vendors on schedule.
+Maintain intercompany schedules and monthly reconciliation with related companies
+Liaise with Auditors, Tax Agent, Legal, Bankers and government authorities when required.
+Ensure adherence of processes to company SOPs
+Assist in preparing necessary reports.
+REQUIREMENT
+At least LCCI, Diploma/ Advance Diploma in Finance/Accounting or equivalent
+Minimum 3 years relevant working experience
+Proficient in excel
+Meticulous, conscientious and punctual
+Able to meet tight deadlines and work independently
+Good analytical and problem-solving skills.
+Knowledge of SQL Accounting
+Fresh graduate are welcome to apply as well.
+Company
+Olympic Edu Sdn Bhd was established in year 2007. Olympic Edu Sdn Bhd is the founder of faith ""Quality Education is The Future of The Country,"" the conviction and enthusiasm for education set up. After about ten years of educational experience, that quality education is to train the country's future leaders indispensable. However, quality education is not an easy task. In which the quality of teaching, teaching content and teaching level are the extent of the factors that must be taken into account. In searching, the reference number of foreign high-quality education, and finally happy to bring our country's primary schools and preschool in line with the above mentioned quality education - International Olympic Mathematics.(IOMaths)
+The primary aim of Olympic Edu Sdn Bhd is
+( a ) to build stronger foundation of teaching methodology
+( b ) to stimulate enthusiasm, interest and love in exploring mathematics
+( c ) to cultivate, inspire and develop innovative abilities, creative thinking and special
+characteristics
+( d ) to strengthen mathematical intuition, logical thinking and strategies for problem solving
+( e ) to provide satisfaction, joy, and thrill of meeting challenges
+( f ) to enrich experiences in intellectually stimulating mental activities",421
+J60,76416269,ACCOUNT & ADMIN - SENIOR EXECUTIVE / ASSISTANT MANAGER,Element Chemicals Sdn Bhd.,Kuala Selangor District,Accounting,Financial Accounting & Reporting,executive-assistant-manager,Full time,"RM 5,000 – RM 7,000 per month",5000.0,7000.0,True,"ACCOUNTING
+Manage full spectrum of Accounts (AR, AP, GL, and Reporting).
+Oversee daily transactions, petty cash, bank balances, and month-end closings.
+Follow up on outstanding items and collection status.
+Assist with annual audits and legal matters.
+Process payments for vendors, contractors, utilities, office expenses, and regulatory bodies.
+Handle bank facilities applications and oversee overseas payments.
+Renew contracts and insurance, including company vehicles and property.
+ADMINISTRATION
+Maintain a systematic filling system and safe keeping important documents.
+Monitors and maintains an adequate inventory of office supplies and equipment repair/maintenance.
+Arrangements for cleaning of office premises, servicing of office equipment and fixtures as well as general tidiness. Contact service personnel and outside.
+Responsible for renewing any contract or insurance including renewing company vehicle, forklift, property, and general liability.
+Liaise with external parties such as government agencies, banking institutions, company secretary and contractors/vendors on HR/Admin related matters.
+Maintaining quality management system according to ISO 9001: 2015 Quality Management System.
+To assist on ad-hoc task as requested by the management.
+DESIRED QUALIFICATIONS, SKILLS AND EXPERIENCE:
+Degree in finance, accounting, or equivalent, with a strong foundation in financial principles and practices.
+Minimum 5 years of working experience in Finance/Accounting and Administration.
+Hands-on knowledge of accounting, finance, admin, human resource functions, payroll, and compliance with statutory bodies.
+Strong analytical skills and ability to diagnose/resolve matters expediently.
+Experience with ERP systems. Knowledge of AutoCount Accounting is an added advantage.
+Good working attitude and high integrity to keep sensitive information confidential.
+Strong sense of urgency and the ability to multitask and able to work independently.
+Proficiency in Bahasa Malaysia, English, and Chinese (added advantage).
+Computer literate, proactive, and self-motivated with the ability to work independently and within a team.
+Excellent organizational skills and attention to detail.
+Ability to multitask and deliver results in a fast-paced environment.",297

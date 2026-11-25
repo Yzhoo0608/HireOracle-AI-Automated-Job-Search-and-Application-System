@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { deleteUser } from '@/lib/db';
+import { requireAuth } from '@/backend/auth';
+import { deleteUser } from '@/backend/db';
 
 export async function POST(request: NextRequest) {
   try {

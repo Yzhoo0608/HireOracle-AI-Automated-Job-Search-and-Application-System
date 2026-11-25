@@ -1,0 +1,5 @@
+domain,sample_type,count,population_available,sampling_ratio,avg_words,disclosed_salary_pct
+Information Technology,Candidates (Resumes),20,120,16.7%,806.2,100.0% (Simulated Expected)
+Information Technology,Job Postings,40,7178,0.56%,299.4,50.0%
+Accounting & Finance,Candidates (Resumes),10,118,8.5%,702.9,100.0% (Simulated Expected)
+Accounting & Finance,Job Postings,20,8959,0.22%,207.2,50.0%

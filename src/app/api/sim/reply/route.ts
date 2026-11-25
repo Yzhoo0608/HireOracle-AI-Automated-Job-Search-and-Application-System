@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { simulateCompanyReply } from '@/lib/agents/reply-agent';
-import { getApplicationById } from '@/lib/db';
+import { requireAuth } from '@/backend/auth';
+import { simulateCompanyReply } from '@/backend/agents/reply-agent';
+import { getApplicationById } from '@/backend/db';
 
 export async function POST(request: NextRequest) {
   try {

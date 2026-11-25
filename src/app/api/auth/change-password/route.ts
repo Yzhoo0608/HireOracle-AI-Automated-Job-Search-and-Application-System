@@ -1,38 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hashPassword, generateToken } from '@/lib/auth';
-import { updateUserPassword, setForcePasswordChange, getUserById } from '@/lib/db';
+import { hashPassword, generateToken, JWT_SECRET, getAuthUser } from '@/backend/auth';
+import { updateUserPassword, setForcePasswordChange, getUserById } from '@/backend/db';
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-change-me';
 
 export async function POST(request: NextRequest) {
   try {
     const { tempToken, newPassword } = await request.json();
 
-    if (!tempToken || !newPassword) {
-      return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
+    const cleanNewPassword = typeof newPassword === 'string' ? newPassword.trim() : '';
+
+    if (!cleanNewPassword) {
+      return NextResponse.json({ success: false, error: 'Password is required' }, { status: 400 });
     }
 
-    if (newPassword.length < 6) {
+    if (cleanNewPassword.length < 6) {
       return NextResponse.json({ success: false, error: 'Password must be at least 6 characters' }, { status: 400 });
     }
 
-    let payload: any;
-    try {
-      payload = jwt.verify(tempToken, JWT_SECRET);
-    } catch {
-      return NextResponse.json({ success: false, error: 'Session expired. Please request a new temporary password.' }, { status: 401 });
+    let targetUserId: string | null = null;
+
+    if (tempToken) {
+      let payload: any;
+      try {
+        payload = jwt.verify(tempToken, JWT_SECRET);
+      } catch {
+        return NextResponse.json({ success: false, error: 'Session expired. Please request a new temporary password.' }, { status: 401 });
+      }
+
+      if (payload.scope !== 'change_password') {
+        return NextResponse.json({ success: false, error: 'Invalid token scope' }, { status: 401 });
+      }
+      targetUserId = payload.userId;
+    } else {
+      const authUser = await getAuthUser();
+      if (!authUser) {
+        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      }
+      targetUserId = authUser.userId;
     }
 
-    if (payload.scope !== 'change_password') {
-      return NextResponse.json({ success: false, error: 'Invalid token scope' }, { status: 401 });
+    if (!targetUserId) {
+      return NextResponse.json({ success: false, error: 'Unauthorized user' }, { status: 401 });
     }
 
-    const hashed = await hashPassword(newPassword);
-    await updateUserPassword(payload.userId, hashed);
-    await setForcePasswordChange(payload.userId, false);
+    const hashed = await hashPassword(cleanNewPassword);
+    await updateUserPassword(targetUserId, hashed);
+    await setForcePasswordChange(targetUserId, false);
 
-    const user = await getUserById(payload.userId);
+    const user = await getUserById(targetUserId);
     if (!user) {
       return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
     }

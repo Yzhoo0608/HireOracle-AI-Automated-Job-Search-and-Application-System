@@ -1,0 +1,12 @@
+{
+  "experiment": "Experiment 01: Candidate-Job Matching Weighting Strategies Evaluation",
+  "timestamp": "2026-11-22T23:41:38.646291",
+  "pairs_count": 120,
+  "candidates_count": 30,
+  "vacancies_count": 60,
+  "outputs": {
+    "main_summary_csv": "C:\\Users\\yzhoo\\AI-Agent-Job-Search\\experiments\\methods\\results\\main_evaluation_results.csv",
+    "master_predictions_csv": "C:\\Users\\yzhoo\\AI-Agent-Job-Search\\experiments\\methods\\results\\all_predictions_120.csv",
+    "report_markdown": "C:\\Users\\yzhoo\\AI-Agent-Job-Search\\experiments\\methods\\results\\exp1_results.md"
+  }
+}

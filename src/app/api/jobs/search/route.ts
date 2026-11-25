@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getUserById } from '@/lib/db';
-import { runJobSearch, runMatchAndRank } from '@/lib/agents/orchestrator';
+import { requireAuth } from '@/backend/auth';
+import { getUserById } from '@/backend/db';
+import { runJobSearch, runMatchAndRank } from '@/backend/agents/orchestrator';
 
 export async function POST(request: NextRequest) {
   try {

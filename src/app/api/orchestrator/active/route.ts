@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { getUserById, updateUserActiveStatus } from '@/lib/db';
-import { runActivePipelineCycle } from '@/lib/agents/orchestrator';
+import { requireAuth } from '@/backend/auth';
+import { getUserById, updateUserActiveStatus } from '@/backend/db';
+import { runActivePipelineCycle, abortUserPipeline } from '@/backend/agents/orchestrator';
 
 export async function GET(request: NextRequest) {
   try {
@@ -28,6 +28,9 @@ export async function POST(request: NextRequest) {
       runActivePipelineCycle(authUser.userId).catch(err => {
         console.error('[Orchestrator] Error running immediate cycle:', err);
       });
+    } else {
+      // Stop pipeline clicked -> instantly cancel any active loop in progress
+      abortUserPipeline(authUser.userId);
     }
 
     return NextResponse.json({ success: true, active });

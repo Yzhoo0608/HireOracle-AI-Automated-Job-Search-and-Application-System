@@ -1,0 +1,4 @@
+Method,Factor_Score_Source,Weight_Source,MAE,RMSE,Spearman_rho,Pearson_r,NDCG@1,NDCG@2,NDCG@4,Precision@1,Recall@2,Predicted_Mean,Ground_Truth_Mean
+Method 1: Uniform (Human Baseline),Human Ground Truth,Uniform (16.67% each),10.9,14.0,0.8752,0.8549,0.92,0.9532,0.971,0.8333,0.92,52.34,47.98
+Method 2: Fixed Expert (Human Baseline),Human Ground Truth,"Fixed Expert (21,21,16,16,15,11)",11.14,14.4,0.8731,0.8517,0.92,0.9532,0.971,0.8333,0.92,53.19,47.98
+Method 3: Dynamic LLM (Full AI Pipeline),AI Zero-Shot (Exp 04),Dynamic LLM (Exp 01),14.3,17.58,0.8002,0.7815,0.76,0.8658,0.9156,0.7667,0.88,55.57,47.98

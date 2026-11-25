@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hashPassword, generateToken } from '@/lib/auth';
-import { createUser, getUserByEmail } from '@/lib/db';
+import { hashPassword, generateToken } from '@/backend/auth';
+import { createUser, getUserByEmail } from '@/backend/db';
 
 export async function POST(request: NextRequest) {
   try {

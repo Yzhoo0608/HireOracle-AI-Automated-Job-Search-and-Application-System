@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserByEmail, createMagicLinkToken } from '@/lib/db';
-import { sendApplicationEmail } from '@/lib/agents/email-agent';
+import { getUserByEmail, createMagicLinkToken } from '@/backend/db';
+import { sendApplicationEmail } from '@/backend/agents/email-agent';
 
 function generateOTP(): string {
   // Generate a 6-digit numeric OTP

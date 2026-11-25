@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '@/lib/auth';
-import { runFullPipeline } from '@/lib/agents/orchestrator';
+import { requireAuth } from '@/backend/auth';
+import { runFullPipeline } from '@/backend/agents/orchestrator';
 
 export async function POST(request: NextRequest) {
   try {
