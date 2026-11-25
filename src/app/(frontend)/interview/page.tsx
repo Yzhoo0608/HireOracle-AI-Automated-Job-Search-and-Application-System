@@ -156,7 +156,6 @@ function InterviewPageContent() {
 
   // Refs
   const candidateVideoRef = useRef<HTMLVideoElement>(null);
-  const incomingVideoRef = useRef<HTMLVideoElement>(null);
   const greenRoomVideoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -239,17 +238,12 @@ function InterviewPageContent() {
   // ── 2. Video Element Binding ──
   useEffect(() => {
     if (activeScreen === 'video_session' && candidateVideoRef.current && streamRef.current) {
-      candidateVideoRef.current.srcObject = streamRef.current;
+      if (candidateVideoRef.current.srcObject !== streamRef.current) {
+        candidateVideoRef.current.srcObject = streamRef.current;
+      }
       candidateVideoRef.current.play().catch(() => {});
     }
-  }, [activeScreen, cameraOn]);
-
-  useEffect(() => {
-    if (activeScreen === 'video_session' && videoStatus === 'RINGING' && incomingVideoRef.current && streamRef.current) {
-      incomingVideoRef.current.srcObject = streamRef.current;
-      incomingVideoRef.current.play().catch(() => {});
-    }
-  }, [activeScreen, videoStatus]);
+  }, [activeScreen, videoStatus, cameraOn]);
 
   useEffect(() => {
     if (activeScreen === 'setup' && greenRoomVideoRef.current && streamRef.current) {
@@ -740,8 +734,23 @@ function InterviewPageContent() {
   const acceptVideoCall = async () => {
     ringtoneRef.current?.stop();
 
-    const mediaOk = await startMedia(selectedAudioDevice);
+    // Immediately transition out of RINGING so meeting layout mounts
+    setVideoStatus('AI_SPEAKING');
+
+    const isStreamLive =
+      streamRef.current &&
+      streamRef.current.getVideoTracks().some((t) => t.readyState === 'live') &&
+      streamRef.current.getAudioTracks().some((t) => t.readyState === 'live');
+
+    const mediaOk = isStreamLive ? true : await startMedia(selectedAudioDevice);
     if (!mediaOk) return;
+
+    if (candidateVideoRef.current && streamRef.current) {
+      if (candidateVideoRef.current.srcObject !== streamRef.current) {
+        candidateVideoRef.current.srcObject = streamRef.current;
+      }
+      candidateVideoRef.current.play().catch(() => {});
+    }
 
     setCallDuration(0);
     if (callTimerRef.current) clearInterval(callTimerRef.current);
@@ -751,7 +760,7 @@ function InterviewPageContent() {
 
     // AI begins speaking question
     if (currentQuestionText) {
-      setTimeout(() => speakQuestion(currentQuestionText), 800);
+      setTimeout(() => speakQuestion(currentQuestionText), 500);
     } else {
       setVideoStatus('USER_TURN');
     }
@@ -861,20 +870,7 @@ function InterviewPageContent() {
             </p>
           </div>
 
-          {/* Candidate Pre-Call Video Preview */}
-          <div className="relative w-56 aspect-video rounded-xl bg-slate-950 overflow-hidden border border-slate-700 shadow-xl mb-8">
-            <video
-              ref={incomingVideoRef}
-              autoPlay
-              playsInline
-              muted
-              className="w-full h-full object-cover"
-              style={{ transform: 'scaleX(-1)' }}
-            />
-            <div className="absolute top-2 left-2 flex items-center gap-1 bg-slate-900/80 px-2 py-0.5 rounded text-[10px] text-slate-300">
-              <UserCheck size={10} className="text-emerald-400" /> Camera Preview
-            </div>
-          </div>
+
 
           <p className="text-slate-400 text-xs mb-8 flex items-center justify-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -1039,7 +1035,13 @@ function InterviewPageContent() {
           {/* Picture-in-Picture: Candidate Video Preview in Top Right Corner */}
           <div className="absolute top-4 right-4 w-56 md:w-64 aspect-video rounded-2xl overflow-hidden bg-slate-950 border-2 border-slate-700 shadow-2xl z-20">
             <video
-              ref={candidateVideoRef}
+              ref={(el) => {
+                candidateVideoRef.current = el;
+                if (el && streamRef.current && el.srcObject !== streamRef.current) {
+                  el.srcObject = streamRef.current;
+                  el.play().catch(() => {});
+                }
+              }}
               autoPlay
               playsInline
               muted

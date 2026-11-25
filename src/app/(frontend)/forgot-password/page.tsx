@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
             <Logo size="lg" />
           </div>
           <h1 className="text-xl font-bold text-slate-800 mb-1">Forgot Password</h1>
-          <p className="text-slate-500 text-sm">Enter your email to receive a reset link</p>
+          <p className="text-slate-500 text-sm">Enter your email to receive a reset password</p>
         </div>
 
         {error && (
