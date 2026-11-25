@@ -1,16 +1,16 @@
 # Final Year Project 1 Submission
 **Project Title:** Development of a Multi-Agent AI System for Automated Job Search, Matching and Application  
-**Student:** Hoo Yen Zhi (`BAI_B2009F-2409014`) 
+**Student:** Hoo Yen Zhi (`BAI_B2009F-2409014`)  
 
----
 This repository is organized into two main directories: **`Submission/`** (project deliverables) and **`Source Code/`** (system implementation and benchmark experiments).
 
 ---
+
 ## Repository Structure
 
 ```text
 HireOracle-AI-Automated-Job-Search-and-Application-System/
-├── Submission/                       # Complete FYP I submission deliverables
+├── Submission/                       # Complete FYP 1 submission deliverables
 │   ├── Report                        # Final Year Project Report
 │   ├── Presentation (PPT)            # Presentation slide deck
 │   └── Video                         # System demonstration & walkthrough video
