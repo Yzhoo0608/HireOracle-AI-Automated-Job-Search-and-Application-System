@@ -1,12 +1,11 @@
-# Final Year Project 1 Submission 
+# Final Year Project 1 Submission
 **Project Title:** Development of a Multi-Agent AI System for Automated Job Search, Matching and Application  
-Student: Hoo Yen Zhi (`BAI_B2009F-2409014`) 
+**Student:** Hoo Yen Zhi (`BAI_B2009F-2409014`) 
 
-## Overview
-HireOracle is an autonomous, explainable Multi-Agent AI system for end-to-end job searching, six-factor candidate-job matching, automated email application, recruiter reply tracking, AI mock interview preparation, and LinkedIn profile analysis.
-This repository is organized into two main directories: **`Submission/`** (project deliverables) and **`Source Code/`** (system implementation and benchmark experiments).
 ---
+This repository is organized into two main directories: **`Submission/`** (project deliverables) and **`Source Code/`** (system implementation and benchmark experiments).
 
+---
 ## Repository Structure
 
 ```text
